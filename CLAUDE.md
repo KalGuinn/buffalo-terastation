@@ -66,3 +66,6 @@ buffalo-terastation/
 - `notes/firmware_extraction_guide.md` — How to decrypt/extract Buffalo firmware
 - `notes/hardware_catalog.md` — Full peripheral catalog from defconfig analysis
 - `devicetree/alpine-ts51220-annotated.dts` — Annotated device tree (ground truth)
+
+## Communication Style
+Be direct. Skip filler phrases and performed enthusiasm. State facts, not reactions.
