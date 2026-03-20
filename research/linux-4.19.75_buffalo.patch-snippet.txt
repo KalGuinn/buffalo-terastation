@@ -1,0 +1,903 @@
+diff --git a/buffalo/scripts/debianize.sh b/buffalo/scripts/debianize.sh
+deleted file mode 100755
+index a64ca2eac36f..000000000000
+--- a/buffalo/scripts/debianize.sh
++++ /dev/null
+@@ -1,196 +0,0 @@
+-#!/bin/bash
+-#
+-export LANGUAGE=C
+-export LC_ALL=C
+-
+-# force fixup kernel build user/host, default:"root@buffalo.jp"
+-#
+-: ${KBUILD_BUILD_USER:="root"}
+-: ${KBUILD_BUILD_HOST:="buffalo.jp"}
+-export KBUILD_BUILD_USER KBUILD_BUILD_HOST
+-
+-# kernel version dependent settings:
+-#
+-: ${KERNELVERSION:="4.19.75"}
+-: ${UBUNTUCORE_NAME:="v${KERNELVERSION}"}
+-: ${UBUNTUCORE_URL:="http://kernel.ubuntu.com/~kernel-ppa/mainline/${UBUNTUCORE_NAME}"}
+-:
+-UBUNTU_PATCHES='
+-	0001-base-packaging.patch
+-	0002-UBUNTU-SAUCE-kbuild-add-fcf-protection-none-when-usi.patch
+-	0003-UBUNTU-SAUCE-add-vmlinux.strip-to-BOOT_TARGETS1-on-p.patch
+-	0004-UBUNTU-SAUCE-tools-hv-lsvmbus-add-manual-page.patch
+-	0005-debian-changelog.patch
+-	0006-configs-based-on-Ubuntu-4.19.0-8.9.patch
+-'
+-: ${ENABLE_UBUNTU_PATCHES:=1}
+-
+-# target architecutre/machine dependent settings:
+-#
+-: ${ARCH:="arm64"}
+-: ${SRCARCH:="arm64"}
+-: ${MACHINE:="buffalo_ts5020"}
+-# arch/arm64/boot/dts/al/alpine-v2-evp.dts
+-: ${DTSNAMES:="alpine-v2-evp.dts"}
+-: ${FLAVOUR:="generic"}
+-: ${FLAVOUR_SUPPORTED:="Generic"}
+-: ${GCCNAME:="gcc-7"}
+-: ${GCCPREFIX:="/usr/bin/aarch64-linux-gnu-"}
+-# buffalo/arch/arm64/configs/buffalo_ts5020_defconfig (based on arch/arm64/configs/alpine_v2_defconfig)
+-: ${DEFCONFIG:="buffalo/arch/${ARCH}/configs/${MACHINE}_defconfig"}
+-: ${PACKAGE_ARCHIVE:="kernel_ts5020_with_buffalo"}
+-: ${KERNEL_DTSDIR:="arch/${ARCH}/boot/dts/al/"}
+-: ${EXTRA_DTSDIR:="buffalo/arch/${ARCH}/boot/dts/"}
+-
+-
+-fetch_ubuntu_patch () {
+-	[ ${ENABLE_UBUNTU_PATCHES} -ne 1 ] && return 0
+-	curl --fail -OL ${UBUNTUCORE_URL}/$1 && return 0
+-	rm -f $1
+-}
+-
+-apply_ubuntu_patch () {
+-	[ ${ENABLE_UBUNTU_PATCHES} -ne 1 ] && return 0
+-
+-	rm -rf debian debian.master
+-	for file in ${UBUNTU_PATCHES}; do
+-		[ -f ${file} ] || fetch_ubuntu_patch $file
+-		patch -p1 < $file || exit 1
+-	done
+-	chmod +x debian/rules
+-	chmod -R u+x debian/scripts/*
+-	fakeroot debian/rules clean
+-}
+-
+-fixup_kernel_flavour () {
+-	[ ${ENABLE_UBUNTU_PATCHES} -ne 1 ] && return 0
+-
+-	# create debian.master/control.d/vars.${FLAVOUR}
+-	#
+-	sed -e "s/^arch=.*/arch=\"${SRCARCH}\"/" \
+-	    -e "s/^supported=.*/supported=\"${FLAVOUR_SUPPORTED}\"/" \
+-	    debian.master/control.d/vars.$1 \
+-	    > debian.master/control.d/vars.$2
+-
+-	# create debian.master/config/${SRCARCH}/config.flavour.${FLAVOUR}
+-	#
+-	cp debian.master/config/${SRCARCH}/config.flavour.$1 \
+-	   debian.master/config/${SRCARCH}/config.flavour.$2
+-
+-	fakeroot debian/rules clean
+-}
+-
+-fixup_buffalo_configs () {
+-	if [ ${ENABLE_UBUNTU_PATCHES} -eq 1 ]; then
+-	    [ -d debian.master ] || apply_ubuntu_patch
+-
+-	    # create new flavour based on 'generic', if needed.
+-	    #
+-	    [ -f debian.master/config/${SRCARCH}/config.flavour.${FLAVOUR} ] \
+-		|| fixup_kernel_flavour generic ${FLAVOUR}
+-
+-	    # merge machine dependent configs to flavour, except for
+-	    # CONFIG_LOCALVERSION setting.
+-	    #
+-	    egrep -v '^CONFIG_LOCALVERSION' ${DEFCONFIG} \
+-		>> debian.master/config/${SRCARCH}/config.flavour.${FLAVOUR} \
+-		|| exit 1
+-	else
+-	    # copy defconfig for fixup_$SRCARCH_configs() and keeping original defconfig
+-	    local defconfig="$(mktemp "${DEFCONFIG%_defconfig}_XXXX_defconfig")"
+-	    trap "rm -f ${defconfig}" EXIT INT QUIT TERM
+-	    cp "${DEFCONFIG}" "${defconfig}"
+-	    DEFCONFIG="${defconfig}"
+-	    echo '# CONFIG_LOCALVERSION_AUTO is not set' >>${DEFCONFIG}
+-	    echo 'CONFIG_LOCALVERSION=""' >>${DEFCONFIG}
+-	fi
+-
+-	fixup_ubuntu_configs || exit 1
+-	fixup_${SRCARCH}_configs || true
+-
+-	for name in ${DTSNAMES}; do
+-	    dts="$(basename $name .dts).dts"
+-	    if [ -f "${EXTRA_DTSDIR}${dts}" ]; then
+-		rm -f "${KERNEL_DTSDIR}${dts}"
+-		cat "${EXTRA_DTSDIR}${dts}" > "${KERNEL_DTSDIR}${dts}" \
+-		|| exit 1
+-	    fi
+-	done
+-}
+-
+-# fixup configes drived from UBUNTU.
+-#
+-fixup_ubuntu_configs () {
+-	if [ ${ENABLE_UBUNTU_PATCHES} -eq 1 ]; then
+-	    # Subject: UBUNTU: [Config] CONFIG_ANDROID=n
+-	    # Author: Tim Gardner <tim.gardner@canonical.com>
+-	    # Date: 2013-10-07 13:54:56 (GMT)
+-	    # commit: b50a787fbcd6f42e9c552b201e58953049ac4428
+-	    # BugLink: http://bugs.launchpad.net/bugs/1235161
+-	    #
+-	    cat <<'EOF' >> debian.master/config/${SRCARCH}/config.flavour.${FLAVOUR}
+-# CONFIG_ANDROID is not set
+-EOF
+-	else
+-	    true
+-	fi
+-}
+-
+-fixup_arm64_configs () {
+-	if [ ${ENABLE_UBUNTU_PATCHES} -eq 1 ]; then
+-	    # To disable asking configs in 'make menuconfig', append default
+-	    # value to undefined configs.
+-	    #
+-	    cat <<'EOF' >> debian.master/config/${SRCARCH}/config.flavour.${FLAVOUR}
+-EOF
+-	    # fixup defconfig (e.g. disable unnecessary device drivers)
+-	    #
+-	    cat <<'EOF' >>"${DEFCONFIG}"
+-EOF
+-	else
+-	    # fixup defconfig (e.g. disable unnecessary device drivers)
+-	    #
+-	    cat <<'EOF' >>"${DEFCONFIG}"
+-EOF
+-	fi
+-}
+-
+-fixup_buffalo_rules () {
+-	[ ${ENABLE_UBUNTU_PATCHES} -ne 1 ] && return 0
+-
+-	[ -d debian.master ] || apply_ubuntu_patch
+-
+-	sed -e "/^flavours/s/=.*/= ${FLAVOUR}/" \
+-	    -e "/^gcc/s/=.*/= ${GCCNAME}/" \
+-	    -i debian.master/rules.d/${SRCARCH}.mk
+-	if ! egrep -q "^gcc\s+=.*" debian.master/rules.d/${SRCARCH}.mk; then
+-		echo "gcc		= ${GCCNAME}" >> debian.master/rules.d/${SRCARCH}.mk
+-	fi
+-	for name in ${DTSNAMES}; do
+-		dts="$(basename $name .dts)"
+-		/bin/echo -e "dtb_files_${FLAVOUR}\t+= ${dts}.dtb" \
+-		>> debian.master/rules.d/${SRCARCH}.mk
+-	done
+-}
+-
+-build_buffalo_packages () {
+-	if [ ${ENABLE_UBUNTU_PATCHES} -eq 1 ]; then
+-	    fakeroot debian/rules do_tools=0 no_dumpfile=1 binary-headers
+-	    fakeroot debian/rules clean
+-	    dpkg-architecture -a${SRCARCH} -c debian/rules \
+-		do_extras_package=false do_tools=0 no_dumpfile=1 build-arch
+-	    dpkg-architecture -a${SRCARCH} -c fakeroot debian/rules \
+-		do_extras_package=false do_tools=0 no_dumpfile=1 binary-debs
+-	else
+-	    make -j $(nproc || echo 1) LOCALVERSION= localver-extra= KERNELVERSION=${KERNELVERSION}-0000000-${FLAVOUR} ARCH=${ARCH} CROSS_COMPILE="${GCCPREFIX}" mrproper "$(basename ${DEFCONFIG})" bindeb-pkg
+-	    rm -f "${DEFCONFIG}"
+-	    trap '' EXIT INT QUIT TERM
+-	    [ "x${KBUILD_OUTPUT}" = "x" ] || mv "${KBUILD_OUTPUT}"/../linux-* ../
+-	fi
+-}
+-
+-fixup_buffalo_configs
+-fixup_buffalo_rules
+-build_buffalo_packages
+-
+-( cd ..; tar cvf ${PACKAGE_ARCHIVE}.tar linux-*.deb )
+diff --git a/buffalo/drivers/Makefile b/buffalo/drivers/Makefile
+deleted file mode 100644
+index b21427e32b36..000000000000
+--- a/buffalo/drivers/Makefile
++++ /dev/null
+@@ -1,20 +0,0 @@
+-obj-$(CONFIG_BUFFALO_PLATFORM)		+= proc_entry.o
+-obj-$(CONFIG_BUFFALO_PLATFORM)		+= buffalocore.o
+-obj-$(CONFIG_BUFFALO_PLATFORM)		+= kernevntProc.o
+-obj-$(CONFIG_BUFFALO_PLATFORM)		+= kernevnt.o
+-
+-obj-$(CONFIG_BUFFALO_MICON_V3)		+= micon_v3.o
+-
+-obj-$(CONFIG_BUFFALO_USE_UPS)		+= upsdrv.o rtc_nvram.o
+-
+-
+-
+-buffalo/drivers/buffalocore.o: buffalo/include/generated/builddate.h
+-
+-       chk_builddate.h = :
+- quiet_chk_builddate.h = echo '  CHK     $@'
+-silent_chk_builddate.h = :
+-buffalo/include/generated/builddate.h: FORCE
+-	$(Q)mkdir -p buffalo/include/generated
+-	@$($(quiet)chk_builddate.h)
+-	$(Q)$(CONFIG_SHELL) $(srctree)/buffalo/scripts/mkbuilddate_h $@
+diff --git a/buffalo/drivers/buffalocore.c b/buffalo/drivers/buffalocore.c
+deleted file mode 100644
+index 57e38ccd5afc..000000000000
+--- a/buffalo/drivers/buffalocore.c
++++ /dev/null
+@@ -1,558 +0,0 @@
+-/*
+- *  Driver routines for BUFFALO Platform
+- *
+- *  Copyright (C)  BUFFALO INC.
+- *
+- *  This software may be used and distributed according to the terms of
+- *  the GNU General Public License (GPL), incorporated herein by reference.
+- *  Drivers based on or derived from this code fall under the GPL and must
+- *  retain the authorship, copyright and license notice.  This file is not
+- *  a complete program and may only be used when the entire operating
+- *  system is licensed under the GPL.
+- *
+- */
+-
+-#include <linux/version.h>
+-#include <linux/kernel.h>
+-#include <linux/slab.h>
+-#include <linux/seq_file.h>
+-#include <linux/ctype.h>
+-#include <linux/string.h>
+-#include <linux/module.h>
+-#include <linux/proc_fs.h>
+-#include <linux/init.h>
+-#include <linux/device.h>
+-#include <linux/uaccess.h>
+-#include <linux/fs.h>
+-
+-#include "buffalocore.h"
+-#include "kernevntProc.h"
+-#include "buffalo/kernevnt.h"
+-#include "proc_entry.h"
+-#include "builddate.h"
+-
+-
+-#define BUFCORE_VERSION "0.20"
+-
+-/* Module parameters */
+-MODULE_AUTHOR("BUFFALO");
+-MODULE_DESCRIPTION("Buffalo Platform Linux Driver");
+-MODULE_LICENSE("GPL");
+-MODULE_VERSION(BUFCORE_VERSION);
+-
+-//#define DEBUG
+-#ifdef DEBUG
+-#define FUNCTRACE(x)	x
+-#else
+-#define FUNCTRACE(x)	/* none */
+-#endif
+-
+-void *
+-buffalo_generic_seq_start(struct seq_file *m, loff_t *pos)
+-{
+-	return *pos < 1 ? SEQ_START_TOKEN : NULL;
+-}
+-
+-void *
+-buffalo_generic_seq_next(struct seq_file *m, void *v, loff_t *pos)
+-{
+-	++ *pos;
+-	return NULL;
+-}
+-
+-void
+-buffalo_generic_seq_stop(struct seq_file *m, void *v)
+-{
+-}
+-
+-
+-/*
+- *	/proc/buffalo/booting
+- */
+-int buffalo_booting = 1;
+-
+-static int
+-buffalo_booting_show(struct seq_file *m, void *v)
+-{
+-	seq_printf(m, "%d\n", buffalo_booting);
+-	return 0;
+-}
+-
+-static const struct seq_operations buffalo_booting_op = {
+-	.start	= buffalo_generic_seq_start,
+-	.next	= buffalo_generic_seq_next,
+-	.stop	= buffalo_generic_seq_stop,
+-	.show	= buffalo_booting_show,
+-};
+-
+-static int
+-buffalo_booting_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &buffalo_booting_op);
+-}
+-
+-static ssize_t
+-buffalo_booting_write(struct file *file, const char __user *buffer,
+-		      size_t count, loff_t *ppos)
+-{
+-	char *kbuf;
+-
+-	kbuf = kmalloc(count + 1, GFP_KERNEL);
+-	if (kbuf == NULL) {
+-		return -ENOMEM;
+-	}
+-
+-	if (copy_from_user(kbuf, buffer, count)) {
+-		count = -EFAULT;
+-		goto out;
+-	}
+-
+-	if (kbuf[count - 1] == '\n') {
+-		kbuf[count - 1] = '\0';
+-	}
+-	else {
+-		kbuf[count] = '\0';
+-	}
+-
+-	if (strncmp(kbuf, "0", 1) == 0) {
+-		buffalo_booting = 0;
+-	}
+-	else if (strncmp(kbuf, "1", 1) == 0) {
+-		buffalo_booting = 1;
+-	}
+-	else {
+-		printk("unknown value for booting(%s)\n", kbuf);
+-		count = -EINVAL;
+-	}
+-out:
+-	kfree(kbuf);
+-
+-	return count;
+-}
+-
+-static struct file_operations buffalo_booting_fops = {
+-	.open		= buffalo_booting_open,
+-	.read		= seq_read,
+-	.write		= buffalo_booting_write,
+-	.llseek		= seq_lseek,
+-	.release	= seq_release,
+-};
+-
+-static struct proc_entry_data buffalo_booting_entry =
+-{
+-	.path		= "booting",
+-	.mode		= S_IRUGO|S_IWUSR,
+-	.proc_fops	= &buffalo_booting_fops,
+-	.data		= NULL,
+-};
+-
+-
+-/*
+- *	/proc/buffalo/cpu_status
+- */
+-unsigned int bfMagicKey = MagicKeyHwPoff;
+-
+-static unsigned int
+-bfGetMagicKey(void)
+-{
+-	return bfMagicKey;
+-}
+-
+-/*
+- * define as 'weak',
+- * you can define architecture-depend bfSetMagicKey_arch()
+- */
+-void (*bfSetMagicKey_arch)(unsigned int key) __attribute__((weak)) = NULL;
+-
+-static void
+-bfSetMagicKey(unsigned int key)
+-{ 
+-	bfMagicKey = key;
+-	if (bfSetMagicKey_arch != NULL) {
+-		bfSetMagicKey_arch(key);
+-	}
+-}
+-
+-static struct buffalo_cpu_status_defs buffalo_cpu_status[] = {
+-	{ MagicKeyNormalState,		"normal_state" },
+-	{ MagicKeyReboot,		"reboot" },
+-	{ MagicKeyWOLReadyState,	"WOLReady" },
+-	{ MagicKeySwPoff,		"swpoff" },
+-
+-	{ MagicKeyTerminator,		NULL },
+-};
+-
+-/*
+- * define as 'weak',
+- * you can define architecture-depend buffalo_cpu_status_arch
+- */
+-struct buffalo_cpu_status_defs *buffalo_cpu_status_arch __attribute__((weak)) = NULL;
+-
+-
+-static char *
+-buffalo_find_cpu_status_str(unsigned int key,
+-			    struct buffalo_cpu_status_defs *defs,
+-			    struct buffalo_cpu_status_defs *defs_arch)
+-{
+-	int i;
+-
+-	for (i = 0; defs[i].stat != MagicKeyTerminator; i ++) {
+-		if (defs[i].stat == key) {
+-			return defs[i].str;
+-		}
+-	}
+-
+-	if (defs_arch != NULL) {
+-		for (i = 0; defs_arch[i].stat != MagicKeyTerminator; i ++) {
+-			if (defs_arch[i].stat == key) {
+-				return defs_arch[i].str;
+-			}
+-		}
+-	}
+-
+-	return NULL;
+-}
+-
+-static unsigned int
+-buffalo_find_cpu_status_id(char *stat_str,
+-			   struct buffalo_cpu_status_defs *defs,
+-			   struct buffalo_cpu_status_defs *defs_arch)
+-{
+-	int i;
+-
+-	for (i = 0; defs[i].stat != MagicKeyTerminator; i ++) {
+-		if (strcmp(defs[i].str, stat_str) == 0) {
+-			return defs[i].stat;
+-		}
+-	}
+-
+-	if (defs_arch != NULL) {
+-		for (i = 0; defs_arch[i].stat != MagicKeyTerminator; i ++) {
+-			if (strcmp(defs_arch[i].str, stat_str) == 0) {
+-				return defs_arch[i].stat;
+-			}
+-		}
+-	}
+-
+-	return MagicKeyTerminator;
+-}
+-
+-static int
+-buffalo_cpu_status_show(struct seq_file *m, void *v)
+-{
+-	unsigned int CpuStatus = bfGetMagicKey();
+-	char *stat_str;
+-
+-	stat_str = buffalo_find_cpu_status_str(CpuStatus,
+-					       buffalo_cpu_status,
+-					       buffalo_cpu_status_arch);
+-	if (stat_str != NULL) {
+-		seq_printf(m, "%s\n", stat_str);
+-	}
+-	else {
+-		seq_printf(m, "Unknown(CpuStatus=%u)\n", CpuStatus);
+-	}
+-
+-	return 0;
+-}
+-
+-static const struct seq_operations buffalo_cpu_status_op = {
+-	.start	= buffalo_generic_seq_start,
+-	.next	= buffalo_generic_seq_next,
+-	.stop	= buffalo_generic_seq_stop,
+-	.show	= buffalo_cpu_status_show,
+-};
+-
+-static int
+-buffalo_cpu_status_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &buffalo_cpu_status_op);
+-}
+-
+-static ssize_t
+-buffalo_cpu_status_write(struct file *file, const char __user *buffer,
+-			 size_t count, loff_t *ppos)
+-{
+-	char *kbuf;
+-	unsigned int CpuStatus;
+-
+-	kbuf = kmalloc(count + 1, GFP_KERNEL);
+-	if (kbuf == NULL) {
+-		return -ENOMEM;
+-	}
+-
+-	if (copy_from_user(kbuf, buffer, count)) {
+-		count = -EFAULT;
+-		goto out;
+-	}
+-
+-	if (kbuf[count - 1] == '\n') {
+-		kbuf[count -1] = '\0';
+-	}
+-	else {
+-		kbuf[count] = '\0';
+-	}
+-
+-	CpuStatus = buffalo_find_cpu_status_id(kbuf,
+-					       buffalo_cpu_status,
+-					       buffalo_cpu_status_arch);
+-
+-	if (CpuStatus != MagicKeyTerminator) {
+-		bfSetMagicKey(CpuStatus);
+-	}
+-	else{
+-		printk("unknown cpu_status(%s)\n", kbuf);
+-		count = -EINVAL;
+-	}
+-out:
+-	kfree(kbuf);
+-
+-	return count;
+-}
+-
+-static struct file_operations buffalo_cpu_status_fops = {
+-	.open		= buffalo_cpu_status_open,
+-	.read		= seq_read,
+-	.write		= buffalo_cpu_status_write,
+-	.llseek		= seq_lseek,
+-	.release	= seq_release,
+-};
+-
+-static struct proc_entry_data buffalo_cpu_status_entry =
+-{
+-	.path		= "cpu_status",
+-	.mode		= S_IRUGO|S_IWUSR,
+-	.proc_fops	= &buffalo_cpu_status_fops,
+-	.data		= NULL,
+-};
+-
+-
+-
+-/*
+- *	/proc/buffalo/firmware
+- */
+-int cmdline_done=0;
+-#define CMDLINE_VALSIZE 32
+-char buffalo_bootver[CMDLINE_VALSIZE] = { 0 };
+-char buffalo_series_name[CMDLINE_VALSIZE] = { 0 };
+-char buffalo_product_name[CMDLINE_VALSIZE] = { 0 };
+-char buffalo_product_id[CMDLINE_VALSIZE] = { 0 };
+-char buffalo_phymode[CMDLINE_VALSIZE] = { 0 };
+-
+-struct {
+-	char *key;
+-	char *value;
+-	char *default_val;
+-} cmdline_opts[] = {
+-	{ "BOOTVER=",		buffalo_bootver,	"Unknown" },
+-	{ "SERIES=",		buffalo_series_name,	"Unknown" },
+-	{ "PRODUCTNAME=",	buffalo_product_name,	"Unknown" },
+-	{ "PRODUCTID=",		buffalo_product_id,	"0x00000000" },
+-	{ "PHYMODE=",		buffalo_phymode,    	"0" },
+-};
+-static void buffalo_firmware_cmdline_process(void)
+-{
+-	int i;
+-
+-	if ( cmdline_done == 1 ) return;
+-	for (i = 0; i < ARRAY_SIZE(cmdline_opts); i ++) {
+-		char *p, *pe;
+-
+-		if (!isalpha(cmdline_opts[i].value[0])) {
+-			memset(cmdline_opts[i].value, 0, CMDLINE_VALSIZE);
+-			p = strstr(saved_command_line, cmdline_opts[i].key);
+-			if (p != NULL) {
+-				p += strlen(cmdline_opts[i].key);
+-				pe = strstr(p, " ");
+-
+-				if ((pe != NULL) && ((pe - p) < CMDLINE_VALSIZE)){
+-					strncpy(cmdline_opts[i].value, p, pe - p);
+-				}
+-				else {
+-					strncpy(cmdline_opts[i].value, p, CMDLINE_VALSIZE);
+-				}
+-			}
+-			else {
+-				sprintf(cmdline_opts[i].value, "%s",
+-					cmdline_opts[i].default_val);
+-			}
+-		}
+-	}
+-	cmdline_done = 1;
+-	return;
+-}
+-
+-static int
+-buffalo_firmware_show(struct seq_file *m, void *v)
+-{
+-	buffalo_firmware_cmdline_process();
+-	seq_printf(m, "SERIES=%s\n", buffalo_series_name);
+-	seq_printf(m, "PRODUCTNAME=%s\n", buffalo_product_name);
+-	seq_printf(m, "VERSION=%s\n", BUFCORE_VERSION);
+-	seq_printf(m, "SUBVERSION=FLASH 0.00\n");
+-	seq_printf(m, "PRODUCTID=%s\n", buffalo_product_id);
+-	seq_printf(m, "BUILDDATE=%s %s\n",
+-		   BUFFALO_BUILD_DATE, BUFFALO_BUILD_TIME);
+-	seq_printf(m, "BOOTVER=%s\n", buffalo_bootver);
+-	seq_printf(m, "PHYMODE=%s\n", buffalo_phymode);
+-
+-	return 0;
+-}
+-
+-void get_buffalo_phymode(char *id){
+-	buffalo_firmware_cmdline_process();
+-	sprintf(id, buffalo_phymode);
+-	return;
+-}
+-
+-static const struct seq_operations buffalo_firmware_op = {
+-	.start	= buffalo_generic_seq_start,
+-	.next	= buffalo_generic_seq_next,
+-	.stop	= buffalo_generic_seq_stop,
+-	.show	= buffalo_firmware_show,
+-};
+-
+-static int
+-buffalo_firmware_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &buffalo_firmware_op);
+-}
+-
+-static struct file_operations buffalo_firmware_fops = {
+-	.open		= buffalo_firmware_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= seq_release,
+-};
+-
+-static struct proc_entry_data buffalo_firmware_entry =
+-{
+-	.path		= "firmware",
+-	.mode		= S_IRUGO,
+-	.proc_fops	= &buffalo_firmware_fops,
+-	.data		= NULL,
+-};
+-
+-/*
+- *	/proc/buffalo/micon
+- */
+-#if defined(CONFIG_BUFFALO_USE_MICON) && !defined(CONFIG_BUFFALO_MICON_V3)
+-static int
+-buffalo_micon_show(struct seq_file *m, void *v)
+-{
+-	seq_printf(m, "on\n");
+-	return 0;
+-}
+-
+-static const struct seq_operations buffalo_micon_op = {
+-	.start	= buffalo_generic_seq_start,
+-	.next	= buffalo_generic_seq_next,
+-	.stop	= buffalo_generic_seq_stop,
+-	.show	= buffalo_micon_show,
+-};
+-
+-static int
+-buffalo_micon_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &buffalo_micon_op);
+-}
+-
+-static struct file_operations buffalo_micon_fops = {
+-	.open		= buffalo_micon_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= seq_release,
+-};
+-
+-static struct proc_entry_data buffalo_micon_entry =
+-{
+-	.path		= "micon",
+-	.mode		= S_IRUGO,
+-	.proc_fops	= &buffalo_micon_fops,
+-	.data		= NULL,
+-};
+-
+-/*
+- * /proc/buffalo/miconint_en
+- */
+-static int
+-buffalo_miconint_en_show(struct seq_file *m, void *v)
+-{
+-	seq_printf(m, "MiconAct\n");
+-	return 0;
+-}
+-
+-static const struct seq_operations buffalo_miconint_en_op = {
+-	.start	= buffalo_generic_seq_start,
+-	.next	= buffalo_generic_seq_next,
+-	.stop	= buffalo_generic_seq_stop,
+-	.show	= buffalo_miconint_en_show,
+-};
+-
+-static int
+-buffalo_miconint_en_open(struct inode *inode, struct file *file)
+-{
+-	return seq_open(file, &buffalo_miconint_en_op);
+-}
+-
+-static struct file_operations buffalo_miconint_en_fops = {
+-	.open		= buffalo_miconint_en_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= seq_release,
+-};
+-
+-static struct proc_entry_data buffalo_micon_entry =
+-{
+-	.path		= "miconint_en",
+-	.mode		= S_IRUGO0,
+-	.proc_fops	= &buffalo_miconint_en_fops,
+-	.data		= NULL,
+-};
+-#endif	/* CONFIG_BUFFALO_USE_MICON && !CONFIG_BUFFALO_MICON_V3 */
+-
+-static struct proc_entry_data *ped_list[] = {
+-	&buffalo_booting_entry,
+-	&buffalo_cpu_status_entry,
+-	&buffalo_firmware_entry,
+-#if defined(CONFIG_BUFFALO_USE_MICON) && !defined(CONFIG_BUFFALO_MICON_V3)
+-	&buffalo_micon_entry,
+-	&buffalo_miconint_en_entry,
+-#endif	/* CONFIG_BUFFALO_USE_MICON && !CONFIG_BUFFALO_MICON_V3 */
+-	NULL,
+-};
+-
+-//----------------------------------------------------------------------
+-int __init
+-buffaloDriver_init (void)
+-{
+-	int i;
+-
+-        FUNCTRACE(printk(">%s\n",__FUNCTION__));
+-
+-	for (i = 0; ped_list[i]; i ++) {
+-		make_proc_entry(ped_list[i]);
+-	}
+-
+-	return 0;
+-}
+-
+-//----------------------------------------------------------------------
+-void
+-buffaloDriver_exit(void)
+-{
+-	int i;
+-	struct proc_dir_entry *buffalo;
+-
+-	FUNCTRACE(printk(">%s\n",__FUNCTION__));
+-
+-	buffalo = get_proc_buffalo();
+-	for (i = 0; ped_list[i]; i++) {
+-		remove_proc_entry(ped_list[i]->path, buffalo);
+-	}
+-
+-	remove_proc_entry ("buffalo", 0);
+-}
+-
+-module_init(buffaloDriver_init);
+-module_exit(buffaloDriver_exit);
+diff --git a/buffalo/include/buffalo/micon_v3.h b/buffalo/include/buffalo/micon_v3.h
+deleted file mode 100644
+index 90f3b2e73aa9..000000000000
+--- a/buffalo/include/buffalo/micon_v3.h
++++ /dev/null
+@@ -1,11 +0,0 @@
+-/*
+- *
+- */
+-
+-#ifndef __BUFFALO_MICON_V3_H__
+-#define __BUFFALO_MICON_V3_H__
+-
+-extern void miconCntl_PowerOff(void);
+-extern void miconCntl_Reboot(void);
+-
+-#endif	/* __BUFFALO_MICON_V3_H__ */
+diff --git a/arch/arm/kernel/reboot.c b/arch/arm/kernel/reboot.c
+index 40f177a7ecd4..3b2aa9a9fe26 100644
+--- a/arch/arm/kernel/reboot.c
++++ b/arch/arm/kernel/reboot.c
+@@ -13,9 +13,6 @@
+ #include <asm/cacheflush.h>
+ #include <asm/idmap.h>
+ #include <asm/virt.h>
+-#ifdef CONFIG_BUFFALO_MICON_V3
+-#include <buffalo/micon_v3.h>
+-#endif	/* CONFIG_BUFFALO_MICON_V3 */
+ 
+ #include "reboot.h"
+ 
+@@ -99,11 +96,6 @@ void soft_restart(unsigned long addr)
+ void machine_shutdown(void)
+ {
+ 	disable_nonboot_cpus();
+-#if 0	/* XXX: this function is for kexec, maybe it is no need to micon op */
+-#ifdef CONFIG_BUFFALO_MICON_V3
+-	miconCntl_PowerOff();
+-#endif	/* CONFIG_BUFFALO_MICON_V3 */
+-#endif
+ }
+ 
+ /*
+@@ -115,27 +107,9 @@ void machine_halt(void)
+ {
+ 	local_irq_disable();
+ 	smp_send_stop();
+-
+-#ifdef CONFIG_BUFFALO_MICON_V3
+-	miconCntl_PowerOff();
+-#else	/* CONFIG_BUFFALO_MICON_V3 */
+-#ifdef CONFIG_BUFFALO_MICON_REBOOT
+-	printk(KERN_EMERG "Waiting for MICON halt.\n");
+-#endif	/* CONFIG_BUFFALO_MICON_REBOOT */
+ 	while (1);
+-#endif	/* CONFIG_BUFFALO_MICON_V3 */
+ }
+ 
+-#ifdef CONFIG_BUFFALO_MICON_REBOOT
+-static inline void longdelay(int sec)
+-{
+-	int i;
+-	for (i = 0; i < sec; i++) {
+-	    mdelay(1000);
+-	    touch_softlockup_watchdog();
+-	}
+-}
+-#endif	/* CONFIG_BUFFALO_MICON_REBOOT */
+ /*
+  * Power-off simply requires that the secondary CPUs stop performing any
+  * activity (executing tasks, handling interrupts). smp_send_stop()
+@@ -147,16 +121,8 @@ void machine_power_off(void)
+ 	local_irq_disable();
+ 	smp_send_stop();
+ 
+-#ifdef CONFIG_BUFFALO_MICON_V3
+-	miconCntl_PowerOff();
+-#else	/* CONFIG_BUFFALO_MICON_V3 */
+-#ifdef CONFIG_BUFFALO_MICON_REBOOT
+-	printk(KERN_EMERG "Waiting for MICON power-off.\n");
+-	longdelay(10);	/* wait 10 secends */
+-#endif	/* CONFIG_BUFFALO_MICON_REBOOT */
+ 	if (pm_power_off)
+ 		pm_power_off();
+-#endif	/* CONFIG_BUFFALO_MICON_V3 */
+ }
+ 
+ /*
+@@ -175,22 +141,10 @@ void machine_restart(char *cmd)
+ 	local_irq_disable();
+ 	smp_send_stop();
+ 
+-	/* Flush the console to make sure all the relevant messages make it
+-	 * out to the console drivers */
+-	arm_machine_flush_console();
+-
+-#ifdef CONFIG_BUFFALO_MICON_V3
+-	miconCntl_Reboot();
+-#else	/* CONFIG_BUFFALO_MICON_V3 */
+-#ifdef CONFIG_BUFFALO_MICON_REBOOT
+-	printk(KERN_EMERG "Waiting for MICON restart.\n");
+-	longdelay(10);	/* wait 10 seconds */
+-#endif	/* CONFIG_BUFFALO_MICON_REBOOT */
+ 	if (arm_pm_restart)
+ 		arm_pm_restart(reboot_mode, cmd);
+ 	else
+ 		do_kernel_restart(cmd);
+-#endif	/* CONFIG_BUFFALO_MICON_V3 */
+ 
+ 	/* Give a grace period for failure to restart of 1s */
+ 	mdelay(1000);

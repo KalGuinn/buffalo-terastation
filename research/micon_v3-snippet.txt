@@ -1,0 +1,359 @@
+diff --git a/buffalo/drivers/micon_v3.c b/buffalo/drivers/micon_v3.c
+deleted file mode 100644
+index 41c292b3efb4..000000000000
+--- a/buffalo/drivers/micon_v3.c
++++ /dev/null
+@@ -1,353 +0,0 @@
+-/*
+- *
+- */
+-
+-#include <linux/kernel.h>
+-#include <linux/slab.h>
+-#include <linux/tty.h>
+-#include <linux/uaccess.h>
+-#include <linux/syscalls.h>
+-#include <linux/delay.h>
+-#include <buffalo/micon_v3.h>
+-
+-
+-#ifdef CONFIG_BUFFALO_MICON_V3_DEVTTY
+-#define MICON_DEV		CONFIG_BUFFALO_MICON_V3_DEVTTY
+-#else	/* CONFIG_BUFFALO_MICON_V3_DEVTTY */
+-#warning "CONFIG_BUFFALO_MICON_V3_DEVTTY is not defined, use /dev/ttyS1"
+-#define MICON_DEV		"/dev/ttyS1"
+-#endif	/* CONFIG_BUFFALO_MICON_V3_DEVTTY */
+-#define MICON_BAUD		115200
+-#define MICON_BAUD_SYM		B115200
+-
+-#define MICON_INIT_MARK		0x1b	/* (ESC) */
+-#define MICON_DELIMITER		0x0d	/* "\r" */
+-
+-#define MICON_CMD_POW_OFF	"POW_OFF"
+-#define MICON_CMD_REBOOT	"REBOOT"
+-#define MICON_CMD_BEEP		"BEEP 3"
+-
+-#define MICON_RSP_ACK		"OK"
+-#define MICON_RSP_NACK		"NG"
+-
+-#define MICON_RSP_MAX		256	/* XXX: reasonable ? */
+-#define MICON_RETRY_MAX		3
+-
+-
+-#define DEBUG
+-#ifdef DEBUG
+-#define TRACE(arg)	arg
+-#else	/* DEBUG */
+-#define TRACE(arg)	/* none */
+-#endif	/* DEBUG */
+-
+-
+-static int
+-micon_v3_serial_io(char *indata, int inlen, char *outdata, int outlen)
+-{
+-	int fd;
+-	int sys_val = 0;
+-	struct termios termios;
+-	struct termios termios_save;
+-	char *cmdbuf = NULL;
+-	int cmdbuflen;
+-	char rspbuf[MICON_RSP_MAX];
+-	int rsplen;
+-	mm_segment_t oldfs;
+-	int try;
+-	int i;
+-
+-	oldfs = get_fs();
+-	set_fs(KERNEL_DS);
+-
+-	oldfs = get_fs();
+-	set_fs(KERNEL_DS);
+-
+-	fd = sys_open(MICON_DEV, O_RDWR, 0);
+-	if (fd < 0) {
+-		printk(KERN_ERR "Micon device(%s): open failed.(%d)\n",
+-		       MICON_DEV, fd);
+-		set_fs(oldfs);
+-		return fd;
+-	}
+-
+-	sys_val = sys_ioctl(fd, TCGETS, (long)&termios_save);
+-	if (sys_val < 0) {
+-		printk(KERN_ERR "Micon device(%s): ioctl(TCGETS) failed.(%d)\n",
+-		       MICON_DEV, sys_val);
+-		sys_close(fd);
+-		set_fs(oldfs);
+-		return sys_val;
+-	}
+-
+-	memset(&termios, 0, sizeof(termios));
+-	termios.c_cflag = MICON_BAUD_SYM | CS8 | CLOCAL | CREAD;
+-	termios.c_iflag = IGNPAR;
+-	sys_val = sys_ioctl(fd, TCSETS, (unsigned long)&termios);
+-	if (sys_val < 0) {
+-		printk(KERN_ERR "Micon device(%s): ioctl(TCSETS) failed.(%d)\n",
+-		       MICON_DEV, sys_val);
+-		goto out;
+-	}
+-
+-	/* read all data before real I/O */
+-	while (1) {
+-		sys_val = sys_read(fd, rspbuf, sizeof(rspbuf));
+-		if (sys_val == 0) {
+-			TRACE(printk(KERN_DEBUG "Micon buffer cleared.\n"));
+-			break;
+-		}
+-		else if (sys_val < 0) {
+-			printk(KERN_ERR "Micon buffer clear failed.\n");
+-			goto out;
+-		}
+-	}
+-
+-	cmdbuflen = 1;	/* at least 1 byte */
+-	if (inlen > cmdbuflen) {
+-		cmdbuflen = inlen;
+-	}
+-	cmdbuflen ++;	/* for string terminator '\0' */
+-	cmdbuf = kmalloc(cmdbuflen, GFP_KERNEL);
+-	if (cmdbuf == NULL) {
+-		printk(KERN_ERR "Micon I/O buffer allocation failed.\n");
+-		return -ENOMEM;
+-	}
+-
+-	for (try = 0; try < MICON_RETRY_MAX; try ++) {
+-		/* initialize */
+-		memset(cmdbuf, 0, cmdbuflen);
+-		snprintf(cmdbuf, cmdbuflen, "%c", MICON_INIT_MARK);
+-		sys_val = sys_write(fd, cmdbuf, strlen(cmdbuf));
+-		TRACE(printk(KERN_DEBUG "CPU->MICON: INIT\n"));
+-		if (sys_val < 0) {
+-			printk(KERN_ERR "Micon device(%s): write(init) failed.\n",
+-			       MICON_DEV);
+-			continue;
+-		}
+-		else if (sys_val != strlen(cmdbuf)) {
+-			printk(KERN_ERR "Micon device(%s): write(init) failed."
+-			       " expect %d bytes, but %d bytes was written\n",
+-			       MICON_DEV, strlen(cmdbuf), sys_val);
+-			continue;
+-		}
+-		msleep_interruptible(10);	/* 10ms */
+-		sys_val = sys_read(fd, rspbuf, sizeof(rspbuf));
+-
+-		/* send command */
+-		memset(cmdbuf, 0, cmdbuflen);
+-		snprintf(cmdbuf, cmdbuflen, "%s", indata);
+-		sys_val = sys_write(fd, cmdbuf, strlen(cmdbuf));
+-		/*
+-		 * XXX:
+-		 *	it might need sys_write() loop in strictly sense,
+-		 *	but this driver doesn't care
+-		 *	because command is enough short.
+-		 */
+-		if (sys_val < 0) {
+-			printk(KERN_ERR "Micon device(%s): write(%s) failed.(%d)\n",
+-			       MICON_DEV, cmdbuf, sys_val);
+-			continue;
+-		}
+-		else if (sys_val != strlen(cmdbuf)) {
+-			printk(KERN_ERR "Micon device(%s): write(%s) failed."
+-			       "expect %d bytes, but %d bytes was written\n",
+-			       MICON_DEV, cmdbuf, strlen(cmdbuf), sys_val);
+-			continue;
+-		}
+-		TRACE(printk(KERN_DEBUG "CPU->MICON: send [%s]\n", cmdbuf));
+-
+-		/* check echo-back */
+-		rsplen = 0;
+-		memset(rspbuf, 0, sizeof(rspbuf));
+-		for (i = 0; i < 10/*???*/; i++) {
+-			if (rsplen >= sizeof(rspbuf)) {
+-				break;
+-			}
+-			sys_val = sys_read(fd, rspbuf + rsplen,
+-					   sizeof(rspbuf) - rsplen);
+-			if (sys_val == 0) {
+-				break;
+-			}
+-			else if (sys_val < 0) {
+-				if (sys_val == -EAGAIN) {
+-					msleep_interruptible(1000);/* XXX */
+-					continue;
+-				}
+-				printk(KERN_ERR "Micon device(%s): read() failed.(%d)\n",
+-				       MICON_DEV, sys_val);
+-				continue;
+-			}
+-			else {
+-				rsplen += sys_val;
+-			}
+-			if (rsplen == strlen(cmdbuf)) {
+-				break;
+-			}
+-			msleep_interruptible(10);
+-		}
+-		TRACE(printk(KERN_DEBUG
+-			     "MICON->CPU: echo-back [%s], ", rspbuf));
+-		if (strncmp(rspbuf, cmdbuf, rsplen) == 0) {
+-			TRACE(printk(KERN_DEBUG "OK"));
+-			break;
+-		}
+-		else {
+-			TRACE(printk(KERN_DEBUG "NG"));
+-		}
+-	}
+-	if (try >= MICON_RETRY_MAX) {
+-		printk(KERN_ERR
+-		       "Micon device(%s): give up to write, can't get echo-back\n",
+-		       MICON_DEV);
+-		goto out;
+-	}
+-	else if (sys_val != strlen(cmdbuf)) {
+-		printk(KERN_ERR "Micon device(%s) write(init) failed."
+-		       "expect %d bytes, but %d bytes was written\n",
+-		       MICON_DEV, strlen(cmdbuf), sys_val);
+-		goto out;
+-	}
+-	msleep_interruptible(10);	/* 10ms */
+-
+-	/* send delimiter */
+-	memset(cmdbuf, 0, cmdbuflen);
+-	snprintf(cmdbuf, cmdbuflen, "%c", MICON_DELIMITER);
+-	sys_val = sys_write(fd, cmdbuf, strlen(cmdbuf));
+-	if (sys_val < 0) {
+-		printk(KERN_ERR
+-		       "Micon device(%s): write(delimiter) failed. (%d)\n",
+-		       MICON_DEV, sys_val);
+-		goto out;
+-	}
+-	msleep_interruptible(10);
+-	sys_val = sys_read(fd, rspbuf, strlen(cmdbuf));
+-	if (sys_val < 0) {
+-		printk(KERN_ERR
+-		       "Micon device(%s): write(delimiter) failed. (%d)\n",
+-		       MICON_DEV, sys_val);
+-		goto out;
+-	}
+-	TRACE(printk(KERN_DEBUG "CPU->MICON: send delimiter\n"));
+-
+-	/* read response */
+-	rsplen = 0;
+-	memset(rspbuf, 0, sizeof(rspbuf));
+-	for (i = 0; i < 10/*XXX*/; i ++) {
+-		int j;
+-
+-		if (rsplen >= sizeof(rspbuf)) {
+-			break;
+-		}
+-		sys_val = sys_read(fd, rspbuf + rsplen,
+-				   sizeof(rspbuf) - rsplen);
+-		if (sys_val == 0) {
+-			break;
+-		}
+-		else if (sys_val < 0) {
+-			if (sys_val == -EAGAIN) {
+-				msleep_interruptible(10);/* XXX */
+-				continue;
+-			}
+-			printk(KERN_ERR "Micon device(%s): read() failed.(%d)\n",
+-			       MICON_DEV, sys_val);
+-			continue;
+-		}
+-		else {
+-			rsplen += sys_val;
+-			for (j = 0; j < rsplen; j ++) {
+-				if (rspbuf[j] == '\n') {
+-					break;
+-				}
+-			}
+-			if (rspbuf[j] == '\n') {
+-				break;
+-			}
+-		}
+-		msleep_interruptible(10);
+-	}
+-	TRACE(printk(KERN_DEBUG "MICON->CPU: [%s]\n", rspbuf));
+-	memcpy(outdata, rspbuf, (sys_val > outlen) ? outlen : sys_val);
+-
+-out:
+-	if (cmdbuf != NULL) {
+-		kfree(cmdbuf);
+-	}
+-	sys_ioctl(fd, TCSETS, (long)&termios_save);
+-	sys_close(fd);
+-	set_fs(oldfs);
+-	return sys_val;
+-}
+-
+-
+-static int
+-micon_v3_send_simple_command(char *cmd, int cmdlen)
+-/* expect "OK" or "NG" */
+-{
+-	char rspbuf[MICON_RSP_MAX];
+-	int micon_ret;
+-
+-	memset(rspbuf, 0, sizeof(rspbuf));
+-	micon_ret = micon_v3_serial_io(cmd, cmdlen, rspbuf, sizeof(rspbuf));
+-	if (micon_ret < 0) {
+-		return micon_ret;
+-	}
+-
+-	if (strncmp(rspbuf, MICON_RSP_ACK, strlen(MICON_RSP_ACK)) == 0) {
+-		TRACE(printk(KERN_DEBUG "Micon ACK(OK) is found\n"));
+-	}
+-	else if (strncmp(rspbuf, MICON_RSP_NACK, strlen(MICON_RSP_NACK)) == 0) {
+-		printk(KERN_ERR "Micon NACK(NG) is found\n");
+-		/* XXX: need retry ??? */
+-		return -1;
+-	}
+-	else {
+-		printk(KERN_ERR "Micon unexpected response[%s]\n", rspbuf);
+-		/* XXX: need retry ??? */
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static void
+-miconCntl_Beep(void)
+-{
+-	int rsp;
+-
+-	rsp = micon_v3_send_simple_command(MICON_CMD_BEEP,
+-					   sizeof(MICON_CMD_BEEP));
+-	if (rsp != 0) {
+-		printk(KERN_ERR "%s() failed\n", __FUNCTION__);
+-	}
+-
+-	return;
+-}
+-
+-void
+-miconCntl_PowerOff(void)
+-{
+-	int rsp;
+-
+-	rsp = micon_v3_send_simple_command(MICON_CMD_POW_OFF,
+-					   strlen(MICON_CMD_POW_OFF));
+-	if (rsp != 0) {
+-		printk(KERN_ERR "%s() failed\n", __FUNCTION__);
+-	}
+-
+-	return;
+-}
+-
+-void
+-miconCntl_Reboot(void)
+-{
+-	int rsp;
+-
+-	rsp = micon_v3_send_simple_command(MICON_CMD_REBOOT,
+-					   strlen(MICON_CMD_REBOOT));
+-	if (rsp != 0) {
+-		printk(KERN_ERR "%s() failed\n", __FUNCTION__);
+-	}
+-
+-	return;
+-}

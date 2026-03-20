@@ -1,0 +1,2427 @@
+/*
+ * Buffalo TeraStation TS51220 (TS5K2ALV2-AA) — Annotated Device Tree
+ * ===================================================================
+ *
+ * SoC: Annapurna Labs Alpine V2 (Amazon AL-314 / AL-524 class)
+ *      ARMv8-A, Quad-core Cortex-A57
+ *
+ * This annotated DTS was produced from the decompiled DTB extracted
+ * from the TS51220 firmware.  All hex values are decoded to
+ * human-readable equivalents.  Phandle cross-references are resolved
+ * to descriptive labels.
+ *
+ * Phandle Map (numeric -> label):
+ *   0x01 = gic_main          — GICv3 interrupt controller
+ *   0x02 = msix              — MSI-X controller
+ *   0x03 = cpu_sleep_state   — CPU idle state
+ *   0x04 = l2_cache          — L2 unified cache
+ *   0x05 = cpu0
+ *   0x06 = cpu1
+ *   0x07 = cpu2
+ *   0x08 = cpu3
+ *   0x09 = sbclk             — SoC south-bridge / peripheral clock
+ *   0x0a = sysfab_intc       — System fabric interrupt controller
+ *   0x0b = syserr_intc       — System error interrupt controller
+ *   0x0c = wdt0              — Watchdog timer 0 (used for reboot)
+ *   0x0d = iofic_pcie_ext0   — PCIe external port 0 IOFIC
+ *   0x0e = iofic_pcie_ext1   — PCIe external port 1 IOFIC
+ *   0x0f = iofic_pcie_ext2   — PCIe external port 2 IOFIC
+ *   0x10 = iofic_pcie_ext3   — PCIe external port 3 IOFIC
+ *   0x11 = thermal_sensor    — On-die thermal sensor
+ *   0x12 = pinmux_nand_8     — NAND 8-bit pin mux
+ *   0x13 = pinmux_nand_cs_0  — NAND chip-select 0 pin mux
+ *   0x14 = gpio2             — GPIO bank 2 (pins 488-495, SATA host 0 LEDs)
+ *   0x15 = gpio3             — GPIO bank 3 (pins 480-487, SATA host 1 LEDs)
+ *   0x16 = gpio0             — GPIO bank 0 (pins 504-511, SATA host 2 LEDs)
+ *
+ * Key differences from TS5020 variant are noted with [TS5020-DIFF] tags.
+ */
+
+/dts-v1/;
+
+/ {
+	#address-cells = <0x02>;    /* 64-bit address space (2 x 32-bit cells) */
+	#size-cells = <0x02>;       /* 64-bit size fields */
+	compatible = "annapurna-labs,alpine";
+	clock-ranges;
+	version = "1.0";
+
+	/*
+	 * Model string (hex-encoded with UTF-8 fullwidth parentheses):
+	 *   42 55 46 46 41 4c 4f 20 = "BUFFALO "
+	 *   54 53 35 31 32 32 30    = "TS51220"
+	 *   ef bc 88                = U+FF08 = fullwidth left parenthesis "（"
+	 *   54 53 35 4b 32 41 4c 56 32 2d 41 41 = "TS5K2ALV2-AA"
+	 *   ef bc 89                = U+FF09 = fullwidth right parenthesis "）"
+	 *   42 6f 61 72 64          = "Board"
+	 *   00                      = null terminator
+	 *
+	 * Decoded: "BUFFALO TS51220（TS5K2ALV2-AA）Board"
+	 *
+	 * [TS5020-DIFF] TS5020 model string decodes to:
+	 *   "BUFFALO TS5020（TS5K2ALV2-AA）Board"
+	 *   (same part number TS5K2ALV2-AA, different product model)
+	 */
+	model = [42 55 46 46 41 4c 4f 20 54 53 35 31 32 32 30 ef bc 88 54 53 35 4b 32 41 4c 56 32 2d 41 41 ef bc 89 42 6f 61 72 64 00];
+
+	chosen {
+	};
+
+	aliases {
+	};
+
+	/* ==================================================================
+	 * SYSTEM MEMORY
+	 * ==================================================================
+	 * reg is set to 0x0 — actual size is filled in by U-Boot at runtime
+	 * from SPD data read off the DDR4 DIMMs.
+	 * The board has 2 DIMM slots (see dram section below).
+	 */
+	memory {
+		device_type = "memory";
+		reg = <0x00 0x00 0x00 0x00>;    /* base=0x0, size=0x0 (runtime patched) */
+	};
+
+	/* ==================================================================
+	 * PSCI — Power State Coordination Interface
+	 * ==================================================================
+	 * ARM standard for CPU power management via secure monitor calls.
+	 */
+	psci {
+		compatible = "arm,psci-0.2", "arm,psci";
+		method = "smc";                     /* Secure Monitor Call */
+		cpu_on = <0x84000003>;              /* PSCI function ID: CPU_ON (32-bit) */
+		cpu_off = <0x84000002>;             /* PSCI function ID: CPU_OFF (32-bit) */
+		cpu_suspend = <0x84000001>;         /* PSCI function ID: CPU_SUSPEND (32-bit) */
+	};
+
+	/* ==================================================================
+	 * RESERVED MEMORY
+	 * ==================================================================
+	 */
+	reserved-memory {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		ranges;
+
+		/* PCIe core configuration memory — 1MB at physical address 0x0 */
+		pcie_core_cfg_mem_reserved {
+			reg = <0x00 0x00 0x00 0x100000>;    /* base=0x0, size=1MB (1,048,576 bytes) */
+			no-map;                              /* Not mapped into kernel virtual memory */
+		};
+	};
+
+	/* ==================================================================
+	 * CPU CLUSTER — Quad-core ARMv8-A (Cortex-A57)
+	 * ==================================================================
+	 * All 4 cores share a unified L2 cache.
+	 * Each core has private L1 instruction and data caches.
+	 */
+	cpus {
+		#address-cells = <0x02>;
+		#size-cells = <0x00>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x00 0x00>;                  /* MPIDR affinity: cluster 0, core 0 */
+			enable-method = "psci";
+			cpu-idle-states = <0x03>;           /* -> cpu_sleep_state (phandle 0x03) */
+			d-cache-size = <0x8000>;            /* L1 D-cache: 32KB (32,768 bytes) */
+			d-cache-line-size = <0x40>;         /* L1 D-cache line: 64 bytes */
+			d-cache-sets = <0x100>;             /* L1 D-cache sets: 256 (32KB / 64B / 2-way = 256) */
+			i-cache-size = <0xc000>;            /* L1 I-cache: 48KB (49,152 bytes) */
+			i-cache-line-size = <0x40>;         /* L1 I-cache line: 64 bytes */
+			i-cache-sets = <0x100>;             /* L1 I-cache sets: 256 */
+			next-level-cache = <0x04>;          /* -> l2_cache (phandle 0x04) */
+			phandle = <0x05>;                   /* cpu0 */
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x00 0x01>;                  /* cluster 0, core 1 */
+			enable-method = "psci";
+			cpu-idle-states = <0x03>;           /* -> cpu_sleep_state */
+			d-cache-size = <0x8000>;            /* 32KB */
+			d-cache-line-size = <0x40>;         /* 64B */
+			d-cache-sets = <0x100>;             /* 256 */
+			i-cache-size = <0xc000>;            /* 48KB */
+			i-cache-line-size = <0x40>;         /* 64B */
+			i-cache-sets = <0x100>;             /* 256 */
+			next-level-cache = <0x04>;          /* -> l2_cache */
+			phandle = <0x06>;                   /* cpu1 */
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x00 0x02>;                  /* cluster 0, core 2 */
+			enable-method = "psci";
+			cpu-idle-states = <0x03>;           /* -> cpu_sleep_state */
+			d-cache-size = <0x8000>;            /* 32KB */
+			d-cache-line-size = <0x40>;         /* 64B */
+			d-cache-sets = <0x100>;             /* 256 */
+			i-cache-size = <0xc000>;            /* 48KB */
+			i-cache-line-size = <0x40>;         /* 64B */
+			i-cache-sets = <0x100>;             /* 256 */
+			next-level-cache = <0x04>;          /* -> l2_cache */
+			phandle = <0x07>;                   /* cpu2 */
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x00 0x03>;                  /* cluster 0, core 3 */
+			enable-method = "psci";
+			cpu-idle-states = <0x03>;           /* -> cpu_sleep_state */
+			d-cache-size = <0x8000>;            /* 32KB */
+			d-cache-line-size = <0x40>;         /* 64B */
+			d-cache-sets = <0x100>;             /* 256 */
+			i-cache-size = <0xc000>;            /* 48KB */
+			i-cache-line-size = <0x40>;         /* 64B */
+			i-cache-sets = <0x100>;             /* 256 */
+			next-level-cache = <0x04>;          /* -> l2_cache */
+			phandle = <0x08>;                   /* cpu3 */
+		};
+
+		/*
+		 * Unified L2 Cache — shared by all 4 cores
+		 *   2MB total, 64-byte lines, 2048 sets
+		 *   2MB / 64B line / 2048 sets = 16-way set-associative
+		 */
+		cache@0 {
+			compatible = "cache";
+			cache-size = <0x200000>;            /* 2MB (2,097,152 bytes) */
+			cache-line-size = <0x40>;           /* 64 bytes */
+			cache-sets = <0x800>;               /* 2048 sets */
+			cache-level = <0x02>;               /* Level 2 */
+			phandle = <0x04>;                   /* l2_cache */
+		};
+
+		/* CPU Idle States */
+		idle-states {
+
+			/*
+			 * Deep sleep state — local timer stops, CPU powered down.
+			 * Entry/exit latency: 10us each.
+			 * Minimum residency: 1000us (1ms) — don't enter for shorter sleeps.
+			 */
+			cpu-sleep {
+				compatible = "arm,idle-state";
+				local-timer-stop;
+				arm,psci-suspend-param = <0x10000>;     /* Power-down state (bit 16 set) */
+				entry-latency-us = <0x0a>;              /* 10 microseconds */
+				exit-latency-us = <0x0a>;               /* 10 microseconds */
+				min-residency-us = <0x3e8>;             /* 1000 microseconds (1ms) */
+				phandle = <0x03>;                       /* cpu_sleep_state */
+			};
+		};
+	};
+
+	/* ==================================================================
+	 * SOC BUS — All on-chip peripherals
+	 * ==================================================================
+	 */
+	soc {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		compatible = "simple-bus";
+		interrupt-parent = <0x01>;      /* -> gic_main: default interrupt controller */
+		ranges;
+
+		/* ==============================================================
+		 * ARCHITECTURE TIMER (ARMv8 Generic Timer)
+		 * ==============================================================
+		 * Four timer interrupts (all PPI type = 0x01):
+		 *   PPI 13 (0x0d) = Secure Physical Timer      (flags 0xff08: level, all CPUs)
+		 *   PPI 14 (0x0e) = Non-secure Physical Timer   (flags 0xff08)
+		 *   PPI 11 (0x0b) = Virtual Timer               (flags 0xff08)
+		 *   PPI 10 (0x0a) = Hypervisor Timer             (flags 0xff08)
+		 *
+		 * Flag 0xff08: bits[15:8]=0xff (target all CPUs), bits[3:0]=0x8 (level-triggered)
+		 */
+		arch-timer {
+			compatible = "arm,armv8-timer";
+			interrupts = <0x01 0x0d 0xff08      /* PPI 13: Secure Phys Timer */
+			              0x01 0x0e 0xff08       /* PPI 14: Non-secure Phys Timer */
+			              0x01 0x0b 0xff08       /* PPI 11: Virtual Timer */
+			              0x01 0x0a 0xff08>;     /* PPI 10: Hypervisor Timer */
+			clock-frequency = <0x2faf080>;       /* 50,000,000 Hz = 50 MHz */
+		};
+
+		/* ==============================================================
+		 * GIC — Generic Interrupt Controller v3
+		 * ==============================================================
+		 * Primary interrupt controller for the SoC.
+		 *
+		 * Register regions:
+		 *   GICD (Distributor):       0xf020_0000, 64KB
+		 *   GICR (Redistributor):     0xf028_0000, 2MB (512KB per core x 4 cores)
+		 *   GICC (CPU interface):     0xf010_0000, 8KB
+		 *   GICH (Hypervisor ctrl):   0xf011_0000, 8KB
+		 *   GICV (Virtual CPU iface): 0xf012_0000, 8KB
+		 *
+		 * Maintenance interrupt: PPI 9 (0x09), flags 0xf04 (level, all CPUs)
+		 */
+		gic_main {
+			compatible = "arm,gic-v3";
+			#interrupt-cells = <0x03>;
+			#size-cells = <0x00>;
+			#address-cells = <0x00>;
+			interrupt-controller;
+			reg = <0x00 0xf0200000 0x00 0x10000      /* GICD: 64KB */
+			       0x00 0xf0280000 0x00 0x200000      /* GICR: 2MB */
+			       0x00 0xf0100000 0x00 0x2000        /* GICC: 8KB */
+			       0x00 0xf0110000 0x00 0x2000        /* GICH: 8KB */
+			       0x00 0xf0120000 0x00 0x2000>;      /* GICV: 8KB */
+			interrupts = <0x01 0x09 0xf04>;           /* PPI 9: GIC maintenance IRQ */
+			phandle = <0x01>;                         /* gic_main */
+		};
+
+		/* ==============================================================
+		 * CCU — Cache Coherency Unit
+		 * ==============================================================
+		 * Manages cache coherency across CPU cluster and I/O.
+		 */
+		ccu {
+			compatible = "annapurna-labs,al-ccu";
+			reg = <0x00 0xf0090000 0x00 0x10000>;    /* 64KB at 0xf009_0000 */
+			io_coherency = <0x01>;                    /* I/O coherency enabled */
+		};
+
+		/* ==============================================================
+		 * MSI-X Controller
+		 * ==============================================================
+		 * Provides MSI/MSI-X support for PCIe devices.
+		 *
+		 * SPI range: SPI 160 (0xa0) through SPI 319 (0x13f)
+		 *   Base SPI: 161 (0xa1)
+		 *   Number of SPIs: 158 (0x9e)
+		 *   (total range = 160 MSI vectors)
+		 */
+		msix {
+			compatible = "annapurna-labs,alpine-msix", "al,alpine-msix";
+			reg = <0x00 0xfbe00000 0x00 0x100000>;   /* 1MB at 0xfbe0_0000 */
+			interrupts = <0x00 0xa0 0x01             /* SPI 160: first MSI, edge-triggered */
+			              0x00 0x13f 0x01>;           /* SPI 319: last MSI, edge-triggered */
+			interrupt-controller;
+			msi-controller;
+			al,msi-base-spi = <0xa1>;                /* Base SPI number = 161 */
+			al,msi-num-spis = <0x9e>;                /* 158 SPIs allocated for MSI */
+			interrupt-parent = <0x01>;               /* -> gic_main */
+			phandle = <0x02>;                        /* msix */
+		};
+
+		/* ==============================================================
+		 * PMU — Performance Monitor Unit
+		 * ==============================================================
+		 * One interrupt per CPU core (SPI 104-107), level-triggered.
+		 */
+		pmu {
+			compatible = "arm,armv8-pmuv3";
+			interrupts = <0x00 0x68 0x04             /* SPI 104: PMU CPU0, level */
+			              0x00 0x69 0x04              /* SPI 105: PMU CPU1, level */
+			              0x00 0x6a 0x04              /* SPI 106: PMU CPU2, level */
+			              0x00 0x6b 0x04>;            /* SPI 107: PMU CPU3, level */
+			interrupt-affinity = <0x05 0x06 0x07 0x08>;  /* -> cpu0, cpu1, cpu2, cpu3 */
+		};
+
+		/* ==============================================================
+		 * NB_SERVICE — North Bridge System Fabric Service
+		 * ==============================================================
+		 * System fabric error/status registers.
+		 * Interrupt type 0x04 = level-triggered, active-high.
+		 */
+		nb_service {
+			compatible = "annapurna-labs,al-nb-service", "al,alpine-sysfabric-service", "syscon";
+			reg = <0x00 0xf0070000 0x00 0x10000>;    /* 64KB at 0xf007_0000 */
+			interrupts = <0x00 0x60 0x04             /* SPI 96: sysfab IRQ 0, level */
+			              0x00 0x61 0x04              /* SPI 97: sysfab IRQ 1, level */
+			              0x00 0x62 0x04              /* SPI 98: sysfab IRQ 2, level */
+			              0x00 0x63 0x04>;            /* SPI 99: sysfab IRQ 3, level */
+		};
+
+		/* L1 cache EDAC (Error Detection and Correction) */
+		al-l1-edac {
+			compatible = "amazon,al-l1-edac";
+		};
+
+		/* L2 cache EDAC for cluster 0 */
+		al-l2-edac-cluster0 {
+			compatible = "amazon,al-l2-edac";
+			l2-cache = <0x04>;                       /* -> l2_cache */
+		};
+
+		/* ==============================================================
+		 * PBS — Peripheral Bus Service
+		 * ==============================================================
+		 * Configuration and control for the peripheral bus subsystem.
+		 */
+		pbs {
+			compatible = "annapurna-labs,al-pbs";
+			reg = <0x00 0xfd8a8000 0x00 0x1000>;     /* 4KB at 0xfd8a_8000 */
+			interrupts = <0x00 0x00 0x04>;            /* SPI 0: PBS IRQ, level */
+		};
+
+		/* TDM (Time Division Multiplexing) — telephony interface, unused on NAS */
+		tdm {
+			compatible = "annapurna-labs,al-tdm";
+			reg = <0x00 0xf2300000 0x00 0x11000>;    /* 68KB at 0xf230_0000 */
+		};
+
+		/* ==============================================================
+		 * TIMERS — ARM SP804 Dual Timers
+		 * ==============================================================
+		 * 4 timer blocks, all disabled (ARMv8 generic timer used instead).
+		 * Each timer block has its own SPI.
+		 */
+		timer0 {
+			compatible = "arm,sp804", "arm,primecell";
+			reg = <0x00 0xfd890000 0x00 0x1000>;     /* 4KB at 0xfd89_0000 */
+			interrupts = <0x00 0x09 0x04>;            /* SPI 9, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "sbclk";
+			status = "disabled";
+		};
+
+		timer1 {
+			compatible = "arm,sp804", "arm,primecell";
+			reg = <0x00 0xfd891000 0x00 0x1000>;     /* 4KB at 0xfd89_1000 */
+			interrupts = <0x00 0x0a 0x04>;            /* SPI 10, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "sbclk";
+			status = "disabled";
+		};
+
+		timer2 {
+			compatible = "arm,sp804", "arm,primecell";
+			reg = <0x00 0xfd892000 0x00 0x1000>;     /* 4KB at 0xfd89_2000 */
+			interrupts = <0x00 0x0b 0x04>;            /* SPI 11, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "sbclk";
+			status = "disabled";
+		};
+
+		timer3 {
+			compatible = "arm,sp804", "arm,primecell";
+			reg = <0x00 0xfd893000 0x00 0x1000>;     /* 4KB at 0xfd89_3000 */
+			interrupts = <0x00 0x0c 0x04>;            /* SPI 12, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "sbclk";
+			status = "disabled";
+		};
+
+		/* ==============================================================
+		 * WATCHDOG TIMERS — ARM SP805
+		 * ==============================================================
+		 * wdt0 is active (used for system reboot).
+		 * wdt1-3 are disabled.
+		 */
+		wdt0 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x00 0xfd88c000 0x00 0x1000>;     /* 4KB at 0xfd88_c000 */
+			interrupts = <0x00 0x0d 0x04>;            /* SPI 13, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "apb_pclk";
+			phandle = <0x0c>;                         /* wdt0 — referenced by reboot node */
+		};
+
+		wdt1 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x00 0xfd88d000 0x00 0x1000>;     /* 4KB at 0xfd88_d000 */
+			interrupts = <0x00 0x0e 0x04>;            /* SPI 14, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "apb_pclk";
+			status = "disabled";
+		};
+
+		wdt2 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x00 0xfd88e000 0x00 0x1000>;     /* 4KB at 0xfd88_e000 */
+			interrupts = <0x00 0x0f 0x04>;            /* SPI 15, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "apb_pclk";
+			status = "disabled";
+		};
+
+		wdt3 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x00 0xfd88f000 0x00 0x1000>;     /* 4KB at 0xfd88_f000 */
+			interrupts = <0x00 0x10 0x04>;            /* SPI 16, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "apb_pclk";
+			status = "disabled";
+		};
+
+		/* ==============================================================
+		 * I2C BUSES
+		 * ==============================================================
+		 *
+		 * i2c-pld: "Platform Logic Device" bus — main I2C bus
+		 *   Register: 0xfd88_0000, 4KB
+		 *   SPI 21 (0x15), level-triggered
+		 *   Clock: 100 kHz (0x186a0 = 100,000)
+		 *
+		 *   Timing parameters (raw register counts at sbclk rate):
+		 *     Standard-speed SCL high count: 0x855 = 2133
+		 *     Standard-speed SCL low count:  0xb0b = 2827
+		 *     Fast-speed SCL high count:     0x19d = 413
+		 *     Fast-speed SCL low count:      0x320 = 800
+		 *     High-speed SCL high count:     0xf3  = 243
+		 *     High-speed SCL low count:      0x198 = 408
+		 *
+		 *   Devices on this bus:
+		 *     0x32: Epson RX8010 — Real-Time Clock (I2C RTC)
+		 *     0x54: DDR4 DIMM0 SPD EEPROM (via dram config, not listed here)
+		 *     0x55: DDR4 DIMM1 SPD EEPROM (via dram config, not listed here)
+		 *     0x57: 24C64 — 64Kbit (8KB) EEPROM (board config / MAC storage)
+		 *     0x70: PCA9548 — 8-channel I2C multiplexer
+		 *
+		 * [TS5020-DIFF] TS5020 does NOT have the PCA9548 I2C mux at 0x70.
+		 *   The TS51220 needs it for its 12 bays (more SATA controllers
+		 *   need more I2C-attached SFP+/PHY management channels).
+		 */
+		i2c-pld {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+			compatible = "snps,designware-i2c";
+			reg = <0x00 0xfd880000 0x00 0x1000>;
+			interrupts = <0x00 0x15 0x04>;           /* SPI 21, level */
+			clocks = <0x09>;                         /* -> sbclk */
+			clock-frequency = <0x186a0>;             /* 100,000 Hz = 100 kHz */
+			i2c-ss-scl-hcnt-raw = <0x855>;           /* 2133 */
+			i2c-ss-scl-lcnt-raw = <0xb0b>;           /* 2827 */
+			i2c-fs-scl-hcnt-raw = <0x19d>;           /* 413 */
+			i2c-fs-scl-lcnt-raw = <0x320>;           /* 800 */
+			i2c-hs-scl-hcnt-raw = <0xf3>;            /* 243 */
+			i2c-hs-scl-lcnt-raw = <0x198>;           /* 408 */
+
+			/* 8KB EEPROM — stores board configuration, MAC addresses, etc. */
+			eeprom@57 {
+				compatible = "24c64";                /* Atmel/Microchip 24C64: 64Kbit = 8KB */
+				reg = <0x57>;                        /* I2C address 0x57 */
+			};
+
+			/* Real-Time Clock */
+			rtc@32 {
+				compatible = "epson,rx8010";          /* Epson RX8010SJ RTC */
+				reg = <0x32>;                         /* I2C address 0x32 (= 0x64 >> 1) */
+			};
+
+			/*
+			 * I2C Multiplexer — 8-channel
+			 * [TS5020-DIFF] This device is ONLY present on the TS51220.
+			 *   Used to fan out I2C to multiple SATA/SAS host controllers
+			 *   and SFP+ modules for the 12-bay configuration.
+			 */
+			i2c_mux@70 {
+				compatible = "pca9548";               /* NXP PCA9548A: 8-ch I2C mux/switch */
+				reg = <0x70>;                         /* I2C address 0x70 */
+			};
+		};
+
+		/*
+		 * i2c-gen: General-purpose I2C bus — DISABLED
+		 *   Register: 0xfd89_4000, 4KB
+		 *   SPI 8 (0x08), level-triggered
+		 *   Same timing parameters as i2c-pld.
+		 */
+		i2c-gen {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+			compatible = "snps,designware-i2c";
+			reg = <0x00 0xfd894000 0x00 0x1000>;
+			interrupts = <0x00 0x08 0x04>;           /* SPI 8, level */
+			clocks = <0x09>;                         /* -> sbclk */
+			clock-frequency = <0x186a0>;             /* 100 kHz */
+			i2c-ss-scl-hcnt-raw = <0x855>;
+			i2c-ss-scl-lcnt-raw = <0xb0b>;
+			i2c-fs-scl-hcnt-raw = <0x19d>;
+			i2c-fs-scl-lcnt-raw = <0x320>;
+			i2c-hs-scl-hcnt-raw = <0xf3>;
+			i2c-hs-scl-lcnt-raw = <0x198>;
+			status = "disabled";
+		};
+
+		/* ==============================================================
+		 * GPIO BANKS — ARM PL061
+		 * ==============================================================
+		 * Each PL061 provides 8 GPIO pins.
+		 * "baseidx" is the starting GPIO number for software mapping.
+		 *
+		 * GPIO numbering scheme (baseidx values, descending):
+		 *   gpio0: baseidx 0x1f8 = 504  -> pins 504-511
+		 *   gpio1: baseidx 0x1f0 = 496  -> pins 496-503
+		 *   gpio2: baseidx 0x1e8 = 488  -> pins 488-495
+		 *   gpio3: baseidx 0x1e0 = 480  -> pins 480-487
+		 *   gpio4: baseidx 0x1d8 = 472  -> pins 472-479
+		 *   gpio5: baseidx 0x1d0 = 464  -> pins 464-471
+		 */
+
+		/* GPIO Bank 0 — pins 504-511
+		 * Used for: SATA host 2 disk LEDs (pins 0-3 = LEDs for bays 9-12)
+		 */
+		gpio0 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd887000 0x00 0x1000>;     /* 4KB at 0xfd88_7000 */
+			interrupts = <0x00 0x02 0x04>;            /* SPI 2, level */
+			clocks = <0x09>;                          /* -> sbclk */
+			clock-names = "apb_pclk";
+			baseidx = <0x1f8>;                        /* GPIO base index: 504 */
+			phandle = <0x16>;                         /* gpio0 — used by SATA host 2 LEDs */
+		};
+
+		/* GPIO Bank 1 — pins 496-503 */
+		gpio1 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd888000 0x00 0x1000>;     /* 4KB at 0xfd88_8000 */
+			interrupts = <0x00 0x03 0x04>;            /* SPI 3, level */
+			clocks = <0x09>;
+			clock-names = "apb_pclk";
+			baseidx = <0x1f0>;                        /* GPIO base index: 496 */
+		};
+
+		/* GPIO Bank 2 — pins 488-495
+		 * Used for: SATA host 0 disk LEDs (pins 4-7 = LEDs for bays 1-4)
+		 */
+		gpio2 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd889000 0x00 0x1000>;     /* 4KB at 0xfd88_9000 */
+			interrupts = <0x00 0x04 0x04>;            /* SPI 4, level */
+			clocks = <0x09>;
+			clock-names = "apb_pclk";
+			baseidx = <0x1e8>;                        /* GPIO base index: 488 */
+			phandle = <0x14>;                         /* gpio2 — used by SATA host 0 LEDs */
+		};
+
+		/* GPIO Bank 3 — pins 480-487
+		 * Used for: SATA host 1 disk LEDs (pins 0-3 = LEDs for bays 5-8)
+		 */
+		gpio3 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd88a000 0x00 0x1000>;     /* 4KB at 0xfd88_a000 */
+			interrupts = <0x00 0x05 0x04>;            /* SPI 5, level */
+			clocks = <0x09>;
+			clock-names = "apb_pclk";
+			baseidx = <0x1e0>;                        /* GPIO base index: 480 */
+			phandle = <0x15>;                         /* gpio3 — used by SATA host 1 LEDs */
+		};
+
+		/* GPIO Bank 4 — pins 472-479 */
+		gpio4 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd88b000 0x00 0x1000>;     /* 4KB at 0xfd88_b000 */
+			interrupts = <0x00 0x06 0x04>;            /* SPI 6, level */
+			clocks = <0x09>;
+			clock-names = "apb_pclk";
+			baseidx = <0x1d8>;                        /* GPIO base index: 472 */
+		};
+
+		/* GPIO Bank 5 — pins 464-471 */
+		gpio5 {
+			#gpio-cells = <0x02>;
+			compatible = "arm,pl061", "arm,primecell";
+			gpio-controller;
+			reg = <0x00 0xfd897000 0x00 0x1000>;     /* 4KB at 0xfd89_7000 */
+			interrupts = <0x00 0x07 0x04>;            /* SPI 7, level */
+			clocks = <0x09>;
+			clock-names = "apb_pclk";
+			baseidx = <0x1d0>;                        /* GPIO base index: 464 */
+		};
+
+		/* ==============================================================
+		 * SGPO — Serial GPIO Output (shift-register based)
+		 * ==============================================================
+		 * Provides additional GPIO outputs via serial shift register.
+		 * Base index: 0x30 = 48, so SGPO pins start at GPIO 48.
+		 * Register block: 20KB at 0xfd8b_4000.
+		 */
+		sgpo {
+			#gpio-cells = <0x02>;
+			compatible = "annapurna-labs,alpine-sgpo";
+			gpio-controller;
+			reg = <0x00 0xfd8b4000 0x00 0x5000>;    /* 20KB at 0xfd8b_4000 */
+			baseidx = <0x30>;                        /* GPIO base index: 48 */
+		};
+
+		/* ==============================================================
+		 * UART PORTS
+		 * ==============================================================
+		 *
+		 * uart0: Serial console (active)
+		 *   Register: 0xfd88_3000, SPI 17 (0x11)
+		 *   This is the debug/console UART, directly accessible via the
+		 *   internal serial header on the board.
+		 *
+		 * uart1: Micon (microcontroller) communication port (active)
+		 *   Register: 0xfd88_4000, SPI 18 (0x12)
+		 *   Connected to the Buffalo "micon" — an embedded microcontroller
+		 *   that handles front-panel LCD, buttons, LEDs, fan control,
+		 *   power sequencing, and buzzer.
+		 *
+		 * uart2, uart3: Disabled (no connected peripherals)
+		 *
+		 * NOTE: clock-frequency = 0x00 means the actual baud rate divisor
+		 * is configured by U-Boot before handing off to Linux.
+		 * Typical console baud rate: 115200.
+		 *
+		 * reg-shift = 2 means registers are spaced 4 bytes apart (32-bit aligned).
+		 * reg-io-width = 4 means 32-bit register accesses.
+		 */
+		uart0 {
+			compatible = "ns16550a";
+			device_type = "serial";
+			reg = <0x00 0xfd883000 0x00 0x1000>;     /* 4KB at 0xfd88_3000 */
+			clock-frequency = <0x00>;                 /* Set by bootloader */
+			interrupts = <0x00 0x11 0x04>;            /* SPI 17, level */
+			reg-shift = <0x02>;                       /* Register stride: 4 bytes */
+			reg-io-width = <0x04>;                    /* 32-bit register width */
+		};
+
+		uart1 {
+			compatible = "ns16550a";
+			device_type = "serial";
+			reg = <0x00 0xfd884000 0x00 0x1000>;     /* 4KB at 0xfd88_4000 */
+			clock-frequency = <0x00>;
+			interrupts = <0x00 0x12 0x04>;            /* SPI 18, level */
+			reg-shift = <0x02>;
+			reg-io-width = <0x04>;
+		};
+
+		uart2 {
+			compatible = "ns16550a";
+			device_type = "serial";
+			reg = <0x00 0xfd885000 0x00 0x1000>;     /* 4KB at 0xfd88_5000 */
+			clock-frequency = <0x00>;
+			interrupts = <0x00 0x13 0x04>;            /* SPI 19, level */
+			reg-shift = <0x02>;
+			reg-io-width = <0x04>;
+			status = "disabled";
+		};
+
+		uart3 {
+			compatible = "ns16550a";
+			device_type = "serial";
+			reg = <0x00 0xfd886000 0x00 0x1000>;     /* 4KB at 0xfd88_6000 */
+			clock-frequency = <0x00>;
+			interrupts = <0x00 0x14 0x04>;            /* SPI 20, level */
+			reg-shift = <0x02>;
+			reg-io-width = <0x04>;
+			status = "disabled";
+		};
+
+		/* ==============================================================
+		 * SYSTEM FABRIC INTERRUPT CONTROLLER
+		 * ==============================================================
+		 * Secondary interrupt controller for system fabric events
+		 * (memory errors, bus errors, etc.).
+		 * Parent: gic_main SPI 96 (0x60).
+		 */
+		interrupt-controller@0xf0070000 {
+			compatible = "amazon,al-system-fabric";
+			interrupt-controller;
+			#interrupt-cells = <0x02>;
+			reg = <0x00 0xf0070000 0x00 0x10000>;    /* 64KB at 0xf007_0000 */
+			interrupt-parent = <0x01>;               /* -> gic_main */
+			interrupts = <0x00 0x60 0x04>;           /* SPI 96, level */
+			phandle = <0x0a>;                        /* sysfab_intc */
+		};
+
+		/* DDR Memory Controller EDAC — uncorrectable error detection */
+		al_mc_edac {
+			compatible = "amazon,al-mc-edac";
+			reg = <0x00 0xf0080000 0x00 0x10000>;    /* 64KB at 0xf008_0000 */
+			interrupt-parent = <0x0a>;               /* -> sysfab_intc */
+			interrupt-names = "ue";                   /* Uncorrectable Error */
+			interrupts = <0x14 0x04>;                /* sysfab IRQ 20, level */
+		};
+
+		/* System Error Interrupt Controller — child of sysfab_intc */
+		interrupt-controller@0xf0070094 {
+			compatible = "amazon,al-system-error";
+			interrupt-controller;
+			#interrupt-cells = <0x02>;
+			reg = <0x00 0xf0070094 0x00 0x08>;       /* 8 bytes at 0xf007_0094 */
+			interrupt-parent = <0x0a>;               /* -> sysfab_intc */
+			interrupts = <0x17 0x04>;                /* sysfab IRQ 23, level */
+			phandle = <0x0b>;                        /* syserr_intc */
+		};
+
+		/* FIFO overflow error handlers (DDR memory controller ports) */
+		fifo_full_port_0_error {
+			compatible = "amazon,al-irq-event-handler-info";
+			interrupt-parent = <0x0b>;               /* -> syserr_intc */
+			interrupts = <0x10 0x04>;                /* syserr IRQ 16, level */
+		};
+
+		fifo_full_port_1_error {
+			compatible = "amazon,al-irq-event-handler-info";
+			interrupt-parent = <0x0b>;               /* -> syserr_intc */
+			interrupts = <0x11 0x04>;                /* syserr IRQ 17, level */
+		};
+
+		/* Read latch timeout error handlers (DDR memory controller ports) */
+		read_latch_timeout_port_1_error {
+			compatible = "amazon,al-irq-event-handler-info";
+			interrupt-parent = <0x0b>;
+			interrupts = <0x01 0x04>;                /* syserr IRQ 1, level */
+		};
+
+		read_latch_timeout_port_0_error {
+			compatible = "amazon,al-irq-event-handler-info";
+			interrupt-parent = <0x0b>;
+			interrupts = <0x00 0x04>;                /* syserr IRQ 0, level */
+		};
+
+		/* POS — Performance and Observability System */
+		al_pos {
+			compatible = "amazon,al-pos";
+			reg = <0x00 0xf0070084 0x00 0x08>;       /* 8 bytes at 0xf007_0084 */
+			interrupt-parent = <0x0b>;               /* -> syserr_intc */
+			interrupts = <0x08 0x04>;                /* syserr IRQ 8, level */
+		};
+
+		/* ==============================================================
+		 * ETHERNET PORTS
+		 * ==============================================================
+		 * The Alpine V2 SoC has 4 Ethernet MAC blocks.
+		 * Actual PHY configuration is in the board-cfg/ethernet section.
+		 *
+		 * eth0: 10GbE port (MAC+EC+UDMA registers)
+		 *   Registers: 0xfc00_0000 (MAC, 4KB), 0xfc01_8000 (EC, 4KB),
+		 *              0xfc00_5000 (UDMA, 64KB)
+		 *   SPI 61 (0x3d)
+		 *
+		 * eth1: 1GbE port (MAC only)
+		 *   Register: 0xfc10_0000, 4KB
+		 *   SPI 62 (0x3e)
+		 *
+		 * eth2: 10GbE port (MAC+EC+UDMA registers)
+		 *   Registers: 0xfc20_0000 (MAC, 4KB), 0xfc21_8000 (EC, 4KB),
+		 *              0xfc20_5000 (UDMA, 64KB)
+		 *   SPI 63 (0x3f)
+		 *
+		 * eth3: 1GbE port (MAC only)
+		 *   Register: 0xfc30_0000, 4KB
+		 *   SPI 64 (0x40)
+		 *
+		 * See board-cfg/ethernet for port mode assignments:
+		 *   port0: 10g-serial on SerDes group3 lane 2 (SFP+ / 10GbE)
+		 *   port1: RGMII (1GbE copper)
+		 *   port2: 10g-serial on SerDes group3 lane 0 (SFP+ / 10GbE)
+		 *   port3: RGMII (1GbE copper)
+		 *
+		 * [TS5020-DIFF] TS5020 only has 3 ports enabled (port0, port1, port3).
+		 *   TS51220 has all 4 ports including port2 (second 10GbE).
+		 *   TS5020 RGMII PHY addresses are 0x04/0x05 vs TS51220's 0x02/0x03.
+		 */
+		eth0 {
+			reg = <0x00 0xfc000000 0x00 0x1000       /* MAC: 4KB at 0xfc00_0000 */
+			       0x00 0xfc018000 0x00 0x1000        /* EC:  4KB at 0xfc01_8000 */
+			       0x00 0xfc005000 0x00 0x10000>;     /* UDMA: 64KB at 0xfc00_5000 */
+			interrupts = <0x00 0x3d 0x04>;           /* SPI 61, level */
+		};
+
+		eth1 {
+			reg = <0x00 0xfc100000 0x00 0x1000>;     /* MAC: 4KB at 0xfc10_0000 */
+			interrupts = <0x00 0x3e 0x04>;           /* SPI 62, level */
+		};
+
+		eth2 {
+			reg = <0x00 0xfc200000 0x00 0x1000       /* MAC: 4KB at 0xfc20_0000 */
+			       0x00 0xfc218000 0x00 0x1000        /* EC:  4KB at 0xfc21_8000 */
+			       0x00 0xfc205000 0x00 0x10000>;     /* UDMA: 64KB at 0xfc20_5000 */
+			interrupts = <0x00 0x3f 0x04>;           /* SPI 63, level */
+		};
+
+		eth3 {
+			reg = <0x00 0xfc300000 0x00 0x1000>;     /* MAC: 4KB at 0xfc30_0000 */
+			interrupts = <0x00 0x40 0x04>;           /* SPI 64, level */
+		};
+
+		/* System reboot via watchdog timeout */
+		reboot {
+			compatible = "annapurna-labs,alpine-reboot";
+			wdt-parent = <0x0c>;                     /* -> wdt0 */
+		};
+
+		/* ==============================================================
+		 * PCIe — INTERNAL BUS
+		 * ==============================================================
+		 * The internal PCIe bus connects on-chip SATA, crypto (SSM),
+		 * and eth3 to the system via an ECAM-style configuration space.
+		 *
+		 * ECAM:    1MB at 0xfbc0_0000
+		 * eth3 UA: 20.5KB at 0xfc30_0000 (unit adapter for eth port 3)
+		 *
+		 * Interrupt map:
+		 *   Device 0x08 (dev 8 = SATA host 0): INTA -> GIC SPI 53 (0x35)
+		 *   Device 0x09 (dev 9 = SATA host 1): INTA -> GIC SPI 54 (0x36)
+		 *
+		 * Memory range: 16MB at 0xfe00_0000
+		 * Bus range: 0-0 (single bus)
+		 */
+		pcie-internal {
+			compatible = "annapurna-labs,alpine-internal-pcie";
+			device_type = "pci";
+			#size-cells = <0x02>;
+			#address-cells = <0x03>;
+			#interrupt-cells = <0x01>;
+			reg = <0x00 0xfbc00000 0x00 0x100000     /* ECAM: 1MB */
+			       0x00 0xfc300000 0x00 0x5080>;      /* Unit adapter eth3: ~20KB */
+			reg-names = "ecam", "unit-adapter-eth-port3";
+			interrupt-parent = <0x01>;               /* -> gic_main */
+			interrupt-map-mask = <0xf800 0x00 0x00 0x07>;
+			/*
+			 * Interrupt routing:
+			 *   PCI device 8 (0x4000 >> 11 = 8), INTA -> GIC SPI 53 (0x35), level
+			 *   PCI device 9 (0x4800 >> 11 = 9), INTA -> GIC SPI 54 (0x36), level
+			 */
+			interrupt-map = <0x4000 0x00 0x00 0x01 0x01 0x00 0x35 0x04
+			                 0x4800 0x00 0x00 0x01 0x01 0x00 0x36 0x04>;
+			msi-parent = <0x02>;                     /* -> msix */
+			ranges = <0x2000000 0x00 0xfe000000 0x00 0xfe000000 0x00 0x1000000>;
+			        /* 32-bit MMIO: 16MB at 0xfe00_0000 */
+			bus-range = <0x00 0x00>;
+		};
+
+		/* ==============================================================
+		 * PCIe — EXTERNAL PORT 0
+		 * ==============================================================
+		 * IOFIC (I/O Fabric Interrupt Controller) for port 0.
+		 * SPI 47 (0x2f), 8 sub-interrupts.
+		 *
+		 * PCIe external port 0:
+		 *   ECAM: 128KB at 0xfd80_0000
+		 *   Config space offset: 64KB (0x10000)
+		 *   Ranges:
+		 *     Config:  1MB at 0xfb60_0000
+		 *     I/O:     64KB at 0xc000_0000 (CPU addr), PCI I/O port 0x10000
+		 *     MMIO:    ~128MB at 0xc001_0000
+		 *   Bus range: 0-255
+		 *
+		 * Interrupt routing via iofic_pcie_ext0:
+		 *   INTA -> iofic IRQ 7
+		 *   INTB -> iofic IRQ 6
+		 *   INTC -> iofic IRQ 5
+		 *   INTD -> iofic IRQ 4
+		 *
+		 * [TS5020-DIFF] Identical in TS5020.
+		 */
+		iofic_pcie_external0 {
+			#interrupt-cells = <0x01>;
+			compatible = "al,alpine-iofic";
+			reg = <0x00 0xfd803000 0x00 0x1000>;     /* 4KB at 0xfd80_3000 */
+			interrupt-controller;
+			interrupts-in = <0x08>;                   /* 8 sub-interrupts */
+			interrupts = <0x00 0x2f 0x04>;           /* SPI 47, level */
+			interrupt-parent = <0x01>;               /* -> gic_main */
+			phandle = <0x0d>;                        /* iofic_pcie_ext0 */
+		};
+
+		pcie-external0 {
+			compatible = "annapurna-labs,alpine-external-pcie";
+			reg = <0x00 0xfd800000 0x00 0x20000>;    /* 128KB ECAM at 0xfd80_0000 */
+			device_type = "pci";
+			#size-cells = <0x02>;
+			#address-cells = <0x03>;
+			#interrupt-cells = <0x01>;
+			reg-names = "ecam";
+			interrupt-map-mask = <0x00 0x00 0x00 0x07>;
+			interrupt-map = <0x00 0x00 0x00 0x01 0x0d 0x07      /* INTA -> iofic0 IRQ 7 */
+			                 0x00 0x00 0x00 0x02 0x0d 0x06       /* INTB -> iofic0 IRQ 6 */
+			                 0x00 0x00 0x00 0x03 0x0d 0x05       /* INTC -> iofic0 IRQ 5 */
+			                 0x00 0x00 0x00 0x04 0x0d 0x04>;     /* INTD -> iofic0 IRQ 4 */
+			msi-parent = <0x02>;                     /* -> msix */
+			cfg-space-offset = <0x10000>;            /* 64KB config space offset */
+			ranges = <0x00 0x00 0xfb600000 0x00 0xfb600000 0x00 0x100000       /* Config: 1MB */
+			          0x1000000 0x00 0x10000 0x00 0xc0000000 0x00 0x10000       /* I/O: 64KB */
+			          0x2000000 0x00 0xc0010000 0x00 0xc0010000 0x00 0x7ff0000>;/* MMIO: ~128MB */
+			bus-range = <0x00 0xff>;
+		};
+
+		/* ==============================================================
+		 * PCIe — EXTERNAL PORT 1
+		 * ==============================================================
+		 * SPI 48 (0x30), IOFIC at 0xfd82_1400.
+		 * ECAM: 128KB at 0xfd82_0000
+		 * Config space offset: 8KB (0x2000)
+		 * MMIO base: 0xc801_0000 (~128MB)
+		 */
+		iofic_pcie_external1 {
+			#interrupt-cells = <0x01>;
+			compatible = "al,alpine-iofic";
+			reg = <0x00 0xfd821400 0x00 0x1000>;
+			interrupt-controller;
+			interrupts-in = <0x08>;
+			interrupts = <0x00 0x30 0x04>;           /* SPI 48, level */
+			interrupt-parent = <0x01>;
+			phandle = <0x0e>;                        /* iofic_pcie_ext1 */
+		};
+
+		pcie-external1 {
+			compatible = "annapurna-labs,alpine-external-pcie";
+			reg = <0x00 0xfd820000 0x00 0x20000>;    /* 128KB ECAM */
+			device_type = "pci";
+			#size-cells = <0x02>;
+			#address-cells = <0x03>;
+			#interrupt-cells = <0x01>;
+			reg-names = "ecam";
+			interrupt-map-mask = <0x00 0x00 0x00 0x07>;
+			interrupt-map = <0x00 0x00 0x00 0x01 0x0e 0x07      /* INTA -> iofic1 IRQ 7 */
+			                 0x00 0x00 0x00 0x02 0x0e 0x06
+			                 0x00 0x00 0x00 0x03 0x0e 0x05
+			                 0x00 0x00 0x00 0x04 0x0e 0x04>;
+			msi-parent = <0x02>;
+			cfg-space-offset = <0x2000>;             /* 8KB config space offset */
+			ranges = <0x00 0x00 0xfb700000 0x00 0xfb700000 0x00 0x100000
+			          0x1000000 0x00 0x20000 0x00 0xc8000000 0x00 0x10000
+			          0x2000000 0x00 0xc8010000 0x00 0xc8010000 0x00 0x7ff0000>;
+			bus-range = <0x00 0xff>;
+		};
+
+		/* ==============================================================
+		 * PCIe — EXTERNAL PORT 2
+		 * ==============================================================
+		 * SPI 49 (0x31), IOFIC at 0xfd84_1400.
+		 * ECAM: 128KB at 0xfd84_0000
+		 * MMIO base: 0xd001_0000 (~128MB)
+		 */
+		iofic_pcie_external2 {
+			#interrupt-cells = <0x01>;
+			compatible = "al,alpine-iofic";
+			reg = <0x00 0xfd841400 0x00 0x1000>;
+			interrupt-controller;
+			interrupts-in = <0x08>;
+			interrupts = <0x00 0x31 0x04>;           /* SPI 49, level */
+			interrupt-parent = <0x01>;
+			phandle = <0x0f>;                        /* iofic_pcie_ext2 */
+		};
+
+		pcie-external2 {
+			compatible = "annapurna-labs,alpine-external-pcie";
+			reg = <0x00 0xfd840000 0x00 0x20000>;    /* 128KB ECAM */
+			device_type = "pci";
+			#size-cells = <0x02>;
+			#address-cells = <0x03>;
+			#interrupt-cells = <0x01>;
+			reg-names = "ecam";
+			interrupt-map-mask = <0x00 0x00 0x00 0x07>;
+			interrupt-map = <0x00 0x00 0x00 0x01 0x0f 0x07      /* INTA -> iofic2 IRQ 7 */
+			                 0x00 0x00 0x00 0x02 0x0f 0x06
+			                 0x00 0x00 0x00 0x03 0x0f 0x05
+			                 0x00 0x00 0x00 0x04 0x0f 0x04>;
+			msi-parent = <0x02>;
+			cfg-space-offset = <0x2000>;
+			ranges = <0x00 0x00 0xfb800000 0x00 0xfb800000 0x00 0x100000
+			          0x1000000 0x00 0x30000 0x00 0xd0000000 0x00 0x10000
+			          0x2000000 0x00 0xd0010000 0x00 0xd0010000 0x00 0x7ff0000>;
+			bus-range = <0x00 0xff>;
+		};
+
+		/* ==============================================================
+		 * PCIe — EXTERNAL PORT 3
+		 * ==============================================================
+		 * SPI 50 (0x32), IOFIC at 0xfd90_1400.
+		 * ECAM: 128KB at 0xfd90_0000
+		 * MMIO base: 0xd801_0000 (~128MB)
+		 * NOTE: Uses amazon,al-fic compat in addition to al,alpine-iofic.
+		 */
+		iofic_pcie_external3 {
+			#interrupt-cells = <0x01>;
+			compatible = "amazon,al-fic", "al,alpine-iofic";
+			reg = <0x00 0xfd901400 0x00 0x1000>;
+			interrupt-controller;
+			interrupts-in = <0x08>;
+			interrupts = <0x00 0x32 0x04>;           /* SPI 50, level */
+			interrupt-parent = <0x01>;
+			phandle = <0x10>;                        /* iofic_pcie_ext3 */
+		};
+
+		pcie-external3 {
+			compatible = "annapurna-labs,alpine-external-pcie";
+			reg = <0x00 0xfd900000 0x00 0x20000>;    /* 128KB ECAM */
+			device_type = "pci";
+			#size-cells = <0x02>;
+			#address-cells = <0x03>;
+			#interrupt-cells = <0x01>;
+			reg-names = "ecam";
+			interrupt-map-mask = <0x00 0x00 0x00 0x07>;
+			interrupt-map = <0x00 0x00 0x00 0x01 0x10 0x07      /* INTA -> iofic3 IRQ 7 */
+			                 0x00 0x00 0x00 0x02 0x10 0x06
+			                 0x00 0x00 0x00 0x03 0x10 0x05
+			                 0x00 0x00 0x00 0x04 0x10 0x04>;
+			msi-parent = <0x02>;
+			cfg-space-offset = <0x2000>;
+			ranges = <0x00 0x00 0xfb900000 0x00 0xfb900000 0x00 0x100000
+			          0x1000000 0x00 0x40000 0x00 0xd8000000 0x00 0x10000
+			          0x2000000 0x00 0xd8010000 0x00 0xd8010000 0x00 0x7ff0000>;
+			bus-range = <0x00 0xff>;
+		};
+
+		/* PCIe External Error Handlers — one per external port */
+		pcie-external-err0 {
+			compatible = "amazon,al-pcie-external-err";
+			reg = <0x00 0xfd800000 0x00 0x20000>;    /* Shares ECAM with pcie-external0 */
+			pcie-port-num = <0x00>;                   /* Port 0 */
+		};
+
+		pcie-external-err1 {
+			compatible = "amazon,al-pcie-external-err";
+			reg = <0x00 0xfd820000 0x00 0x20000>;
+			pcie-port-num = <0x01>;                   /* Port 1 */
+		};
+
+		pcie-external-err2 {
+			compatible = "amazon,al-pcie-external-err";
+			reg = <0x00 0xfd840000 0x00 0x20000>;
+			pcie-port-num = <0x02>;                   /* Port 2 */
+		};
+
+		pcie-external-err3 {
+			compatible = "amazon,al-pcie-external-err";
+			reg = <0x00 0xfd900000 0x00 0x20000>;
+			pcie-port-num = <0x03>;                   /* Port 3 */
+		};
+
+		/* ==============================================================
+		 * PCIe UNIT ADAPTERS — SATA and SSM (Security Subsystem Module)
+		 * ==============================================================
+		 * These bridge the internal PCIe bus to the SATA and crypto engines.
+		 */
+
+		/* SATA host 0 unit adapter — SPI 57 (0x39) */
+		al-pcie-unit-adapter-sata-port0 {
+			compatible = "amazon,al-pcie-unit-adapter";
+			reg = <0x00 0xfc8f8000 0x00 0x1000>;     /* 4KB at 0xfc8f_8000 */
+			interrupts = <0x00 0x39 0x04>;           /* SPI 57, level */
+		};
+
+		/* SATA host 1 unit adapter — SPI 58 (0x3a) */
+		al-pcie-unit-adapter-sata-port1 {
+			compatible = "amazon,al-pcie-unit-adapter";
+			reg = <0x00 0xfc9f8000 0x00 0x1000>;     /* 4KB at 0xfc9f_8000 */
+			interrupts = <0x00 0x3a 0x04>;           /* SPI 58, level */
+		};
+
+		/* Crypto/SSM port 0 unit adapter — SPI 59 (0x3b) */
+		al-pcie-unit-adapter-ssm-port0 {
+			compatible = "amazon,al-pcie-unit-adapter";
+			reg = <0x00 0xfc400000 0x00 0x1000>;     /* 4KB at 0xfc40_0000 */
+			interrupts = <0x00 0x3b 0x04>;           /* SPI 59, level */
+		};
+
+		/* Crypto/SSM port 1 unit adapter — SPI 60 (0x3c) */
+		al-pcie-unit-adapter-ssm-port1 {
+			compatible = "amazon,al-pcie-unit-adapter";
+			reg = <0x00 0xfc500000 0x00 0x1000>;     /* 4KB at 0xfc50_0000 */
+			interrupts = <0x00 0x3c 0x04>;           /* SPI 60, level */
+		};
+
+		/* ==============================================================
+		 * THERMAL SENSOR AND ZONES
+		 * ==============================================================
+		 * On-die thermal sensor at 0xfd86_0a00, 256 bytes.
+		 *
+		 * Thermal zone polling:
+		 *   Passive polling: 250ms (0xfa = 250)
+		 *   Active polling:  1000ms (0x3e8 = 1000)
+		 *
+		 * Trip points:
+		 *   Critical: 105,000 millidegrees C (0x19a28 = 105,000)
+		 *             = 105 degrees Celsius
+		 *   Hysteresis: 2,000 millidegrees C (0x7d0 = 2,000) = 2 degrees C
+		 */
+		thermal {
+			compatible = "annapurna-labs,al-thermal";
+			reg = <0x00 0xfd860a00 0x00 0x100>;      /* 256B at 0xfd86_0a00 */
+			#thermal-sensor-cells = <0x00>;
+			phandle = <0x11>;                        /* thermal_sensor */
+		};
+
+		thermal-zones {
+
+			cpu-thermal {
+				polling-delay-passive = <0xfa>;      /* 250 ms */
+				polling-delay = <0x3e8>;             /* 1000 ms */
+				thermal-sensors = <0x11>;            /* -> thermal_sensor */
+
+				trips {
+
+					cpu-crit {
+						temperature = <0x19a28>;     /* 105,000 mC = 105 degrees C */
+						hysteresis = <0x7d0>;        /* 2,000 mC = 2 degrees C */
+						type = "critical";           /* System shutdown on trip */
+					};
+				};
+			};
+		};
+
+		/* ==============================================================
+		 * NAND FLASH
+		 * ==============================================================
+		 * Annapurna Labs NAND controller.
+		 * Register: 2.008MB at 0xfa10_0000
+		 * SPI 1, level-triggered.
+		 * ONFI timing mode 1 max.
+		 *
+		 * Partition Layout (total ~1GB NAND):
+		 *   Offset      Size        Label
+		 *   ---------   ---------   ------------------
+		 *   0x000000    3MB         al_boot_nand      — U-Boot secondary/NAND bootloader
+		 *   0x300000    2MB         device_tree       — DTB storage
+		 *   0x500000    15MB        linux_kernel      — Kernel image (zImage/Image)
+		 *   0x1400000   30MB        initrd            — Initial ramdisk
+		 *   0x3200000   ~972MB      ubifs             — UBIFS root filesystem
+		 *                           (0x3ce00000 = 1,020,264,448 bytes)
+		 */
+		nand-flash {
+			compatible = "annapurna-labs,al-nand";
+			reg = <0x00 0xfa100000 0x00 0x202000>;   /* ~2MB at 0xfa10_0000 */
+			interrupts = <0x00 0x01 0x04>;           /* SPI 1, level */
+			clocks = <0x09>;                         /* -> sbclk */
+			clock-names = "sbclk";
+			#address-cells = <0x01>;
+			#size-cells = <0x01>;
+			max-onfi-timing-mode = <0x01>;           /* ONFI timing mode 1 */
+
+			partition@0 {
+				label = "al_boot_nand";
+				reg = <0x00 0x300000>;               /* 0x0 + 3MB (3,145,728 bytes) */
+			};
+
+			partition@1 {
+				label = "device_tree";
+				reg = <0x300000 0x200000>;            /* 3MB + 2MB */
+			};
+
+			partition@2 {
+				label = "linux_kernel";
+				reg = <0x500000 0xf00000>;            /* 5MB + 15MB (15,728,640 bytes) */
+			};
+
+			partition@3 {
+				label = "initrd";
+				reg = <0x1400000 0x1e00000>;          /* 20MB + 30MB (31,457,280 bytes) */
+			};
+
+			partition@4 {
+				label = "ubifs";
+				reg = <0x3200000 0x3ce00000>;         /* 50MB + ~972MB */
+			};
+		};
+
+		/* ==============================================================
+		 * SPI FLASH
+		 * ==============================================================
+		 * DesignWare SPI master controller.
+		 * Register: 4KB at 0xfd88_2000
+		 * SPI interrupt: SPI 23 (0x17), level-triggered.
+		 * 4 chip selects, bus 0.
+		 *
+		 * Flash device on CS0:
+		 *   JEDEC auto-detection (no hardcoded part number)
+		 *   Max SPI clock: 25 MHz (0x17d7840 = 25,000,000)
+		 *
+		 * SPI Flash Partition Layout (4MB total):
+		 *   Offset      Size       Label
+		 *   ---------   --------   ----------------
+		 *   0x000000    3MB        al_boot           — Primary U-Boot / SPI bootloader
+		 *   0x300000    832KB      feature_reserved  — Buffalo feature flags area
+		 *   0x3D0000    128KB      nas-feature       — NAS-specific feature data
+		 *   0x3F0000    64KB       firmware_hash     — Firmware integrity hash
+		 */
+		spi {
+			compatible = "amazon,alpine-dw-apb-ssi", "snps,dw-spi-mmio", "snps,dw-apb-ssi";
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+			reg = <0x00 0xfd882000 0x00 0x1000>;     /* 4KB at 0xfd88_2000 */
+			interrupts = <0x00 0x17 0x04>;           /* SPI 23, level */
+			num-chipselect = <0x04>;                  /* 4 chip selects */
+			bus-num = <0x00>;                         /* SPI bus 0 */
+			clocks = <0x09>;                         /* -> sbclk */
+			clock-names = "sbclk";
+
+			spiflash@0 {
+				#address-cells = <0x01>;
+				#size-cells = <0x01>;
+				compatible = "spi_flash_jedec_detection";
+				spi-max-frequency = <0x17d7840>;     /* 25,000,000 Hz = 25 MHz */
+				reg = <0x00>;                        /* Chip select 0 */
+
+				partition@0 {
+					reg = <0x00 0x300000>;           /* 0x0 + 3MB (3,145,728 bytes) */
+					label = "al_boot";
+				};
+
+				partition@1 {
+					reg = <0x300000 0xd0000>;        /* 3MB + 832KB (851,968 bytes) */
+					label = "feature_reserved";
+				};
+
+				partition@2 {
+					reg = <0x3d0000 0x20000>;        /* 3.8125MB + 128KB (131,072 bytes) */
+					label = "nas-feature";
+				};
+
+				partition@3 {
+					reg = <0x3f0000 0x10000>;        /* 3.9375MB + 64KB (65,536 bytes) */
+					label = "firmware_hash";
+				};
+			};
+		};
+
+		/* ==============================================================
+		 * CLOCKS
+		 * ==============================================================
+		 *
+		 * refclk:  Reference clock = 24 MHz (0x16e3600 = 24,000,000)
+		 *          Main crystal oscillator on the board.
+		 *
+		 * sbclk:   South-bridge / peripheral clock = 1 MHz placeholder
+		 *          (0xf4240 = 1,000,000)
+		 *          NOTE: This placeholder value is overridden at runtime
+		 *          by U-Boot with the actual peripheral bus clock frequency
+		 *          (typically 375 MHz on Alpine V2).
+		 *
+		 * nbclk:   North-bridge clock = 1 MHz placeholder (runtime patched)
+		 *          (typically 1700-2000 MHz on Alpine V2)
+		 *
+		 * cpuclk:  CPU clock = 1 MHz placeholder (runtime patched)
+		 *          (typically 1700-2300 MHz on Alpine V2)
+		 */
+		clocks {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+
+			refclk {
+				#clock-cells = <0x00>;
+				compatible = "fixed-clock";
+				clock-frequency = <0x16e3600>;       /* 24,000,000 Hz = 24 MHz */
+			};
+
+			sbclk {
+				#clock-cells = <0x00>;
+				compatible = "fixed-clock";
+				clock-frequency = <0xf4240>;         /* 1,000,000 Hz = 1 MHz (placeholder) */
+				phandle = <0x09>;                    /* sbclk — referenced by many peripherals */
+			};
+
+			nbclk {
+				#clock-cells = <0x00>;
+				compatible = "fixed-clock";
+				clock-frequency = <0xf4240>;         /* 1 MHz placeholder */
+			};
+
+			cpuclk {
+				#clock-cells = <0x00>;
+				compatible = "fixed-clock";
+				clock-frequency = <0xf4240>;         /* 1 MHz placeholder */
+			};
+		};
+
+		/* ==============================================================
+		 * SERDES — High-speed serial interface configuration block
+		 * ==============================================================
+		 * Register: 9.25KB at 0xfd8c_0000
+		 * Actual lane configuration is in board-cfg/serdes section below.
+		 */
+		serdes {
+			compatible = "annapurna-labs,al-serdes";
+			reg = <0x00 0xfd8c0000 0x00 0x2400>;    /* ~9KB at 0xfd8c_0000 */
+		};
+
+		/* DDR Memory Controller */
+		mc {
+			compatible = "annapurna-labs,alpine-mc";
+			reg = <0x00 0xf0080000 0x00 0x10000>;   /* 64KB at 0xf008_0000 */
+		};
+
+		/* ==============================================================
+		 * PIN MULTIPLEXER (PINCTRL)
+		 * ==============================================================
+		 * Configures which function each SoC pin is assigned to.
+		 * Register: 4KB at 0xfd8a_8000 (same base as PBS).
+		 *
+		 * Each entry has:
+		 *   id  = function name
+		 *   arg = 0x00 (disabled/default) or specific configuration
+		 *
+		 * Key active pin mux settings:
+		 *   if_nand_8:    NAND 8-bit data bus (phandle 0x12)
+		 *   if_nand_cs_0: NAND chip select 0 (phandle 0x13)
+		 *   if_uart_1:    UART1 pins (micon communication)
+		 *   if_sgpo_*:    Serial GPIO output pins (LED shift registers)
+		 *   if_gpio0-43:  GPIO pin function enables
+		 *
+		 * NOTE: arg=0x00 for all entries means the pin mux is configured
+		 * by the bootloader before Linux starts; these entries just
+		 * declare the available functions.
+		 */
+		pinctrl {
+			compatible = "annapurna-labs,alpine-pinctrl";
+			reg = <0x00 0xfd8a8000 0x00 0x1000>;
+
+			/* NOR flash interfaces — all disabled (arg=0) */
+			if_nor_8     { id = "if_nor_8";     arg = <0x00>; };
+			if_nor_16    { id = "if_nor_16";    arg = <0x00>; };
+			if_nor_cs_0  { id = "if_nor_cs_0";  arg = <0x00>; };
+			if_nor_cs_1  { id = "if_nor_cs_1";  arg = <0x00>; };
+			if_nor_cs_2  { id = "if_nor_cs_2";  arg = <0x00>; };
+			if_nor_cs_3  { id = "if_nor_cs_3";  arg = <0x00>; };
+			if_nor_wp    { id = "if_nor_wp";    arg = <0x00>; };
+
+			/* NAND flash interfaces */
+			if_nand_8 {
+				id = "if_nand_8";
+				arg = <0x00>;
+				phandle = <0x12>;                    /* pinmux_nand_8 — used by pinctrl_init */
+			};
+
+			if_nand_16   { id = "if_nand_16";   arg = <0x00>; };
+
+			if_nand_cs_0 {
+				id = "if_nand_cs_0";
+				arg = <0x00>;
+				phandle = <0x13>;                    /* pinmux_nand_cs_0 — used by pinctrl_init */
+			};
+
+			if_nand_cs_1 { id = "if_nand_cs_1"; arg = <0x00>; };
+			if_nand_cs_2 { id = "if_nand_cs_2"; arg = <0x00>; };
+			if_nand_cs_3 { id = "if_nand_cs_3"; arg = <0x00>; };
+			if_nand_wp   { id = "if_nand_wp";   arg = <0x00>; };
+
+			/* SRAM interfaces — unused */
+			if_sram_8    { id = "if_sram_8";    arg = <0x00>; };
+			if_sram_16   { id = "if_sram_16";   arg = <0x00>; };
+			if_sram_cs_0 { id = "if_sram_cs_0"; arg = <0x00>; };
+			if_sram_cs_1 { id = "if_sram_cs_1"; arg = <0x00>; };
+			if_sram_cs_2 { id = "if_sram_cs_2"; arg = <0x00>; };
+			if_sram_cs_3 { id = "if_sram_cs_3"; arg = <0x00>; };
+
+			/* SATA activity LED pins */
+			if_sata_0_leds { id = "if_sata_0_leds"; arg = <0x00>; };
+			if_sata_1_leds { id = "if_sata_1_leds"; arg = <0x00>; };
+
+			/* Ethernet LED pins */
+			if_eth_0_led { id = "if_eth_0_led"; arg = <0x00>; };
+			if_eth_1_led { id = "if_eth_1_led"; arg = <0x00>; };
+			if_eth_2_led { id = "if_eth_2_led"; arg = <0x00>; };
+			if_eth_3_led { id = "if_eth_3_led"; arg = <0x00>; };
+			if_eth_leds  { id = "if_eth_leds";  arg = <0x00>; };
+			if_eth_gpio  { id = "if_eth_gpio";  arg = <0x00>; };
+
+			/* UART pin mux */
+			if_uart_1       { id = "if_uart_1";       arg = <0x00>; };
+			if_uart_1_modem { id = "if_uart_1_modem"; arg = <0x00>; };
+			if_uart_2       { id = "if_uart_2";       arg = <0x00>; };
+			if_uart_3       { id = "if_uart_3";       arg = <0x00>; };
+
+			/* I2C general bus pin mux */
+			if_i2c_gen { id = "if_i2c_gen"; arg = <0x00>; };
+
+			/* USB ULPI reset pins */
+			if_ulpi_0_rst_n { id = "if_ulpi_0_rst_n"; arg = <0x00>; };
+			if_ulpi_1_rst_n { id = "if_ulpi_1_rst_n"; arg = <0x00>; };
+
+			/* PCIe endpoint pins */
+			if_pci_ep_int_a     { id = "if_pci_ep_int_a";     arg = <0x00>; };
+			if_pci_ep_reset_out { id = "if_pci_ep_reset_out"; arg = <0x00>; };
+
+			/* SPI master auxiliary chip selects */
+			if_spim_a_ss_1 { id = "if_spim_a_ss_1"; arg = <0x00>; };
+			if_spim_a_ss_2 { id = "if_spim_a_ss_2"; arg = <0x00>; };
+			if_spim_a_ss_3 { id = "if_spim_a_ss_3"; arg = <0x00>; };
+			if_spim_aux    { id = "if_spim_aux";    arg = <0x00>; };
+
+			/* USB ULPI bus B */
+			if_ulpi_1_b { id = "if_ulpi_1_b"; arg = <0x00>; };
+
+			/* GPIO pin function enables (pins 0-43)
+			 * arg = pin number being configured for GPIO function */
+			if_gpio0  { id = "if_gpio"; arg = <0x00>; };   /* GPIO pin 0 */
+			if_gpio1  { id = "if_gpio"; arg = <0x01>; };   /* GPIO pin 1 */
+			if_gpio2  { id = "if_gpio"; arg = <0x02>; };   /* GPIO pin 2 */
+			if_gpio3  { id = "if_gpio"; arg = <0x03>; };   /* GPIO pin 3 */
+			if_gpio4  { id = "if_gpio"; arg = <0x04>; };   /* GPIO pin 4 */
+			if_gpio5  { id = "if_gpio"; arg = <0x05>; };   /* GPIO pin 5 */
+			if_gpio6  { id = "if_gpio"; arg = <0x06>; };   /* GPIO pin 6 */
+			if_gpio7  { id = "if_gpio"; arg = <0x07>; };   /* GPIO pin 7 */
+			if_gpio8  { id = "if_gpio"; arg = <0x08>; };   /* GPIO pin 8 */
+			if_gpio9  { id = "if_gpio"; arg = <0x09>; };   /* GPIO pin 9 */
+			if_gpio10 { id = "if_gpio"; arg = <0x0a>; };   /* GPIO pin 10 */
+			if_gpio11 { id = "if_gpio"; arg = <0x0b>; };   /* GPIO pin 11 */
+			if_gpio12 { id = "if_gpio"; arg = <0x0c>; };   /* GPIO pin 12 */
+			if_gpio13 { id = "if_gpio"; arg = <0x0d>; };   /* GPIO pin 13 */
+			if_gpio14 { id = "if_gpio"; arg = <0x0e>; };   /* GPIO pin 14 */
+			if_gpio15 { id = "if_gpio"; arg = <0x0f>; };   /* GPIO pin 15 */
+			if_gpio16 { id = "if_gpio"; arg = <0x10>; };   /* GPIO pin 16 */
+			if_gpio17 { id = "if_gpio"; arg = <0x11>; };   /* GPIO pin 17 */
+			if_gpio18 { id = "if_gpio"; arg = <0x12>; };   /* GPIO pin 18 */
+			if_gpio19 { id = "if_gpio"; arg = <0x13>; };   /* GPIO pin 19 */
+			if_gpio20 { id = "if_gpio"; arg = <0x14>; };   /* GPIO pin 20 */
+			if_gpio21 { id = "if_gpio"; arg = <0x15>; };   /* GPIO pin 21 */
+			if_gpio22 { id = "if_gpio"; arg = <0x16>; };   /* GPIO pin 22 */
+			if_gpio23 { id = "if_gpio"; arg = <0x17>; };   /* GPIO pin 23 */
+			if_gpio24 { id = "if_gpio"; arg = <0x18>; };   /* GPIO pin 24 */
+			if_gpio25 { id = "if_gpio"; arg = <0x19>; };   /* GPIO pin 25 */
+			if_gpio26 { id = "if_gpio"; arg = <0x1a>; };   /* GPIO pin 26 */
+			if_gpio27 { id = "if_gpio"; arg = <0x1b>; };   /* GPIO pin 27 */
+			if_gpio28 { id = "if_gpio"; arg = <0x1c>; };   /* GPIO pin 28 */
+			if_gpio29 { id = "if_gpio"; arg = <0x1d>; };   /* GPIO pin 29 */
+			if_gpio30 { id = "if_gpio"; arg = <0x1e>; };   /* GPIO pin 30 */
+			if_gpio31 { id = "if_gpio"; arg = <0x1f>; };   /* GPIO pin 31 */
+			if_gpio32 { id = "if_gpio"; arg = <0x20>; };   /* GPIO pin 32 */
+			if_gpio33 { id = "if_gpio"; arg = <0x21>; };   /* GPIO pin 33 */
+			if_gpio34 { id = "if_gpio"; arg = <0x22>; };   /* GPIO pin 34 */
+			if_gpio35 { id = "if_gpio"; arg = <0x23>; };   /* GPIO pin 35 */
+			if_gpio36 { id = "if_gpio"; arg = <0x24>; };   /* GPIO pin 36 */
+			if_gpio37 { id = "if_gpio"; arg = <0x25>; };   /* GPIO pin 37 */
+			if_gpio38 { id = "if_gpio"; arg = <0x26>; };   /* GPIO pin 38 */
+			if_gpio39 { id = "if_gpio"; arg = <0x27>; };   /* GPIO pin 39 */
+			if_gpio40 { id = "if_gpio"; arg = <0x28>; };   /* GPIO pin 40 */
+			if_gpio41 { id = "if_gpio"; arg = <0x29>; };   /* GPIO pin 41 */
+			if_gpio42 { id = "if_gpio"; arg = <0x2a>; };   /* GPIO pin 42 */
+			if_gpio43 { id = "if_gpio"; arg = <0x2b>; };   /* GPIO pin 43 */
+
+			/* Serial GPIO Output (SGPO) clock and data pins */
+			if_sgpo_clk  { id = "if_sgpo_clk";  arg = <0x00>; };
+			if_sgpo_ds_0 { id = "if_sgpo_ds_0"; arg = <0x00>; };  /* SGPO data stream 0 */
+			if_sgpo_ds_1 { id = "if_sgpo_ds_1"; arg = <0x00>; };  /* SGPO data stream 1 */
+			if_sgpo_ds_2 { id = "if_sgpo_ds_2"; arg = <0x00>; };  /* SGPO data stream 2 */
+			if_sgpo_ds_3 { id = "if_sgpo_ds_3"; arg = <0x00>; };  /* SGPO data stream 3 */
+		};
+
+		/* ==============================================================
+		 * BOARD CONFIGURATION — Buffalo TS51220 Rev 1.0
+		 * ==============================================================
+		 * This section is consumed by U-Boot and the Annapurna Labs
+		 * boot firmware, NOT directly by the Linux kernel.
+		 * It configures SerDes lanes, Ethernet PHYs, PCIe ports,
+		 * DRAM, and initial GPIO state.
+		 *
+		 * [TS5020-DIFF] Board ID is "ts5020_buffalo_rev1.0" on TS5020.
+		 */
+		board-cfg {
+			id = "ts51220_buffalo_rev1.0";
+			u-boot-offset = <0x20000>;               /* U-Boot image offset: 128KB (131,072) */
+
+			/* ==========================================================
+			 * SerDes (Serializer/Deserializer) Lane Configuration
+			 * ==========================================================
+			 * Alpine V2 has 5 SerDes groups (group0-group4), each with
+			 * up to 4 lanes.  Lanes can be assigned to PCIe, SATA,
+			 * 10GbE, or left unused.
+			 *
+			 * TS51220 SerDes Assignment Summary:
+			 * ----------------------------------
+			 *   Group 0 (lanes 0-3): PCIe Gen2 x2 + PCIe Gen2 x2
+			 *     -> Lanes 0-1: PCIe external port 0 (likely USB3 host or SAS HBA)
+			 *     -> Lanes 2-3: PCIe external port 1
+			 *     Ref clock: 100 MHz
+			 *
+			 *   Group 1 (lanes 0-3): SATA (4 ports)
+			 *     -> SATA host 0, ports 0-3 (disk bays 1-4)
+			 *     Ref clock: 100 MHz
+			 *     RX/TX equalization: tuned per-lane
+			 *
+			 *   Group 2 (lanes 0-3): PCIe Gen2 x2 + PCIe Gen2 x2
+			 *     -> Lanes 0-1: PCIe external port 2 (likely Marvell SAS/SATA HBA)
+			 *     -> Lanes 2-3: PCIe external port 3 (likely Marvell SAS/SATA HBA)
+			 *     Ref clock: 100 MHz
+			 *
+			 *   Group 3 (lanes 0,2): 10GbE (2 x 10Gbps Ethernet)
+			 *     -> Lane 0: eth2 (10GbE port 2)
+			 *     -> Lane 2: eth0 (10GbE port 0)
+			 *     Ref clock: 156.25 MHz (10GbE standard)
+			 *
+			 *   Group 4 (lanes 0-1): SKIP (unused/reserved)
+			 *     Ref clock: 100 MHz
+			 *
+			 * [TS5020-DIFF] Key differences:
+			 *   - TS5020 group1 uses SATA with per-variant tuning
+			 *     (nas-pid 0x2048-0x2052 for different PCB revisions)
+			 *   - TS5020 group2 is ALSO SATA (second 4-port SATA controller)
+			 *     vs TS51220 which uses group2 for PCIe (external SAS HBAs)
+			 *   - TS5020 group3 only has lane 2 active (single 10GbE)
+			 *     vs TS51220 which has lanes 0 AND 2 (dual 10GbE)
+			 *   - TS51220 SerDes group1 SATA lanes have rx@1220R/tx@1220R
+			 *     variant tuning (nas-pid 0x2053) instead of the multiple
+			 *     board revision tunings in TS5020
+			 */
+			serdes {
+
+				/*
+				 * Group 0: Dual PCIe Gen2 x2
+				 * Lanes 0-1 -> PCIe external port 0
+				 * Lanes 2-3 -> PCIe external port 1
+				 * No RX/TX equalization overrides.
+				 */
+				group0 {
+					interface = "pcie_g2x2_pcie_g2x2";
+					ref-clock = "100Mhz";
+					active-lanes = <0x00 0x01 0x02 0x03>;  /* All 4 lanes active */
+					inv-tx-lanes;                           /* TX lane polarity inverted */
+					inv-rx-lanes;                           /* RX lane polarity inverted */
+					ssc = "disabled";                       /* Spread-spectrum clocking off */
+
+					lane_0_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_1_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_2_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_3_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+				};
+
+				/*
+				 * Group 1: SATA (4 ports) — drives disk bays 1-4
+				 * All 4 lanes active with custom RX/TX equalization.
+				 *
+				 * Each lane has tuning for:
+				 *   Default: dcgain=0, dfe_3db_freq=7, low_freq_agc_gain=7
+				 *            TX amp=1, total_driver_units=19(0x13), post_emph=2
+				 *
+				 *   @1220R variant (nas-pid 0x2053): Same parameters — tuned
+				 *     for the TS51220-specific PCB routing.
+				 *     (status=disabled means these are alternate profiles,
+				 *      selected at runtime based on board ID)
+				 *
+				 *   @DEF (default fallback): Same as active parameters.
+				 *
+				 * [TS5020-DIFF] TS5020 has many more variant profiles:
+				 *   @820D (nas-pid 0x2051): different amp/dfe for 8-bay design
+				 *   @620D (nas-pid 0x2050): 6-bay variant
+				 *   @420D (nas-pid 0x2049): 4-bay variant
+				 *   @220D (nas-pid 0x2048): 2-bay variant
+				 *   @420R (nas-pid 0x2052): rack-mount 4-bay
+				 *   @DIS: disabled for certain PIDs
+				 */
+				group1 {
+					interface = "sata";
+					ref-clock = "100Mhz";
+					active-lanes = <0x00 0x01 0x02 0x03>;
+					inv-tx-lanes;
+					inv-rx-lanes;
+					ssc = "disabled";
+
+					lane_0_params {
+						rx {
+							override = "enabled";
+							dcgain = <0x00>;
+							dfe_3db_freq = <0x07>;
+							dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>;
+							dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>;
+							dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>;
+							high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx {
+							override = "enabled";
+							amp = <0x01>;
+							total_driver_units = <0x13>;    /* 19 driver units */
+							post_emph = <0x02>;
+							pre_emph = <0x00>;
+							slew_rate = <0x00>;
+						};
+						/* TS51220-specific variant profile */
+						rx@1220R {
+							nas-pid = <0x2053>;            /* NAS product ID 0x2053 */
+							status = "disabled";
+							override = "enabled";
+							dcgain = <0x00>;
+							dfe_3db_freq = <0x07>;
+							dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>;
+							dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>;
+							dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>;
+							high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx@1220R {
+							nas-pid = <0x2053>;
+							status = "disabled";
+							override = "enabled";
+							amp = <0x01>;
+							total_driver_units = <0x13>;
+							post_emph = <0x02>;
+							pre_emph = <0x00>;
+							slew_rate = <0x00>;
+						};
+						rx@DEF {
+							status = "disabled";
+							override = "enabled";
+							dcgain = <0x00>;
+							dfe_3db_freq = <0x07>;
+							dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>;
+							dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>;
+							dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>;
+							high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx@DEF {
+							status = "disabled";
+							override = "enabled";
+							amp = <0x01>;
+							total_driver_units = <0x13>;
+							post_emph = <0x02>;
+							pre_emph = <0x00>;
+							slew_rate = <0x00>;
+						};
+					};
+
+					/* Lanes 1-3: identical parameters to lane 0 */
+					lane_1_params {
+						rx {
+							override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx {
+							override = "enabled"; amp = <0x01>;
+							total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>;
+						};
+						rx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+						rx@DEF { status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@DEF { status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+
+					lane_2_params {
+						rx {
+							override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx {
+							override = "enabled"; amp = <0x01>;
+							total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>;
+						};
+						rx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+						rx@DEF { status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@DEF { status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+
+					lane_3_params {
+						rx {
+							override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>;
+						};
+						tx {
+							override = "enabled"; amp = <0x01>;
+							total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>;
+						};
+						rx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@1220R { nas-pid = <0x2053>; status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+						rx@DEF { status = "disabled"; override = "enabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx@DEF { status = "disabled"; override = "enabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+				};
+
+				/*
+				 * Group 2: Dual PCIe Gen2 x2
+				 * Lanes 0-1 -> PCIe external port 2 (SAS/SATA HBA for bays 5-8)
+				 * Lanes 2-3 -> PCIe external port 3 (SAS/SATA HBA for bays 9-12)
+				 *
+				 * RX/TX equalization override disabled — uses PCIe defaults.
+				 *
+				 * [TS5020-DIFF] TS5020 uses group2 as SATA (not PCIe)
+				 *   with full per-variant equalization tuning profiles.
+				 *   This is the major hardware difference: TS51220 uses
+				 *   PCIe-attached SAS/SATA HBAs for bays 5-12 while
+				 *   TS5020 uses native SATA for bays 5-8.
+				 */
+				group2 {
+					interface = "pcie_g2x2_pcie_g2x2";
+					ref-clock = "100Mhz";
+					active-lanes = <0x00 0x01 0x02 0x03>;
+					inv-tx-lanes;
+					inv-rx-lanes;
+					ssc = "disabled";
+
+					lane_0_params {
+						rx { override = "disabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx { override = "disabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+					lane_1_params {
+						rx { override = "disabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx { override = "disabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+					lane_2_params {
+						rx { override = "disabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx { override = "disabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+					lane_3_params {
+						rx { override = "disabled";
+							dcgain = <0x00>; dfe_3db_freq = <0x07>; dfe_gain = <0x00>;
+							dfe_1st_tap_ctrl = <0x00>; dfe_2nd_tap_ctrl = <0x08>;
+							dfe_3rd_tap_ctrl = <0x00>; dfe_4th_tap_ctrl = <0x08>;
+							low_freq_agc_gain = <0x07>; high_freq_agc_boost = <0x00>;
+							precal_code_sel = <0x00>; };
+						tx { override = "disabled";
+							amp = <0x01>; total_driver_units = <0x13>; post_emph = <0x02>;
+							pre_emph = <0x00>; slew_rate = <0x00>; };
+					};
+				};
+
+				/*
+				 * Group 3: 10GbE (Dual 10-Gigabit Ethernet)
+				 * Lane 0 -> eth2 (10GbE port 2, phy-addr 0x00)
+				 * Lane 2 -> eth0 (10GbE port 0, phy-addr 0x08)
+				 * Ref clock: 156.25 MHz (standard for 10GbE SerDes)
+				 *
+				 * [TS5020-DIFF] TS5020 only has lane 2 active (single 10GbE).
+				 *   TS51220 has BOTH lanes 0 and 2 active (dual 10GbE).
+				 */
+				group3 {
+					interface = "10gbe";
+					ref-clock = "156.25Mhz";
+					active-lanes = <0x00 0x02>;     /* Lanes 0 and 2 active */
+					inv-tx-lanes;
+					inv-rx-lanes;
+					ssc = "disabled";
+
+					lane_0_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_1_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_2_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_3_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+				};
+
+				/*
+				 * Group 4: SKIP (unused/reserved)
+				 * Lanes 0-1 listed but interface is "skip" = not configured.
+				 */
+				group4 {
+					interface = "skip";
+					ref-clock = "100Mhz";
+					active-lanes = <0x00 0x01>;
+					inv-tx-lanes;
+					inv-rx-lanes;
+					ssc = "disabled";
+
+					lane_0_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_1_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_2_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+					lane_3_params {
+						rx { override = "disabled"; };
+						tx { override = "disabled"; };
+					};
+				};
+			};
+
+			/* ==========================================================
+			 * ETHERNET PORT CONFIGURATION
+			 * ==========================================================
+			 *
+			 * port0: 10GbE via 10g-serial (SFP+ or copper 10GBASE-T)
+			 *   SerDes: group 3, lane 2
+			 *   PHY management: XMDC/XMDIO (clause 45)
+			 *   PHY address: 0x08
+			 *   I2C channel: 1 (via PCA9548 mux for SFP+ module access)
+			 *
+			 * port1: 1GbE via RGMII (copper RJ45)
+			 *   PHY management: MDC/MDIO (clause 22)
+			 *   PHY address: 0x02
+			 *   [TS5020-DIFF] TS5020 uses phy-addr 0x04
+			 *
+			 * port2: 10GbE via 10g-serial (second 10GbE port)
+			 *   SerDes: group 3, lane 0
+			 *   PHY management: XMDC/XMDIO
+			 *   PHY address: 0x00
+			 *   I2C channel: 3
+			 *   [TS5020-DIFF] port2 does NOT exist on TS5020
+			 *
+			 * port3: 1GbE via RGMII (copper RJ45)
+			 *   PHY management: MDC/MDIO
+			 *   PHY address: 0x03
+			 *   [TS5020-DIFF] TS5020 uses phy-addr 0x05
+			 *
+			 * All ports use out-of-band auto-negotiation.
+			 * All MDIO buses run at 1.0 MHz.
+			 */
+			ethernet {
+
+				port0 {
+					status = "enabled";
+					mode = "10g-serial";
+					i2c-id = <0x01>;                 /* I2C mux channel 1 */
+					serdes-grp = <0x03>;             /* SerDes group 3 */
+					serdes-lane = <0x02>;            /* Lane 2 */
+
+					ext_phy {
+						phy_mgmt_if = "xmdc-xmdio";  /* Clause 45 MDIO */
+						phy-addr = <0x08>;            /* PHY address 8 */
+						mdc-mdio-freq = "1.0Mhz";
+						auto-neg-mode = "out-of-band";
+					};
+				};
+
+				port1 {
+					status = "enabled";
+					mode = "rgmii";                  /* Reduced GMII — 1GbE */
+					allow-random-mac = "enabled";
+
+					ext_phy {
+						phy_mgmt_if = "mdc-mdio";    /* Clause 22 MDIO */
+						phy-addr = <0x02>;            /* PHY address 2 */
+						mdc-mdio-freq = "1.0Mhz";
+						auto-neg-mode = "out-of-band";
+					};
+				};
+
+				port3 {
+					status = "enabled";
+					mode = "rgmii";
+					allow-random-mac = "enabled";
+
+					ext_phy {
+						phy_mgmt_if = "mdc-mdio";
+						phy-addr = <0x03>;            /* PHY address 3 */
+						mdc-mdio-freq = "1.0Mhz";
+						auto-neg-mode = "out-of-band";
+					};
+				};
+
+				/*
+				 * [TS5020-DIFF] This port does not exist on TS5020.
+				 * The TS51220 has a second 10GbE port (port2).
+				 */
+				port2 {
+					status = "enabled";
+					mode = "10g-serial";
+					i2c-id = <0x03>;                 /* I2C mux channel 3 */
+					serdes-grp = <0x03>;             /* SerDes group 3 */
+					serdes-lane = <0x00>;            /* Lane 0 */
+
+					ext_phy {
+						phy_mgmt_if = "xmdc-xmdio";
+						phy-addr = <0x00>;            /* PHY address 0 */
+						mdc-mdio-freq = "1.0Mhz";
+						auto-neg-mode = "out-of-band";
+					};
+				};
+			};
+
+			/* ==========================================================
+			 * PCIe PORT CONFIGURATION (board-level)
+			 * ==========================================================
+			 * crs-timeout: 30,000 (0x7530) — Configuration Request Retry timeout
+			 *
+			 * All 4 external ports enabled at Gen2 (5 GT/s), x2 width.
+			 *
+			 * [TS5020-DIFF] TS5020 has very different PCIe config:
+			 *   port0: enabled, Gen2, x1 (not x2)
+			 *   port1: DISABLED
+			 *   port2: DISABLED (Gen3 x4 capability but unused)
+			 *   port3: DISABLED (Gen3 x4 capability but unused)
+			 *   The TS51220 enables all 4 ports because it needs
+			 *   PCIe-attached SAS HBAs for the additional disk bays.
+			 */
+			pcie {
+				ep-ports;
+				crs-timeout = <0x7530>;              /* 30,000 */
+
+				port0 {
+					status = "enabled";
+					gen = <0x02>;                    /* PCIe Gen 2 (5 GT/s) */
+					width = <0x02>;                  /* x2 link width */
+				};
+
+				port1 {
+					status = "enabled";
+					gen = <0x02>;
+					width = <0x02>;
+				};
+
+				port2 {
+					status = "enabled";
+					gen = <0x02>;
+					width = <0x02>;
+				};
+
+				port3 {
+					status = "enabled";
+					gen = <0x02>;
+					width = <0x02>;
+				};
+			};
+
+			/* ==========================================================
+			 * DRAM CONFIGURATION
+			 * ==========================================================
+			 * DDR4 memory, single channel (channel0), 2 DIMM slots.
+			 *
+			 * DIMM SPD EEPROM addresses (on i2c-pld bus):
+			 *   DIMM0: I2C address 0x54
+			 *   DIMM1: I2C address 0x55
+			 *   on-board = 0 means socketed DIMMs (not soldered)
+			 *
+			 * Impedance control parameters (same for all DIMM configs):
+			 *   dram_odt = 4:          DRAM On-Die Termination
+			 *   dram_odt_dyn = 0:      Dynamic ODT disabled
+			 *   dram_rout = 7:         DRAM output driver impedance
+			 *   phy_odt = 0x38 (56):   PHY ODT impedance
+			 *   phy_rout = 0x22 (34):  PHY output driver impedance
+			 *   rtt_park = 0:          RTT_PARK disabled
+			 *   host_init_vref = 0x28 (40): Host initial Vref (in % steps)
+			 *   vrefdq = 0x19 (25):    DRAM DQ Vref setting
+			 *
+			 * PHY routing impedance (per byte lane):
+			 *   Byte 0: pu=13, pd=13, odt=7
+			 *   Byte 1: pu=11, pd=13, odt=7
+			 */
+			dram {
+
+				channel0 {
+
+					impedance_ctrl {
+
+						single_dimm_single_rank_per_dimm {
+							dram_odt = <0x04>;
+							dram_odt_dyn = <0x00>;
+							dram_rout = <0x07>;
+							phy_odt = <0x38>;        /* 56 ohms */
+							phy_rout = <0x22>;        /* 34 ohms */
+							rtt_park = <0x00>;
+							phy_rout_pu_0 = <0x0d>;   /* 13 */
+							phy_rout_pd_0 = <0x0d>;   /* 13 */
+							phy_pu_odt_0 = <0x07>;    /* 7 */
+							phy_rout_pu_1 = <0x0b>;   /* 11 */
+							phy_rout_pd_1 = <0x0d>;   /* 13 */
+							phy_pu_odt_1 = <0x07>;    /* 7 */
+							host_init_vref = <0x28>;  /* 40 */
+							vrefdq = <0x19>;          /* 25 */
+						};
+
+						single_dimm_dual_rank_per_dimm {
+							dram_odt = <0x04>; dram_odt_dyn = <0x00>;
+							dram_rout = <0x07>; phy_odt = <0x38>; phy_rout = <0x22>;
+							rtt_park = <0x00>;
+							phy_rout_pu_0 = <0x0d>; phy_rout_pd_0 = <0x0d>; phy_pu_odt_0 = <0x07>;
+							phy_rout_pu_1 = <0x0b>; phy_rout_pd_1 = <0x0d>; phy_pu_odt_1 = <0x07>;
+							host_init_vref = <0x28>; vrefdq = <0x19>;
+						};
+
+						dual_dimm_single_rank_per_dimm {
+							dram_odt = <0x04>; dram_odt_dyn = <0x00>;
+							dram_rout = <0x07>; phy_odt = <0x38>; phy_rout = <0x22>;
+							rtt_park = <0x00>;
+							phy_rout_pu_0 = <0x0d>; phy_rout_pd_0 = <0x0d>; phy_pu_odt_0 = <0x07>;
+							phy_rout_pu_1 = <0x0b>; phy_rout_pd_1 = <0x0d>; phy_pu_odt_1 = <0x07>;
+							host_init_vref = <0x28>; vrefdq = <0x19>;
+						};
+
+						dual_dimm_dual_rank_per_dimm {
+							dram_odt = <0x04>; dram_odt_dyn = <0x00>;
+							dram_rout = <0x07>; phy_odt = <0x38>; phy_rout = <0x22>;
+							rtt_park = <0x00>;
+							phy_rout_pu_0 = <0x0d>; phy_rout_pd_0 = <0x0d>; phy_pu_odt_0 = <0x07>;
+							phy_rout_pu_1 = <0x0b>; phy_rout_pd_1 = <0x0d>; phy_pu_odt_1 = <0x07>;
+							host_init_vref = <0x28>; vrefdq = <0x19>;
+						};
+					};
+
+					dimm0 {
+						status = "enabled";
+						on-board = <0x00>;           /* Socketed DIMM (not soldered) */
+
+						spd {
+							i2c-addr = <0x54>;      /* SPD EEPROM at I2C 0x54 */
+							offset = <0x00>;
+						};
+					};
+
+					dimm1 {
+						status = "enabled";
+						on-board = <0x00>;
+
+						spd {
+							i2c-addr = <0x55>;      /* SPD EEPROM at I2C 0x55 */
+							offset = <0x00>;
+						};
+					};
+				};
+			};
+
+			/* Pin controller initialization — enables NAND 8-bit + CS0 */
+			pinctrl_init {
+				pinctrl-0 = <0x12 0x13>;             /* -> pinmux_nand_8, pinmux_nand_cs_0 */
+			};
+
+			/* ==========================================================
+			 * GPIO INITIALIZATION
+			 * ==========================================================
+			 * Format: <pin direction value> triplets
+			 *   direction: 0 = output, 1 = input
+			 *   value: initial output level (0=low, 1=high)
+			 *
+			 *   GPIO 28 (0x1c): output, low  — purpose: possibly HBA reset
+			 *   GPIO 29 (0x1d): output, low  — purpose: possibly HBA reset
+			 *   GPIO 32 (0x20): output, low  — purpose: possibly HBA reset
+			 *   GPIO 33 (0x21): output, low  — purpose: possibly HBA reset
+			 *   GPIO  4 (0x04): input,  low  — purpose: possibly presence detect
+			 *   GPIO  5 (0x05): input,  high — purpose: possibly presence detect
+			 *
+			 * [TS5020-DIFF] TS5020 has fewer GPIO inits:
+			 *   GPIO 28 (0x1c): output, low
+			 *   GPIO  4 (0x04): input,  low
+			 *   (No GPIO 29, 32, 33 — those are for the extra HBAs)
+			 */
+			gpio_init {
+				gpio-list = <0x1c 0x00 0x00          /* GPIO 28: output, low */
+				             0x1d 0x00 0x00           /* GPIO 29: output, low */
+				             0x20 0x00 0x00           /* GPIO 32: output, low */
+				             0x21 0x00 0x00           /* GPIO 33: output, low */
+				             0x04 0x01 0x00           /* GPIO  4: input */
+				             0x05 0x01 0x01>;         /* GPIO  5: input, pull-high */
+			};
+		};
+
+		/* NOR flash — not populated on this board */
+		nor_flash {
+			status = "disabled";
+		};
+
+		/* ==============================================================
+		 * SATA SOFTWARE LED CONTROLLER
+		 * ==============================================================
+		 * Maps disk activity/presence LEDs to GPIO pins.
+		 *
+		 * The TS51220 has 12 disk bays, requiring 3 SATA/SAS controllers:
+		 *   Host 0 (internal PCI dev 8): 4 ports (bays 1-4), native SATA
+		 *   Host 1 (PCIe-attached HBA):  4 ports (bays 5-8), via PCIe ext port
+		 *   Host 2 (PCIe-attached HBA):  4 ports (bays 9-12), via PCIe ext port
+		 *
+		 * LED GPIO Mapping:
+		 *   LED  Host  Domain  Bus  Dev  Port  GPIO Bank  Pin   Bay
+		 *   ---  ----  ------  ---  ---  ----  ---------  ---   ---
+		 *    0    0     0       0    8    0    gpio2(0x14) 4     Bay 1
+		 *    1    0     0       0    8    1    gpio2(0x14) 5     Bay 2
+		 *    2    0     0       0    8    2    gpio2(0x14) 6     Bay 3
+		 *    3    0     0       0    8    3    gpio2(0x14) 7     Bay 4
+		 *    4    1     2       1    0    3    gpio3(0x15) 3     Bay 5
+		 *    5    1     2       1    0    2    gpio3(0x15) 2     Bay 6
+		 *    6    1     2       1    0    1    gpio3(0x15) 1     Bay 7
+		 *    7    1     2       1    0    0    gpio3(0x15) 0     Bay 8
+		 *    8    1     3       1    0    3    gpio3(0x15) 3     (alt domain)
+		 *    9    1     3       1    0    2    gpio3(0x15) 2     (alt domain)
+		 *   10    1     3       1    0    1    gpio3(0x15) 1     (alt domain)
+		 *   11    1     3       1    0    0    gpio3(0x15) 0     (alt domain)
+		 *   12    2     3       1    0    1    gpio0(0x16) 1     Bay 9
+		 *   13    2     3       1    0    0    gpio0(0x16) 0     Bay 10
+		 *   14    2     3       1    0    2    gpio0(0x16) 2     Bay 11
+		 *   15    2     3       1    0    3    gpio0(0x16) 3     Bay 12
+		 *   16    2     4       1    0    1    gpio0(0x16) 1     (alt domain)
+		 *   17    2     4       1    0    0    gpio0(0x16) 0     (alt domain)
+		 *   18    2     4       1    0    2    gpio0(0x16) 2     (alt domain)
+		 *   19    2     4       1    0    3    gpio0(0x16) 3     (alt domain)
+		 *
+		 * GPIO pin flag = 0x00 = active-high
+		 *
+		 * NOTE: LEDs 4-11 and 12-19 have duplicate entries with different
+		 * PCI domains (2/3 and 3/4).  This is because the PCIe-attached
+		 * SAS HBAs may enumerate under different domain numbers depending
+		 * on the kernel's PCIe enumeration order.  Both mappings are
+		 * provided so the LED driver catches the right one.
+		 *
+		 * [TS5020-DIFF] TS5020 only has 8 LEDs (2 SATA hosts, 8 bays):
+		 *   LEDs 0-3: host 1 (internal dev 9) ports 3-0 -> gpio2 pins 4-7
+		 *   LEDs 4-7: host 0 (internal dev 8) ports 0-3 -> gpio3 pins 0-3
+		 *   Note reversed host/GPIO assignment compared to TS51220.
+		 */
+		sata_sw_leds {
+			compatible = "annapurna-labs,al-sata-sw-leds";
+
+			/* Bays 1-4: Native SATA host 0 (internal PCI device 8) */
+			led@0 {
+				label = "host 0, port 0 activity&presence led";
+				pci_host = <0x00>; pci_domain = <0x00>;
+				pci_bus = <0x00>; pci_dev = <0x08>;
+				port = <0x00>;
+				gpios = <0x14 0x04 0x00>;             /* gpio2, pin 4, active-high */
+			};
+
+			led@1 {
+				label = "host 0, port 1 activity&presence led";
+				pci_host = <0x00>; pci_domain = <0x00>;
+				pci_bus = <0x00>; pci_dev = <0x08>;
+				port = <0x01>;
+				gpios = <0x14 0x05 0x00>;             /* gpio2, pin 5, active-high */
+			};
+
+			led@2 {
+				label = "host 0, port 2 activity&presence led";
+				pci_host = <0x00>; pci_domain = <0x00>;
+				pci_bus = <0x00>; pci_dev = <0x08>;
+				port = <0x02>;
+				gpios = <0x14 0x06 0x00>;             /* gpio2, pin 6, active-high */
+			};
+
+			led@3 {
+				label = "host 0, port 3 activity&presence led";
+				pci_host = <0x00>; pci_domain = <0x00>;
+				pci_bus = <0x00>; pci_dev = <0x08>;
+				port = <0x03>;
+				gpios = <0x14 0x07 0x00>;             /* gpio2, pin 7, active-high */
+			};
+
+			/* Bays 5-8: PCIe-attached host 1, PCI domain 2 */
+			led@4 {
+				label = "host 1, port 3 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x02>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x03>;
+				gpios = <0x15 0x03 0x00>;             /* gpio3, pin 3, active-high */
+			};
+
+			led@5 {
+				label = "host 1, port 2 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x02>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x02>;
+				gpios = <0x15 0x02 0x00>;             /* gpio3, pin 2, active-high */
+			};
+
+			led@6 {
+				label = "host 1, port 1 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x02>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x01>;
+				gpios = <0x15 0x01 0x00>;             /* gpio3, pin 1, active-high */
+			};
+
+			led@7 {
+				label = "host 1, port 0 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x02>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x00>;
+				gpios = <0x15 0x00 0x00>;             /* gpio3, pin 0, active-high */
+			};
+
+			/* Bays 5-8 (alternate PCI domain 3 mapping) */
+			led@8 {
+				label = "host 1, port 3 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x03>;
+				gpios = <0x15 0x03 0x00>;
+			};
+
+			led@9 {
+				label = "host 1, port 2 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x02>;
+				gpios = <0x15 0x02 0x00>;
+			};
+
+			led@10 {
+				label = "host 1, port 1 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x01>;
+				gpios = <0x15 0x01 0x00>;
+			};
+
+			led@11 {
+				label = "host 1, port 0 activity&presence led";
+				pci_host = <0x01>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x00>;
+				gpios = <0x15 0x00 0x00>;
+			};
+
+			/* Bays 9-12: PCIe-attached host 2, PCI domain 3 */
+			led@12 {
+				label = "host 2, port 1 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x01>;
+				gpios = <0x16 0x01 0x00>;             /* gpio0, pin 1, active-high */
+			};
+
+			led@13 {
+				label = "host 2, port 0 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x00>;
+				gpios = <0x16 0x00 0x00>;             /* gpio0, pin 0, active-high */
+			};
+
+			led@14 {
+				label = "host 2, port 2 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x02>;
+				gpios = <0x16 0x02 0x00>;             /* gpio0, pin 2, active-high */
+			};
+
+			led@15 {
+				label = "host 2, port 3 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x03>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x03>;
+				gpios = <0x16 0x03 0x00>;             /* gpio0, pin 3, active-high */
+			};
+
+			/* Bays 9-12 (alternate PCI domain 4 mapping) */
+			led@16 {
+				label = "host 2, port 1 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x04>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x01>;
+				gpios = <0x16 0x01 0x00>;
+			};
+
+			led@17 {
+				label = "host 2, port 0 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x04>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x00>;
+				gpios = <0x16 0x00 0x00>;
+			};
+
+			led@18 {
+				label = "host 2, port 2 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x04>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x02>;
+				gpios = <0x16 0x02 0x00>;
+			};
+
+			led@19 {
+				label = "host 2, port 3 activity&presence led";
+				pci_host = <0x02>; pci_domain = <0x04>;
+				pci_bus = <0x01>; pci_dev = <0x00>;
+				port = <0x03>;
+				gpios = <0x16 0x03 0x00>;
+			};
+		};
+	};
+};

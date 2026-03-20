@@ -1,0 +1,22 @@
+# Large firmware files - don't commit binaries
+firmware/win298/
+firmware/win308/
+firmware/rootfs/
+*.img
+*.dmg
+*.dmg.zip
+*.exe
+*.zip
+*.tar.gz
+*.ko
+*.dtb
+
+# GPL source tarballs (too large for git)
+gpl-source/linux-4.19.75/
+gpl-source/linux-4.19.75.tar.gz
+
+# macOS
+.DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json

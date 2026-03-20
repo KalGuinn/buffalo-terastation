@@ -1,0 +1,99 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d9b479e3bc1d..48e990e45085 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+--
+diff --git a/Makefile b/Makefile
+index 4bf6f24916bf..35f856104376 100644
+--- a/Makefile
++++ b/Makefile
+--
+diff --git a/drivers/net/ethernet/realtek/Kconfig b/drivers/net/ethernet/realtek/Kconfig
+index 96d1b9c08f1a..bf58c56372f1 100644
+--- a/drivers/net/ethernet/realtek/Kconfig
++++ b/drivers/net/ethernet/realtek/Kconfig
+--
+diff --git a/drivers/net/ethernet/realtek/Makefile b/drivers/net/ethernet/realtek/Makefile
+index 71b1da30ecb5..e274623269e2 100644
+--- a/drivers/net/ethernet/realtek/Makefile
++++ b/drivers/net/ethernet/realtek/Makefile
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/Makefile b/drivers/net/ethernet/realtek/r8125/Makefile
+new file mode 100644
+index 000000000000..5175cf2b3492
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/Makefile_linux24x b/drivers/net/ethernet/realtek/r8125/Makefile_linux24x
+new file mode 100644
+index 000000000000..cfd82bacc038
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125.h b/drivers/net/ethernet/realtek/r8125/r8125.h
+new file mode 100644
+index 000000000000..77f1a0cf6d83
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_dash.h b/drivers/net/ethernet/realtek/r8125/r8125_dash.h
+new file mode 100644
+index 000000000000..b502d11dc5d6
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_firmware.c b/drivers/net/ethernet/realtek/r8125/r8125_firmware.c
+new file mode 100644
+index 000000000000..3d4dd79d0f26
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_firmware.h b/drivers/net/ethernet/realtek/r8125/r8125_firmware.h
+new file mode 100644
+index 000000000000..13030abca45d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_n.c b/drivers/net/ethernet/realtek/r8125/r8125_n.c
+new file mode 100644
+index 000000000000..a8a5fb3e0231
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_ptp.c b/drivers/net/ethernet/realtek/r8125/r8125_ptp.c
+new file mode 100644
+index 000000000000..2fb63cc6a010
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_ptp.h b/drivers/net/ethernet/realtek/r8125/r8125_ptp.h
+new file mode 100644
+index 000000000000..d48dda164891
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_realwow.h b/drivers/net/ethernet/realtek/r8125/r8125_realwow.h
+new file mode 100644
+index 000000000000..2f6b142933c0
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_rss.c b/drivers/net/ethernet/realtek/r8125/r8125_rss.c
+new file mode 100644
+index 000000000000..29e462f0dd73
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_rss.h b/drivers/net/ethernet/realtek/r8125/r8125_rss.h
+new file mode 100644
+index 000000000000..d893b497141a
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/rtl_eeprom.c b/drivers/net/ethernet/realtek/r8125/rtl_eeprom.c
+new file mode 100644
+index 000000000000..71fe0db2f2d2
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/rtl_eeprom.h b/drivers/net/ethernet/realtek/r8125/rtl_eeprom.h
+new file mode 100644
+index 000000000000..de12095ac683
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/rtltool.c b/drivers/net/ethernet/realtek/r8125/rtltool.c
+new file mode 100644
+index 000000000000..0bba0f7262ff
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/rtltool.h b/drivers/net/ethernet/realtek/r8125/rtltool.h
+new file mode 100644
+index 000000000000..c8b319c63a51
+--- /dev/null

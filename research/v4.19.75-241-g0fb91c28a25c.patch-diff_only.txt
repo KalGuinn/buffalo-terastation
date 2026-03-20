@@ -1,0 +1,1924 @@
+diff --git a/.gitignore b/.gitignore
+index 97ba6b79834c..877857461856 100644
+--- a/.gitignore
++++ b/.gitignore
+--
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 11a59e82d92e..d9b479e3bc1d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+--
+diff --git a/arch/arm/mach-alpine/Makefile b/arch/arm/mach-alpine/Makefile
+index b6674890be71..d010eea4b9cf 100644
+--- a/arch/arm/mach-alpine/Makefile
++++ b/arch/arm/mach-alpine/Makefile
+--
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 393d2b524284..400d4aa261b3 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+--
+diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+index 49bb9a020a09..995b054ff8c6 100644
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+--
+diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
+index 0e2ea1c78542..2724c68c48d3 100644
+--- a/arch/arm64/kernel/pci.c
++++ b/arch/arm64/kernel/pci.c
+--
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index a0099be4311a..e050301304f7 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+--
+diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
+index c4c8cd4c31d4..0c274d5f2db4 100644
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+--
+diff --git a/drivers/acpi/pci_mcfg.c b/drivers/acpi/pci_mcfg.c
+index a4e8432fc2fb..b42be067fb83 100644
+--- a/drivers/acpi/pci_mcfg.c
++++ b/drivers/acpi/pci_mcfg.c
+--
+diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+index 39b181d6bd0d..622cac8c0da1 100644
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+--
+diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
+index d21cdd83f7ab..1bc48e73f020 100644
+--- a/drivers/ata/Makefile
++++ b/drivers/ata/Makefile
+--
+diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+index 021ce46e2e57..530be3a33d7e 100644
+--- a/drivers/ata/ahci.c
++++ b/drivers/ata/ahci.c
+--
+diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+index 6a1515f0da40..d0b55a8249c7 100644
+--- a/drivers/ata/ahci.h
++++ b/drivers/ata/ahci.h
+--
+diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
+index b5f57c69c487..90c99eae3f8e 100644
+--- a/drivers/ata/libahci.c
++++ b/drivers/ata/libahci.c
+--
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 133fed8e4a8b..4c1b8ac10e3c 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+--
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index dacf3f42426d..6abbe2478dd1 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+--
+diff --git a/drivers/dma/Makefile b/drivers/dma/Makefile
+index c91702d88b95..70d50bc07aed 100644
+--- a/drivers/dma/Makefile
++++ b/drivers/dma/Makefile
+--
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index b00cc03ad6b6..a03ff2527cdd 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+--
+diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+index 02b43a7d8c3e..baeeb980094f 100644
+--- a/drivers/edac/Makefile
++++ b/drivers/edac/Makefile
+--
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 65cf2b9355c4..b9fd78423f1b 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+--
+diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
+index 1aaba74ae411..38c0caee3576 100644
+--- a/drivers/edac/edac_device.h
++++ b/drivers/edac/edac_device.h
+--
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 1de10e5c70d7..e40407514fbb 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+--
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 383e7b70221d..cc164be13742 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+--
+diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+index fbd1ec8070ef..51669db62b87 100644
+--- a/drivers/irqchip/Makefile
++++ b/drivers/irqchip/Makefile
+--
+diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.c
+index f5fe0100f9ff..f45971bb2fea 100644
+--- a/drivers/irqchip/irq-gic-v2m.c
++++ b/drivers/irqchip/irq-gic-v2m.c
+--
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index d5912f1ec884..4fac505a579c 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+--
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 3726eacdf65d..d0a4fe5146ed 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+--
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index af22bbc3d00c..88e3e75e319e 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+--
+diff --git a/drivers/mtd/devices/m25p80.c b/drivers/mtd/devices/m25p80.c
+index 270d3c9580c5..45e98b460f0c 100644
+--- a/drivers/mtd/devices/m25p80.c
++++ b/drivers/mtd/devices/m25p80.c
+--
+diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+index 5fc9a1bde4ac..add1b5c10af0 100644
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+--
+diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+index d5a5f9832b88..a9a949760a06 100644
+--- a/drivers/mtd/nand/raw/Makefile
++++ b/drivers/mtd/nand/raw/Makefile
+--
+diff --git a/drivers/mtd/spi-nor/spi-nor.c b/drivers/mtd/spi-nor/spi-nor.c
+index f028277fb1ce..b136fc1d8905 100644
+--- a/drivers/mtd/spi-nor/spi-nor.c
++++ b/drivers/mtd/spi-nor/spi-nor.c
+--
+diff --git a/drivers/net/ethernet/Kconfig b/drivers/net/ethernet/Kconfig
+index 6fde68aa13a4..76494b1829a8 100644
+--- a/drivers/net/ethernet/Kconfig
++++ b/drivers/net/ethernet/Kconfig
+--
+diff --git a/drivers/net/ethernet/Makefile b/drivers/net/ethernet/Makefile
+index b45d5f626b59..8610757ee996 100644
+--- a/drivers/net/ethernet/Makefile
++++ b/drivers/net/ethernet/Makefile
+--
+diff --git a/drivers/net/ethernet/al/al_mod_eth_group_lm.c b/drivers/net/ethernet/al/al_mod_eth_group_lm.c
+new file mode 100644
+index 000000000000..3a51b7514f54
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_eth_group_lm.h b/drivers/net/ethernet/al/al_mod_eth_group_lm.h
+new file mode 100644
+index 000000000000..40008a01a0c4
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_common.h b/drivers/net/ethernet/al/al_mod_hal_common.h
+new file mode 100644
+index 000000000000..0996fe697a44
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth.h b/drivers/net/ethernet/al/al_mod_hal_eth.h
+new file mode 100644
+index 000000000000..b1230dd1e0f1
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_alu.h b/drivers/net/ethernet/al/al_mod_hal_eth_alu.h
+new file mode 100644
+index 000000000000..2344c7d0750b
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_common.c b/drivers/net/ethernet/al/al_mod_hal_eth_common.c
+new file mode 100644
+index 000000000000..13da4e0ab84a
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_common.h b/drivers/net/ethernet/al/al_mod_hal_eth_common.h
+new file mode 100644
+index 000000000000..ab89dda256dc
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_epe.c b/drivers/net/ethernet/al/al_mod_hal_eth_epe.c
+new file mode 100644
+index 000000000000..8594d3400fa9
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_epe.h b/drivers/net/ethernet/al/al_mod_hal_eth_epe.h
+new file mode 100644
+index 000000000000..c94572c73121
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_field.c b/drivers/net/ethernet/al/al_mod_hal_eth_field.c
+new file mode 100644
+index 000000000000..f0bd65d65674
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_field.h b/drivers/net/ethernet/al/al_mod_hal_eth_field.h
+new file mode 100644
+index 000000000000..d4c3f27d1708
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_kr.c b/drivers/net/ethernet/al/al_mod_hal_eth_kr.c
+new file mode 100644
+index 000000000000..eba7f0e8a73e
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_kr.h b/drivers/net/ethernet/al/al_mod_hal_eth_kr.h
+new file mode 100644
+index 000000000000..768233960197
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac.c
+new file mode 100644
+index 000000000000..4e70ec571ed0
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac.h b/drivers/net/ethernet/al/al_mod_hal_eth_mac.h
+new file mode 100644
+index 000000000000..2e0b0b9d05c5
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c
+new file mode 100644
+index 000000000000..020528fdf6ec
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.h b/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.h
+new file mode 100644
+index 000000000000..9837264ab9d7
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_regs.h b/drivers/net/ethernet/al/al_mod_hal_eth_mac_regs.h
+new file mode 100644
+index 000000000000..fa244bcb8cf8
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_v1_v2.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_v1_v2.c
+new file mode 100644
+index 000000000000..a11abe65f80b
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c
+new file mode 100644
+index 000000000000..872cd730b595
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_v4.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_v4.c
+new file mode 100644
+index 000000000000..cf095af1ac67
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_main.c b/drivers/net/ethernet/al/al_mod_hal_eth_main.c
+new file mode 100644
+index 000000000000..d45669452a3d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_i2c.c b/drivers/net/ethernet/al/al_mod_hal_i2c.c
+new file mode 100644
+index 000000000000..7bde545c52b1
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_i2c.h b/drivers/net/ethernet/al/al_mod_hal_i2c.h
+new file mode 100644
+index 000000000000..803dbf64d6f7
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_i2c_regs.h b/drivers/net/ethernet/al/al_mod_hal_i2c_regs.h
+new file mode 100644
+index 000000000000..5101a1675f1a
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iofic.c b/drivers/net/ethernet/al/al_mod_hal_iofic.c
+new file mode 100644
+index 000000000000..68254b76f73c
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iofic.h b/drivers/net/ethernet/al/al_mod_hal_iofic.h
+new file mode 100644
+index 000000000000..7b1af0291542
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iofic_regs.h b/drivers/net/ethernet/al/al_mod_hal_iofic_regs.h
+new file mode 100644
+index 000000000000..73b733b20c00
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iomap.h b/drivers/net/ethernet/al/al_mod_hal_iomap.h
+new file mode 100644
+index 000000000000..09661387f636
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic.c b/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..be3fde0b63e2
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic.h b/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic.h
+new file mode 100644
+index 000000000000..be75c28c85ac
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic_internal.h b/drivers/net/ethernet/al/al_mod_hal_iomap_dynamic_internal.h
+new file mode 100644
+index 000000000000..5016decfe72f
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_m2m_udma.c b/drivers/net/ethernet/al/al_mod_hal_m2m_udma.c
+new file mode 100644
+index 000000000000..c2b3e0fa485c
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_m2m_udma.h b/drivers/net/ethernet/al/al_mod_hal_m2m_udma.h
+new file mode 100644
+index 000000000000..b56a06343696
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pbs_iofic.h b/drivers/net/ethernet/al/al_mod_hal_pbs_iofic.h
+new file mode 100644
+index 000000000000..d4ce68dd04a0
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pbs_utils.h b/drivers/net/ethernet/al/al_mod_hal_pbs_utils.h
+new file mode 100644
+index 000000000000..169618271a4e
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pcie.c b/drivers/net/ethernet/al/al_mod_hal_pcie.c
+new file mode 100644
+index 000000000000..7e240e00b4d6
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pcie.h b/drivers/net/ethernet/al/al_mod_hal_pcie.h
+new file mode 100644
+index 000000000000..be05b86e2395
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pcie_axi_reg.h b/drivers/net/ethernet/al/al_mod_hal_pcie_axi_reg.h
+new file mode 100644
+index 000000000000..9d7406226417
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pcie_regs.h b/drivers/net/ethernet/al/al_mod_hal_pcie_regs.h
+new file mode 100644
+index 000000000000..c05bc8e20345
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_pcie_w_reg.h b/drivers/net/ethernet/al/al_mod_hal_pcie_w_reg.h
+new file mode 100644
+index 000000000000..5fee4b84a203
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_plat_services.h b/drivers/net/ethernet/al/al_mod_hal_plat_services.h
+new file mode 100644
+index 000000000000..03d7911b9bc3
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_plat_types.h b/drivers/net/ethernet/al/al_mod_hal_plat_types.h
+new file mode 100644
+index 000000000000..6a711fecc238
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_reg_utils.h b/drivers/net/ethernet/al/al_mod_hal_reg_utils.h
+new file mode 100644
+index 000000000000..3c912053d01a
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_sbus.c b/drivers/net/ethernet/al/al_mod_hal_sbus.c
+new file mode 100644
+index 000000000000..bdfd75f50d7f
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_sbus.h b/drivers/net/ethernet/al/al_mod_hal_sbus.h
+new file mode 100644
+index 000000000000..d72aa8a1074e
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_25g.c b/drivers/net/ethernet/al/al_mod_hal_serdes_25g.c
+new file mode 100644
+index 000000000000..f933c50f5edd
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_25g.h b/drivers/net/ethernet/al/al_mod_hal_serdes_25g.h
+new file mode 100644
+index 000000000000..ce9e1501555c
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_25g_internal_regs.h b/drivers/net/ethernet/al/al_mod_hal_serdes_25g_internal_regs.h
+new file mode 100644
+index 000000000000..d93dc4c973ae
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_25g_regs.h b/drivers/net/ethernet/al/al_mod_hal_serdes_25g_regs.h
+new file mode 100644
+index 000000000000..8e6baa49848b
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_avg.c b/drivers/net/ethernet/al/al_mod_hal_serdes_avg.c
+new file mode 100644
+index 000000000000..758a55ca42d0
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_avg.h b/drivers/net/ethernet/al/al_mod_hal_serdes_avg.h
+new file mode 100644
+index 000000000000..1cdf6cc68b18
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_hssp.c b/drivers/net/ethernet/al/al_mod_hal_serdes_hssp.c
+new file mode 100644
+index 000000000000..15e44595307d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_hssp.h b/drivers/net/ethernet/al/al_mod_hal_serdes_hssp.h
+new file mode 100644
+index 000000000000..80981ad448b5
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_hssp_internal_regs.h b/drivers/net/ethernet/al/al_mod_hal_serdes_hssp_internal_regs.h
+new file mode 100644
+index 000000000000..dfdb7e7ea220
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_hssp_regs.h b/drivers/net/ethernet/al/al_mod_hal_serdes_hssp_regs.h
+new file mode 100644
+index 000000000000..b19c7eec3757
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_serdes_interface.h b/drivers/net/ethernet/al/al_mod_hal_serdes_interface.h
+new file mode 100644
+index 000000000000..d9674d8de7f1
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_types.h b/drivers/net/ethernet/al/al_mod_hal_types.h
+new file mode 100644
+index 000000000000..3c70eaa2ae4d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma.h b/drivers/net/ethernet/al/al_mod_hal_udma.h
+new file mode 100644
+index 000000000000..b55981b8068d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_config.c b/drivers/net/ethernet/al/al_mod_hal_udma_config.c
+new file mode 100644
+index 000000000000..33571c671fd9
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_config.h b/drivers/net/ethernet/al/al_mod_hal_udma_config.h
+new file mode 100644
+index 000000000000..8ecfeaa0ae7d
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_debug.c b/drivers/net/ethernet/al/al_mod_hal_udma_debug.c
+new file mode 100644
+index 000000000000..110bdaf46259
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_debug.h b/drivers/net/ethernet/al/al_mod_hal_udma_debug.h
+new file mode 100644
+index 000000000000..78815a33e541
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_iofic.c b/drivers/net/ethernet/al/al_mod_hal_udma_iofic.c
+new file mode 100644
+index 000000000000..fe26265b12e5
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_iofic.h b/drivers/net/ethernet/al/al_mod_hal_udma_iofic.h
+new file mode 100644
+index 000000000000..0e58f1b325e2
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_iofic_regs.h b/drivers/net/ethernet/al/al_mod_hal_udma_iofic_regs.h
+new file mode 100644
+index 000000000000..a98aba38a57c
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_main.c b/drivers/net/ethernet/al/al_mod_hal_udma_main.c
+new file mode 100644
+index 000000000000..7e4e5450625c
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_regs.h b/drivers/net/ethernet/al/al_mod_hal_udma_regs.h
+new file mode 100644
+index 000000000000..57c06d0556cd
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_regs_gen.h b/drivers/net/ethernet/al/al_mod_hal_udma_regs_gen.h
+new file mode 100644
+index 000000000000..d58a8ce152ea
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_regs_m2s.h b/drivers/net/ethernet/al/al_mod_hal_udma_regs_m2s.h
+new file mode 100644
+index 000000000000..80da0202356e
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_udma_regs_s2m.h b/drivers/net/ethernet/al/al_mod_hal_udma_regs_s2m.h
+new file mode 100644
+index 000000000000..d7ab39dc8fd0
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_unit_adapter.c b/drivers/net/ethernet/al/al_mod_hal_unit_adapter.c
+new file mode 100644
+index 000000000000..2eac2d37b035
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_unit_adapter.h b/drivers/net/ethernet/al/al_mod_hal_unit_adapter.h
+new file mode 100644
+index 000000000000..529ee6035774
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_unit_adapter_regs.h b/drivers/net/ethernet/al/al_mod_hal_unit_adapter_regs.h
+new file mode 100644
+index 000000000000..112f919f8ded
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_init_eth_kr.c b/drivers/net/ethernet/al/al_mod_init_eth_kr.c
+new file mode 100644
+index 000000000000..8460a86e7351
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_init_eth_kr.h b/drivers/net/ethernet/al/al_mod_init_eth_kr.h
+new file mode 100644
+index 000000000000..9f71e6603edb
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_init_eth_lm.c b/drivers/net/ethernet/al/al_mod_init_eth_lm.c
+new file mode 100644
+index 000000000000..b1d32a46b718
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_init_eth_lm.h b/drivers/net/ethernet/al/al_mod_init_eth_lm.h
+new file mode 100644
+index 000000000000..7cb391c812ac
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/al_mod_serdes.c b/drivers/net/ethernet/al/al_mod_serdes.c
+new file mode 100644
+index 000000000000..f6c97d27eaed
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v1/include/al_mod_hal_iomap.h b/drivers/net/ethernet/al/platform/alpine_v1/include/al_mod_hal_iomap.h
+new file mode 100644
+index 000000000000..f544039384e1
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v1/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c b/drivers/net/ethernet/al/platform/alpine_v1/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..a6936d106e8e
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v2/include/al_mod_hal_iomap.h b/drivers/net/ethernet/al/platform/alpine_v2/include/al_mod_hal_iomap.h
+new file mode 100644
+index 000000000000..3bc297a89c8b
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v2/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c b/drivers/net/ethernet/al/platform/alpine_v2/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..b2bd48682936
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v3/include/al_mod_hal_iomap.h b/drivers/net/ethernet/al/platform/alpine_v3/include/al_mod_hal_iomap.h
+new file mode 100644
+index 000000000000..09661387f636
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v3/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c b/drivers/net/ethernet/al/platform/alpine_v3/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..39320eca550b
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v3/src/pmdt/al_mod_hal_pmdt_map.c b/drivers/net/ethernet/al/platform/alpine_v3/src/pmdt/al_mod_hal_pmdt_map.c
+new file mode 100644
+index 000000000000..ebe948f70ebe
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v4/include/al_mod_hal_iomap.h b/drivers/net/ethernet/al/platform/alpine_v4/include/al_mod_hal_iomap.h
+new file mode 100644
+index 000000000000..aae51e843230
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v4/include/al_mod_hal_pmdt_map_regs.h b/drivers/net/ethernet/al/platform/alpine_v4/include/al_mod_hal_pmdt_map_regs.h
+new file mode 100644
+index 000000000000..126ca6652a83
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v4/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c b/drivers/net/ethernet/al/platform/alpine_v4/src/iomap_dynamic/al_mod_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..d01f1780ee44
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/alpine_v4/src/pmdt/al_mod_hal_pmdt_map.c b/drivers/net/ethernet/al/platform/alpine_v4/src/pmdt/al_mod_hal_pmdt_map.c
+new file mode 100644
+index 000000000000..348c4b82a4ee
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al/platform/include/al_mod_hal_pmdt_map.h b/drivers/net/ethernet/al/platform/include/al_mod_hal_pmdt_map.h
+new file mode 100644
+index 000000000000..765c11b29609
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al_lm/al_hal_plat_services.h b/drivers/net/ethernet/al_lm/al_hal_plat_services.h
+new file mode 100644
+index 000000000000..ccb9e0675fc8
+--- /dev/null
+--
+diff --git a/drivers/net/ethernet/al_lm/al_hal_plat_types.h b/drivers/net/ethernet/al_lm/al_hal_plat_types.h
+new file mode 100644
+index 000000000000..87947e004e61
+--- /dev/null
+--
+diff --git a/drivers/net/phy/aquantia.c b/drivers/net/phy/aquantia.c
+index 319edc9c8ec7..da00610872a5 100644
+--- a/drivers/net/phy/aquantia.c
++++ b/drivers/net/phy/aquantia.c
+--
+diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+index 411cf1072bae..0edd5aaa99b7 100644
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+--
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 6144146aec29..312dd7ce2753 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+--
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+old mode 100644
+new mode 100755
+index 028b287466fb..1f373c38f4c7
+--
+ 	  different vendors SoCs.
+-
+ endmenu
+ 
+--
+diff --git a/drivers/pci/controller/Makefile b/drivers/pci/controller/Makefile
+old mode 100644
+new mode 100755
+index d56a507495c5..1cb58ca42aa1
+--
+diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
+index 5d2ce72c7a52..85848f2e208e 100644
+--- a/drivers/pci/controller/dwc/Makefile
++++ b/drivers/pci/controller/dwc/Makefile
+--
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 06be52912dcd..cdc55b8643cc 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+--
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 6533aa560aa1..a50ba85e3849 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+--
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 0aebee954ac1..b672432257d7 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+--
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index c07b4a85253f..789753633dd8 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+--
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 113e884697fd..2944d3b2464f 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+--
+diff --git a/drivers/soc/alpine/HAL/License.txt b/drivers/soc/alpine/HAL/License.txt
+new file mode 100755
+index 000000000000..087f9ea215e4
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/README b/drivers/soc/alpine/HAL/README
+new file mode 100644
+index 000000000000..defc18794663
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr.h b/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr.h
+new file mode 100644
+index 000000000000..6755bcb043fc
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_cfg.h b/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_cfg.h
+new file mode 100644
+index 000000000000..f5934c1c98e3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_init.h b/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_init.h
+new file mode 100644
+index 000000000000..c5f8eb7466f0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_pmu.h b/drivers/soc/alpine/HAL/ddr/include/al_hal_ddr_pmu.h
+new file mode 100644
+index 000000000000..23625f229fe7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr.c
+new file mode 100644
+index 000000000000..06af23dd73ee
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v1.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v1.c
+new file mode 100644
+index 000000000000..5a0dc224c224
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v2.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v2.c
+new file mode 100644
+index 000000000000..5f8f21f14638
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v3.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_alpine_v3.c
+new file mode 100644
+index 000000000000..f8be9e739e9c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v1.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v1.h
+new file mode 100644
+index 000000000000..c0d4a960c29f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v2.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v2.h
+new file mode 100644
+index 000000000000..4c7433d188ed
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v3.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_alpine_v3.h
+new file mode 100644
+index 000000000000..45e2845bbe1d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_common.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_ctrl_regs_common.h
+new file mode 100644
+index 000000000000..fb3661c7deea
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v1.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v1.c
+new file mode 100644
+index 000000000000..5be593c38ba8
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v2.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v2.c
+new file mode 100644
+index 000000000000..cce1b339ddab
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v3.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_init_alpine_v3.c
+new file mode 100644
+index 000000000000..5d3348ffc10e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_jedec_ddr3.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_jedec_ddr3.h
+new file mode 100644
+index 000000000000..d5112f1a5369
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_jedec_ddr4.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_jedec_ddr4.h
+new file mode 100644
+index 000000000000..ba84c4d46bce
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v1.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v1.h
+new file mode 100644
+index 000000000000..1f56db058151
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v2.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v2.h
+new file mode 100644
+index 000000000000..0adb51d96407
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v3.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_phy_regs_alpine_v3.h
+new file mode 100644
+index 000000000000..555e666b05ca
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_pmu.c b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_pmu.c
+new file mode 100644
+index 000000000000..0d382b67a5c0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_utils.h b/drivers/soc/alpine/HAL/ddr/src/al_hal_ddr_utils.h
+new file mode 100644
+index 000000000000..1c040894bdfd
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/doc/main/mainpage.dox b/drivers/soc/alpine/HAL/doc/main/mainpage.dox
+new file mode 100644
+index 000000000000..2ba5a294d579
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_common.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_common.c
+new file mode 100644
+index 000000000000..4dbf0ecc687c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_epe.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_epe.c
+new file mode 100644
+index 000000000000..8be61292aa61
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_field.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_field.c
+new file mode 100644
+index 000000000000..9baedf857fab
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_kr.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_kr.c
+new file mode 100644
+index 000000000000..1c382a7f90cf
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac.c
+new file mode 100644
+index 000000000000..55c48e13a290
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_internal.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_internal.c
+new file mode 100644
+index 000000000000..8a7115a6b27a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_internal.h b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_internal.h
+new file mode 100644
+index 000000000000..42daca235817
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_regs.h b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_regs.h
+new file mode 100644
+index 000000000000..d27a84f48bf7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v1_v2.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v1_v2.c
+new file mode 100644
+index 000000000000..29eade43043d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v3.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v3.c
+new file mode 100644
+index 000000000000..c29c790a1568
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v4.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_mac_v4.c
+new file mode 100644
+index 000000000000..f793d9343545
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_main.c b/drivers/soc/alpine/HAL/drivers/eth/al_hal_eth_main.c
+new file mode 100644
+index 000000000000..874122539960
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/io_fabric/al_hal_unit_adapter.c b/drivers/soc/alpine/HAL/drivers/io_fabric/al_hal_unit_adapter.c
+new file mode 100644
+index 000000000000..519e88aaaf5f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/iofic/al_hal_iofic.c b/drivers/soc/alpine/HAL/drivers/iofic/al_hal_iofic.c
+new file mode 100644
+index 000000000000..fa5ce2933239
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_cxela500_regs.h b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_cxela500_regs.h
+new file mode 100644
+index 000000000000..307843a7a01b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_axi_mon.c b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_axi_mon.c
+new file mode 100644
+index 000000000000..1a2e26d1f310
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_cctm.c b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_cctm.c
+new file mode 100644
+index 000000000000..fc7a8e08750a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_common.h b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_common.h
+new file mode 100644
+index 000000000000..cd3942fa0c82
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_ela.c b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_ela.c
+new file mode 100644
+index 000000000000..3cfdc75efde5
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_ela_config.c b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_ela_config.c
+new file mode 100644
+index 000000000000..ba34109cd9ba
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_pmu.c b/drivers/soc/alpine/HAL/drivers/pmdt/al_hal_pmdt_pmu.c
+new file mode 100644
+index 000000000000..1cae0ec3ce65
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ring/al_hal_cmos.c b/drivers/soc/alpine/HAL/drivers/ring/al_hal_cmos.c
+new file mode 100644
+index 000000000000..be01d49b7577
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll.c b/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll.c
+new file mode 100644
+index 000000000000..da7a8999f755
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll_map.h b/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll_map.h
+new file mode 100644
+index 000000000000..13dfb72ce2c4
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll_regs.h b/drivers/soc/alpine/HAL/drivers/ring/al_hal_pll_regs.h
+new file mode 100644
+index 000000000000..a4892be51e74
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_25g.c b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_25g.c
+new file mode 100644
+index 000000000000..8a78caa8a7a6
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_25g_internal_regs.h b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_25g_internal_regs.h
+new file mode 100644
+index 000000000000..d93dc4c973ae
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_avg.c b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_avg.c
+new file mode 100644
+index 000000000000..eb7b257d2826
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp.c b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp.c
+new file mode 100644
+index 000000000000..0dd4e8a4be55
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp_internal_regs.h b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp_internal_regs.h
+new file mode 100644
+index 000000000000..dfdb7e7ea220
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp_regs.h b/drivers/soc/alpine/HAL/drivers/serdes/al_hal_serdes_hssp_regs.h
+new file mode 100644
+index 000000000000..4441c01294ac
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm.c b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm.c
+new file mode 100644
+index 000000000000..ea578175e391
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crc_memcpy.c b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crc_memcpy.c
+new file mode 100644
+index 000000000000..aa1fe03eda7f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crc_regs.h b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crc_regs.h
+new file mode 100644
+index 000000000000..3e131fdf273e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto.c b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto.c
+new file mode 100644
+index 000000000000..0278368d45c0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto_cfg.c b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto_cfg.c
+new file mode 100644
+index 000000000000..cb832efcbb8d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto_regs.h b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_crypto_regs.h
+new file mode 100644
+index 000000000000..b4f3fc52c57f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_raid.c b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_raid.c
+new file mode 100644
+index 000000000000..79a54edc1a13
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_raid_regs.h b/drivers/soc/alpine/HAL/drivers/ssm/al_hal_ssm_raid_regs.h
+new file mode 100644
+index 000000000000..bbe51ed3478c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_fabric/al_hal_ccu_pmu.c b/drivers/soc/alpine/HAL/drivers/sys_fabric/al_hal_ccu_pmu.c
+new file mode 100644
+index 000000000000..46d75d48d506
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_fabric/al_hal_sys_fabric_pasw.c b/drivers/soc/alpine/HAL/drivers/sys_fabric/al_hal_sys_fabric_pasw.c
+new file mode 100644
+index 000000000000..b64c6533948a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_otp.c b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_otp.c
+new file mode 100644
+index 000000000000..6699b4104f17
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_otp_regs.h b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_otp_regs.h
+new file mode 100644
+index 000000000000..ff0b2f5669ee
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_thermal_sensor.c b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_thermal_sensor.c
+new file mode 100644
+index 000000000000..2638328f16ca
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_thermal_sensor_regs.h b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_thermal_sensor_regs.h
+new file mode 100644
+index 000000000000..cb98d55425bf
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_timer.c b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_timer.c
+new file mode 100644
+index 000000000000..470ac155f35f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_timer_regs.h b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_timer_regs.h
+new file mode 100644
+index 000000000000..0c413c5ecdb1
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_watchdog.c b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_watchdog.c
+new file mode 100644
+index 000000000000..4899b9909936
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_watchdog_regs.h b/drivers/soc/alpine/HAL/drivers/sys_services/al_hal_watchdog_regs.h
+new file mode 100644
+index 000000000000..3511da699140
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma/al_hal_m2m_udma.c b/drivers/soc/alpine/HAL/drivers/udma/al_hal_m2m_udma.c
+new file mode 100644
+index 000000000000..beebdd48011c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_config.c b/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_config.c
+new file mode 100644
+index 000000000000..b51679616089
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_debug.c b/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_debug.c
+new file mode 100644
+index 000000000000..bb1563949afe
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_iofic.c b/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_iofic.c
+new file mode 100644
+index 000000000000..5ecbba4a29d2
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_main.c b/drivers/soc/alpine/HAL/drivers/udma/al_hal_udma_main.c
+new file mode 100644
+index 000000000000..6d6d62b7b38d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/drivers/udma_fast/al_hal_udma_fast.c b/drivers/soc/alpine/HAL/drivers/udma_fast/al_hal_udma_fast.c
+new file mode 100644
+index 000000000000..4f206fffe50e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/common/al_hal_common.h b/drivers/soc/alpine/HAL/include/common/al_hal_common.h
+new file mode 100644
+index 000000000000..0aa1b1f22218
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/common/al_hal_reg_utils.h b/drivers/soc/alpine/HAL/include/common/al_hal_reg_utils.h
+new file mode 100644
+index 000000000000..433b682ddea0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/common/al_hal_types.h b/drivers/soc/alpine/HAL/include/common/al_hal_types.h
+new file mode 100644
+index 000000000000..fcc3836e3325
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth.h
+new file mode 100644
+index 000000000000..04b22e776bbc
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_alu.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_alu.h
+new file mode 100644
+index 000000000000..4b12ff8d753c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_common.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_common.h
+new file mode 100644
+index 000000000000..1939794e4a86
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_epe.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_epe.h
+new file mode 100644
+index 000000000000..ea128c051b8f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_field.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_field.h
+new file mode 100644
+index 000000000000..bf754b4ec957
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_kr.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_kr.h
+new file mode 100644
+index 000000000000..edf8a79e71e0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/eth/al_hal_eth_mac.h b/drivers/soc/alpine/HAL/include/eth/al_hal_eth_mac.h
+new file mode 100644
+index 000000000000..95464090e146
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/io_fabric/al_hal_unit_adapter.h b/drivers/soc/alpine/HAL/include/io_fabric/al_hal_unit_adapter.h
+new file mode 100644
+index 000000000000..e4307540f75c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/io_fabric/al_hal_unit_adapter_regs.h b/drivers/soc/alpine/HAL/include/io_fabric/al_hal_unit_adapter_regs.h
+new file mode 100644
+index 000000000000..4f9d27b57701
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/iofic/al_hal_iofic.h b/drivers/soc/alpine/HAL/include/iofic/al_hal_iofic.h
+new file mode 100644
+index 000000000000..d536f6283cdd
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/iofic/al_hal_iofic_regs.h b/drivers/soc/alpine/HAL/include/iofic/al_hal_iofic_regs.h
+new file mode 100644
+index 000000000000..4153dc3ef8cd
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/plat_api/sample/al_hal_plat_services.h b/drivers/soc/alpine/HAL/include/plat_api/sample/al_hal_plat_services.h
+new file mode 100644
+index 000000000000..0b117e30f484
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/plat_api/sample/al_hal_plat_types.h b/drivers/soc/alpine/HAL/include/plat_api/sample/al_hal_plat_types.h
+new file mode 100644
+index 000000000000..60d0c03db16c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_axi_mon.h b/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_axi_mon.h
+new file mode 100644
+index 000000000000..c0973c89c7c7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_cctm.h b/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_cctm.h
+new file mode 100644
+index 000000000000..79d93f181452
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_ela.h b/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_ela.h
+new file mode 100644
+index 000000000000..57facf54da31
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_ela_config.h b/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_ela_config.h
+new file mode 100644
+index 000000000000..fb1b01c5d580
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_pmu.h b/drivers/soc/alpine/HAL/include/pmdt/al_hal_pmdt_pmu.h
+new file mode 100644
+index 000000000000..b3f2dc6ee262
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ring/al_hal_cmos.h b/drivers/soc/alpine/HAL/include/ring/al_hal_cmos.h
+new file mode 100644
+index 000000000000..bfb2dd7c3c8b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ring/al_hal_cmos_regs.h b/drivers/soc/alpine/HAL/include/ring/al_hal_cmos_regs.h
+new file mode 100644
+index 000000000000..ea1d151f5c32
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ring/al_hal_pll.h b/drivers/soc/alpine/HAL/include/ring/al_hal_pll.h
+new file mode 100644
+index 000000000000..47cc9b8eb00e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_25g.h b/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_25g.h
+new file mode 100644
+index 000000000000..128b93161c61
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_25g_regs.h b/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_25g_regs.h
+new file mode 100644
+index 000000000000..fac96658da09
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_avg.h b/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_avg.h
+new file mode 100644
+index 000000000000..3087f4b4c7ec
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_hssp.h b/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_hssp.h
+new file mode 100644
+index 000000000000..525c140e9b99
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_interface.h b/drivers/soc/alpine/HAL/include/serdes/al_hal_serdes_interface.h
+new file mode 100644
+index 000000000000..c1b81217ffe0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm.h b/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm.h
+new file mode 100644
+index 000000000000..8555103814c1
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_crc_memcpy.h b/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_crc_memcpy.h
+new file mode 100644
+index 000000000000..76fb69d51b41
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_crypto.h b/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_crypto.h
+new file mode 100644
+index 000000000000..de716b8b6327
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_raid.h b/drivers/soc/alpine/HAL/include/ssm/al_hal_ssm_raid.h
+new file mode 100644
+index 000000000000..80887fc791f0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_ccu_pmu.h b/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_ccu_pmu.h
+new file mode 100644
+index 000000000000..b4af9cd1f04b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_ccu_regs.h b/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_ccu_regs.h
+new file mode 100644
+index 000000000000..079534b9e486
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_nb_regs_v1_v2.h b/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_nb_regs_v1_v2.h
+new file mode 100644
+index 000000000000..628e2e61ddeb
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_sys_fabric_pasw.h b/drivers/soc/alpine/HAL/include/sys_fabric/al_hal_sys_fabric_pasw.h
+new file mode 100644
+index 000000000000..8bf2cf729025
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_services/al_hal_otp.h b/drivers/soc/alpine/HAL/include/sys_services/al_hal_otp.h
+new file mode 100644
+index 000000000000..ec01d1fed658
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_services/al_hal_thermal_sensor.h b/drivers/soc/alpine/HAL/include/sys_services/al_hal_thermal_sensor.h
+new file mode 100644
+index 000000000000..a447b4197313
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_services/al_hal_timer.h b/drivers/soc/alpine/HAL/include/sys_services/al_hal_timer.h
+new file mode 100644
+index 000000000000..5f6102c99bcb
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/sys_services/al_hal_watchdog.h b/drivers/soc/alpine/HAL/include/sys_services/al_hal_watchdog.h
+new file mode 100644
+index 000000000000..862992d96c26
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_m2m_udma.h b/drivers/soc/alpine/HAL/include/udma/al_hal_m2m_udma.h
+new file mode 100644
+index 000000000000..508fef9c5f7e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma.h
+new file mode 100644
+index 000000000000..6cdd787b1817
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma_config.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma_config.h
+new file mode 100644
+index 000000000000..0114505bd046
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma_debug.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma_debug.h
+new file mode 100644
+index 000000000000..a8e55d0943d6
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma_iofic.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma_iofic.h
+new file mode 100644
+index 000000000000..322079f06660
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma_iofic_regs.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma_iofic_regs.h
+new file mode 100644
+index 000000000000..7d991e62f922
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma/al_hal_udma_regs.h b/drivers/soc/alpine/HAL/include/udma/al_hal_udma_regs.h
+new file mode 100644
+index 000000000000..3fda067113c2
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/include/udma_fast/al_hal_udma_fast.h b/drivers/soc/alpine/HAL/include/udma_fast/al_hal_udma_fast.h
+new file mode 100644
+index 000000000000..b661b9c93d0f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_addr_map.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_addr_map.h
+new file mode 100644
+index 000000000000..8e946d6ff352
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_bootstrap.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_bootstrap.h
+new file mode 100644
+index 000000000000..929e6451ed93
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_gpio.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_gpio.h
+new file mode 100644
+index 000000000000..1150626145ea
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_i2c.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_i2c.h
+new file mode 100644
+index 000000000000..35b41119cd51
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_muio_mux.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_muio_mux.h
+new file mode 100644
+index 000000000000..ddf0d94bb03a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_nand.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_nand.h
+new file mode 100644
+index 000000000000..16d4599357a3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_nand_defs.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_nand_defs.h
+new file mode 100644
+index 000000000000..0cc8fe241c93
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_pbs_iofic.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_pbs_iofic.h
+new file mode 100644
+index 000000000000..2df348b2f40f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_pbs_utils.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_pbs_utils.h
+new file mode 100644
+index 000000000000..22d795ee8e6a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_sbus.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_sbus.h
+new file mode 100644
+index 000000000000..08325ee2502f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_sgpo.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_sgpo.h
+new file mode 100644
+index 000000000000..166c18a99ce1
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/include/al_hal_uart.h b/drivers/soc/alpine/HAL/pbs/include/al_hal_uart.h
+new file mode 100644
+index 000000000000..2ab7b3ab1300
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_addr_map.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_addr_map.c
+new file mode 100644
+index 000000000000..7301f245c782
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_bootstrap.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_bootstrap.c
+new file mode 100644
+index 000000000000..09b369e700af
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_bootstrap_map.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_bootstrap_map.h
+new file mode 100644
+index 000000000000..d979e01531a3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_gpio.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_gpio.c
+new file mode 100644
+index 000000000000..cefc9d37b84a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_gpio_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_gpio_regs.h
+new file mode 100644
+index 000000000000..925be57e1bb7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_i2c.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_i2c.c
+new file mode 100644
+index 000000000000..f0687c9b34c2
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_i2c_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_i2c_regs.h
+new file mode 100644
+index 000000000000..a98618e74fa3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_muio_mux.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_muio_mux.c
+new file mode 100644
+index 000000000000..c69b008f33a3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_muio_mux_map.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_muio_mux_map.h
+new file mode 100644
+index 000000000000..4cd2734f9546
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_nand.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_nand.c
+new file mode 100644
+index 000000000000..d3a09f057540
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_coded_properties.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_coded_properties.h
+new file mode 100644
+index 000000000000..7311e5760648
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_dma.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_dma.c
+new file mode 100644
+index 000000000000..898bb1c94ce6
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_nand_regs.h
+new file mode 100644
+index 000000000000..f23f228852d2
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_sbus.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_sbus.c
+new file mode 100644
+index 000000000000..642fe5ae068e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo.c
+new file mode 100644
+index 000000000000..7257d975c1b0
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_common_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_common_regs.h
+new file mode 100644
+index 000000000000..5e2bf63e9d3b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_pergroup_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_pergroup_regs.h
+new file mode 100644
+index 000000000000..55df58cf542c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_sgpo_regs.h
+new file mode 100644
+index 000000000000..dd663e51c417
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_spi.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_spi.c
+new file mode 100644
+index 000000000000..cbef669b2f59
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_spi_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_spi_regs.h
+new file mode 100644
+index 000000000000..f3dc0310d274
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_uart.c b/drivers/soc/alpine/HAL/pbs/src/al_hal_uart.c
+new file mode 100644
+index 000000000000..31bb08e80a65
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pbs/src/al_hal_uart_regs.h b/drivers/soc/alpine/HAL/pbs/src/al_hal_uart_regs.h
+new file mode 100644
+index 000000000000..8491cb949812
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/include/al_hal_pcie.h b/drivers/soc/alpine/HAL/pcie/include/al_hal_pcie.h
+new file mode 100644
+index 000000000000..5f2b1de69cf1
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/include/al_hal_pcie_interrupts.h b/drivers/soc/alpine/HAL/pcie/include/al_hal_pcie_interrupts.h
+new file mode 100644
+index 000000000000..3b977feb6e73
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie.c b/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie.c
+new file mode 100644
+index 000000000000..b5539ddbc091
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_axi_reg.h b/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_axi_reg.h
+new file mode 100644
+index 000000000000..399eef9cbdcf
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_interrupts.c b/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_interrupts.c
+new file mode 100644
+index 000000000000..606baca688ab
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_regs.h b/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_regs.h
+new file mode 100644
+index 000000000000..fb19df292d8b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_w_reg.h b/drivers/soc/alpine/HAL/pcie/src/al_hal_pcie_w_reg.h
+new file mode 100644
+index 000000000000..20ce61cdb127
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v1/include/al_hal_iomap.h b/drivers/soc/alpine/HAL/platform/alpine_v1/include/al_hal_iomap.h
+new file mode 100644
+index 000000000000..1bf45a262403
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v1/src/iomap_dynamic/al_hal_iomap_dynamic.c b/drivers/soc/alpine/HAL/platform/alpine_v1/src/iomap_dynamic/al_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..23c670dc2f14
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v2/include/al_hal_iomap.h b/drivers/soc/alpine/HAL/platform/alpine_v2/include/al_hal_iomap.h
+new file mode 100644
+index 000000000000..3652d907aaa1
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v2/src/iomap_dynamic/al_hal_iomap_dynamic.c b/drivers/soc/alpine/HAL/platform/alpine_v2/src/iomap_dynamic/al_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..99b2853d3e05
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v3/include/al_hal_iomap.h b/drivers/soc/alpine/HAL/platform/alpine_v3/include/al_hal_iomap.h
+new file mode 100644
+index 000000000000..baa64b257e41
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v3/src/iomap_dynamic/al_hal_iomap_dynamic.c b/drivers/soc/alpine/HAL/platform/alpine_v3/src/iomap_dynamic/al_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..0e6d179e2260
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v3/src/pmdt/al_hal_pmdt_map.c b/drivers/soc/alpine/HAL/platform/alpine_v3/src/pmdt/al_hal_pmdt_map.c
+new file mode 100644
+index 000000000000..bfa7d5575df7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v4/include/al_hal_iomap.h b/drivers/soc/alpine/HAL/platform/alpine_v4/include/al_hal_iomap.h
+new file mode 100644
+index 000000000000..5c663a316b08
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v4/include/al_hal_pmdt_map_regs.h b/drivers/soc/alpine/HAL/platform/alpine_v4/include/al_hal_pmdt_map_regs.h
+new file mode 100644
+index 000000000000..8e1f61091adb
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v4/src/iomap_dynamic/al_hal_iomap_dynamic.c b/drivers/soc/alpine/HAL/platform/alpine_v4/src/iomap_dynamic/al_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..7ea4b389928e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/alpine_v4/src/pmdt/al_hal_pmdt_map.c b/drivers/soc/alpine/HAL/platform/alpine_v4/src/pmdt/al_hal_pmdt_map.c
+new file mode 100644
+index 000000000000..85cd0bd8ca6e
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/platform/include/al_hal_pmdt_map.h b/drivers/soc/alpine/HAL/platform/include/al_hal_pmdt_map.h
+new file mode 100644
+index 000000000000..9635df9f7eae
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/crypto.c b/drivers/soc/alpine/HAL/samples/crypto.c
+new file mode 100644
+index 000000000000..25ce90cc0f92
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/dummy_plat.c b/drivers/soc/alpine/HAL/samples/dummy_plat.c
+new file mode 100644
+index 000000000000..b8babff6efaf
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/dummy_plat_services.c b/drivers/soc/alpine/HAL/samples/dummy_plat_services.c
+new file mode 100644
+index 000000000000..86f7a8b6c70c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/dummy_syscalls.S b/drivers/soc/alpine/HAL/samples/dummy_syscalls.S
+new file mode 100644
+index 000000000000..fbd9dc8323b3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/pmdt.c b/drivers/soc/alpine/HAL/samples/pmdt.c
+new file mode 100644
+index 000000000000..c01599ab2551
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/pmdt_service.c b/drivers/soc/alpine/HAL/samples/pmdt_service.c
+new file mode 100644
+index 000000000000..dbea7432e12c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/samples.h b/drivers/soc/alpine/HAL/samples/samples.h
+new file mode 100644
+index 000000000000..536333516fd3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/serdes.c b/drivers/soc/alpine/HAL/samples/serdes.c
+new file mode 100644
+index 000000000000..3a137fac5280
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/udma.c b/drivers/soc/alpine/HAL/samples/udma.c
+new file mode 100644
+index 000000000000..eddbd4aa7f4b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/samples/udma_fast.c b/drivers/soc/alpine/HAL/samples/udma_fast.c
+new file mode 100644
+index 000000000000..c90af6ee8ba6
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/bootstrap/al_bootstrap.c b/drivers/soc/alpine/HAL/services/bootstrap/al_bootstrap.c
+new file mode 100644
+index 000000000000..591bfbe2ba7d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/bootstrap/al_bootstrap.h b/drivers/soc/alpine/HAL/services/bootstrap/al_bootstrap.h
+new file mode 100644
+index 000000000000..94962e9c09e4
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eeprom/al_eeprom_data.h b/drivers/soc/alpine/HAL/services/eeprom/al_eeprom_data.h
+new file mode 100644
+index 000000000000..e41c2a5b524c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_eth_group_lm.c b/drivers/soc/alpine/HAL/services/eth/al_eth_group_lm.c
+new file mode 100644
+index 000000000000..f95211592931
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_eth_group_lm.h b/drivers/soc/alpine/HAL/services/eth/al_eth_group_lm.h
+new file mode 100644
+index 000000000000..c80aea9ef730
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_init_eth_kr.c b/drivers/soc/alpine/HAL/services/eth/al_init_eth_kr.c
+new file mode 100644
+index 000000000000..835da1596100
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_init_eth_kr.h b/drivers/soc/alpine/HAL/services/eth/al_init_eth_kr.h
+new file mode 100644
+index 000000000000..3fb8bbf4a1e3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_init_eth_lm.c b/drivers/soc/alpine/HAL/services/eth/al_init_eth_lm.c
+new file mode 100644
+index 000000000000..5bbbb198891d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/eth/al_init_eth_lm.h b/drivers/soc/alpine/HAL/services/eth/al_init_eth_lm.h
+new file mode 100644
+index 000000000000..f93109012431
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/flash_contents/al_flash_contents.h b/drivers/soc/alpine/HAL/services/flash_contents/al_flash_contents.h
+new file mode 100644
+index 000000000000..1d9b02b6404c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/gic/al_init_gicv2_regs.h b/drivers/soc/alpine/HAL/services/gic/al_init_gicv2_regs.h
+new file mode 100644
+index 000000000000..7ad90a0f626d
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/gic/al_init_gicv3_regs.h b/drivers/soc/alpine/HAL/services/gic/al_init_gicv3_regs.h
+new file mode 100644
+index 000000000000..968810f9965c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic.c b/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic.c
+new file mode 100644
+index 000000000000..506d84e964f8
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic.h b/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic.h
+new file mode 100644
+index 000000000000..65d4b2f77443
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic_internal.h b/drivers/soc/alpine/HAL/services/iomap_dynamic/al_hal_iomap_dynamic_internal.h
+new file mode 100644
+index 000000000000..41e07ebade8b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/monitor_mgmt/aarch32/monitor_mgmt.S b/drivers/soc/alpine/HAL/services/monitor_mgmt/aarch32/monitor_mgmt.S
+new file mode 100644
+index 000000000000..cd001f7eaea9
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/monitor_mgmt/aarch32/monitor_mgmt.h b/drivers/soc/alpine/HAL/services/monitor_mgmt/aarch32/monitor_mgmt.h
+new file mode 100644
+index 000000000000..209f1ff47d99
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/nand/al_nand_early.c b/drivers/soc/alpine/HAL/services/nand/al_nand_early.c
+new file mode 100644
+index 000000000000..caa8f8bdf55a
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/nand/al_nand_early.h b/drivers/soc/alpine/HAL/services/nand/al_nand_early.h
+new file mode 100644
+index 000000000000..fb04df83c84f
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pcie/al_init_pcie.c b/drivers/soc/alpine/HAL/services/pcie/al_init_pcie.c
+new file mode 100644
+index 000000000000..3ce9fb48542c
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pcie/al_init_pcie.h b/drivers/soc/alpine/HAL/services/pcie/al_init_pcie.h
+new file mode 100644
+index 000000000000..bf7436cee86b
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_debug.c b/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_debug.c
+new file mode 100644
+index 000000000000..e1b55dc14431
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_debug.h b/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_debug.h
+new file mode 100644
+index 000000000000..918a62e85ab7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_params.h b/drivers/soc/alpine/HAL/services/pcie/al_init_pcie_params.h
+new file mode 100644
+index 000000000000..2f7fc452fb76
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pmdt/al_pmdt.c b/drivers/soc/alpine/HAL/services/pmdt/al_pmdt.c
+new file mode 100644
+index 000000000000..fc2b7ee40743
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pmdt/al_pmdt.h b/drivers/soc/alpine/HAL/services/pmdt/al_pmdt.h
+new file mode 100644
+index 000000000000..b1eaaea1c860
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/pmdt/al_pmdt_config.h b/drivers/soc/alpine/HAL/services/pmdt/al_pmdt_config.h
+new file mode 100644
+index 000000000000..c23f72e3ab97
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/serdes/al_serdes.c b/drivers/soc/alpine/HAL/services/serdes/al_serdes.c
+new file mode 100644
+index 000000000000..e9e6d2821e51
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache.h b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache.h
+new file mode 100644
+index 000000000000..f6066d67d680
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache_aarch32.S b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache_aarch32.S
+new file mode 100644
+index 000000000000..029296c20b90
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache_aarch64.S b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_l2cache_aarch64.S
+new file mode 100644
+index 000000000000..9a87c67769d8
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_smmu_regs.h b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_smmu_regs.h
+new file mode 100644
+index 000000000000..b0a7288a0f46
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_sys_fabric.c b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_sys_fabric.c
+new file mode 100644
+index 000000000000..e0a573c9e8f3
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/sys_fabric/al_init_sys_fabric.h b/drivers/soc/alpine/HAL/services/sys_fabric/al_init_sys_fabric.h
+new file mode 100644
+index 000000000000..9c49e94745c7
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm.c b/drivers/soc/alpine/HAL/services/tpm/al_tpm.c
+new file mode 100644
+index 000000000000..76b562a36cde
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm.h b/drivers/soc/alpine/HAL/services/tpm/al_tpm.h
+new file mode 100644
+index 000000000000..859971a7fb53
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_i2c.c b/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_i2c.c
+new file mode 100644
+index 000000000000..e6608e155262
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_i2c.h b/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_i2c.h
+new file mode 100644
+index 000000000000..aad16f722393
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_spi.c b/drivers/soc/alpine/HAL/services/tpm/al_tpm_if_spi.c
+new file mode 100644
+index 000000000000..1db6c26febcb
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/tpm/al_tpm_tis12.h b/drivers/soc/alpine/HAL/services/tpm/al_tpm_tis12.h
+new file mode 100644
+index 000000000000..f8304ef3c9ef
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/trace/al_trace.c b/drivers/soc/alpine/HAL/services/trace/al_trace.c
+new file mode 100644
+index 000000000000..2941ecd80576
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/HAL/services/trace/al_trace.h b/drivers/soc/alpine/HAL/services/trace/al_trace.h
+new file mode 100644
+index 000000000000..f9d70b3dcd33
+--- /dev/null
+--
+diff --git a/drivers/soc/alpine/al_hal_plat_types.h b/drivers/soc/alpine/al_hal_plat_types.h
+new file mode 100644
+index 000000000000..e7039c1c6c69
+--- /dev/null
+--
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index e80f60ed6fdf..0763e46126ae 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+--
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index ac2eb89ef7a5..dd411f66ff33 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+--
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index 0168b08364d5..efacb77d0477 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+--
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 0e69edc77d18..34bc26629227 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+--
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 610344eb3e03..52b9385ffacb 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+--
+diff --git a/include/linux/irqchip/arm-gic-common.h b/include/linux/irqchip/arm-gic-common.h
+index 0a83b4379f34..558ac22b4b2f 100644
+--- a/include/linux/irqchip/arm-gic-common.h
++++ b/include/linux/irqchip/arm-gic-common.h
+--
+diff --git a/include/linux/irqchip/arm-gic.h b/include/linux/irqchip/arm-gic.h
+index 6c4aaf04046c..35e3fe34cc83 100644
+--- a/include/linux/irqchip/arm-gic.h
++++ b/include/linux/irqchip/arm-gic.h
+--
+diff --git a/include/linux/libata.h b/include/linux/libata.h
+index 38c95d66ab12..07751fbf21cb 100644
+--- a/include/linux/libata.h
++++ b/include/linux/libata.h
+--
+diff --git a/include/linux/pci-acpi.h b/include/linux/pci-acpi.h
+index 8082b612f561..cbaecde2977e 100644
+--- a/include/linux/pci-acpi.h
++++ b/include/linux/pci-acpi.h
+--
+diff --git a/include/linux/pci-ecam.h b/include/linux/pci-ecam.h
+index 29efa09d686b..a73164c85e78 100644
+--- a/include/linux/pci-ecam.h
++++ b/include/linux/pci-ecam.h
+--
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index d157983b84cf..e6643ef440ef 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h

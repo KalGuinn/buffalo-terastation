@@ -1,0 +1,784 @@
+diff --git a/Makefile b/Makefile
+index c8cd7b4cc3b2..35f856104376 100644
+--- a/Makefile
++++ b/Makefile
+--
+diff --git a/README-TSx010.txt b/README-TSx010.txt
+deleted file mode 100644
+index af70ef15d770..000000000000
+--- a/README-TSx010.txt
+--
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 5bebeaf8443f..51794c7fa6d5 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+--
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 632a8645f68b..d1516f85f25d 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+--
+diff --git a/arch/arm/boot/compressed/misc.c b/arch/arm/boot/compressed/misc.c
+index cc99dd80a7e2..e1e9a5dde853 100644
+--- a/arch/arm/boot/compressed/misc.c
++++ b/arch/arm/boot/compressed/misc.c
+--
+diff --git a/arch/arm/boot/install.sh b/arch/arm/boot/install.sh
+index 83bea24ae828..2a45092a40e3 100644
+--- a/arch/arm/boot/install.sh
++++ b/arch/arm/boot/install.sh
+--
+diff --git a/arch/arm/kernel/reboot.c b/arch/arm/kernel/reboot.c
+index 40f177a7ecd4..3b2aa9a9fe26 100644
+--- a/arch/arm/kernel/reboot.c
++++ b/arch/arm/kernel/reboot.c
+--
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 44b45c09df00..e3ebece79617 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+--
+diff --git a/arch/arm64/boot/install.sh b/arch/arm64/boot/install.sh
+index c74648896b9c..d91e1f022573 100644
+--- a/arch/arm64/boot/install.sh
++++ b/arch/arm64/boot/install.sh
+--
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 6acb83e05bfe..7f1628effe6d 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+--
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 21d4280bed00..e76d16ac2776 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+--
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 4c46ef335d3d..af635f878f96 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+--
+diff --git a/block/genhd.c b/block/genhd.c
+index b617875a9d09..2b2a936cf848 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+--
+diff --git a/block/mq-deadline.c b/block/mq-deadline.c
+index 69094d641062..d5e21ce44d2c 100644
+--- a/block/mq-deadline.c
++++ b/block/mq-deadline.c
+--
+diff --git a/buffalo/Kconfig b/buffalo/Kconfig
+deleted file mode 100644
+index 027ab4690467..000000000000
+--- a/buffalo/Kconfig
+--
+diff --git a/buffalo/Makefile b/buffalo/Makefile
+deleted file mode 100644
+index 6376ae69599e..000000000000
+--- a/buffalo/Makefile
+--
+diff --git a/buffalo/arch/arm64/Kconfig b/buffalo/arch/arm64/Kconfig
+deleted file mode 100644
+index 0d1d6ba3a693..000000000000
+--- a/buffalo/arch/arm64/Kconfig
+--
+diff --git a/buffalo/arch/arm64/Makefile b/buffalo/arch/arm64/Makefile
+deleted file mode 100644
+index d1786a332a1c..000000000000
+--- a/buffalo/arch/arm64/Makefile
+--
+diff --git a/buffalo/arch/arm64/boot/installkernel b/buffalo/arch/arm64/boot/installkernel
+deleted file mode 100755
+index 808e5cb3e3be..000000000000
+--- a/buffalo/arch/arm64/boot/installkernel
+--
+diff --git a/buffalo/arch/arm64/configs/README b/buffalo/arch/arm64/configs/README
+deleted file mode 100644
+index 0a6f97c6c2bc..000000000000
+--- a/buffalo/arch/arm64/configs/README
+--
+diff --git a/buffalo/arch/arm64/configs/buffalo_ts5020_defconfig b/buffalo/arch/arm64/configs/buffalo_ts5020_defconfig
+deleted file mode 100644
+index dd4a439960b2..000000000000
+--- a/buffalo/arch/arm64/configs/buffalo_ts5020_defconfig
+--
+diff --git a/buffalo/arch/arm64/plat-alpine-v2/Makefile b/buffalo/arch/arm64/plat-alpine-v2/Makefile
+deleted file mode 100644
+index a26cd34927e1..000000000000
+--- a/buffalo/arch/arm64/plat-alpine-v2/Makefile
+--
+diff --git a/buffalo/arch/arm64/plat-alpine-v2/sysfs.c b/buffalo/arch/arm64/plat-alpine-v2/sysfs.c
+deleted file mode 100644
+index c01d472f34d9..000000000000
+--- a/buffalo/arch/arm64/plat-alpine-v2/sysfs.c
+--
+diff --git a/buffalo/drivers/Makefile b/buffalo/drivers/Makefile
+deleted file mode 100644
+index b21427e32b36..000000000000
+--- a/buffalo/drivers/Makefile
+--
+diff --git a/buffalo/drivers/buffalocore.c b/buffalo/drivers/buffalocore.c
+deleted file mode 100644
+index 57e38ccd5afc..000000000000
+--- a/buffalo/drivers/buffalocore.c
+--
+diff --git a/buffalo/drivers/buffalocore.h b/buffalo/drivers/buffalocore.h
+deleted file mode 100644
+index e2c580f654dc..000000000000
+--- a/buffalo/drivers/buffalocore.h
+--
+diff --git a/buffalo/drivers/kernevnt.c b/buffalo/drivers/kernevnt.c
+deleted file mode 100644
+index 710029c3d9ba..000000000000
+--- a/buffalo/drivers/kernevnt.c
+--
+diff --git a/buffalo/drivers/kernevntProc.c b/buffalo/drivers/kernevntProc.c
+deleted file mode 100644
+index ec833ff9ee1f..000000000000
+--- a/buffalo/drivers/kernevntProc.c
+--
+diff --git a/buffalo/drivers/kernevntProc.h b/buffalo/drivers/kernevntProc.h
+deleted file mode 100644
+index 941eed8a213c..000000000000
+--- a/buffalo/drivers/kernevntProc.h
+--
+diff --git a/buffalo/drivers/micon_v3.c b/buffalo/drivers/micon_v3.c
+deleted file mode 100644
+index 41c292b3efb4..000000000000
+--- a/buffalo/drivers/micon_v3.c
+--
+diff --git a/buffalo/drivers/proc_entry.c b/buffalo/drivers/proc_entry.c
+deleted file mode 100644
+index 0ad7b2defdfe..000000000000
+--- a/buffalo/drivers/proc_entry.c
+--
+diff --git a/buffalo/drivers/proc_entry.h b/buffalo/drivers/proc_entry.h
+deleted file mode 100644
+index ff4fa53e0162..000000000000
+--- a/buffalo/drivers/proc_entry.h
+--
+diff --git a/buffalo/drivers/rtc_nvram.c b/buffalo/drivers/rtc_nvram.c
+deleted file mode 100644
+index 35ba10266779..000000000000
+--- a/buffalo/drivers/rtc_nvram.c
+--
+diff --git a/buffalo/drivers/rtc_nvram.h b/buffalo/drivers/rtc_nvram.h
+deleted file mode 100644
+index 8715909ba869..000000000000
+--- a/buffalo/drivers/rtc_nvram.h
+--
+diff --git a/buffalo/drivers/upsdrv.c b/buffalo/drivers/upsdrv.c
+deleted file mode 100644
+index 0da5feb275ec..000000000000
+--- a/buffalo/drivers/upsdrv.c
+--
+diff --git a/buffalo/include/buffalo/kernevnt.h b/buffalo/include/buffalo/kernevnt.h
+deleted file mode 100644
+index 547e4a84d47e..000000000000
+--- a/buffalo/include/buffalo/kernevnt.h
+--
+diff --git a/buffalo/include/buffalo/micon_v3.h b/buffalo/include/buffalo/micon_v3.h
+deleted file mode 100644
+index 90f3b2e73aa9..000000000000
+--- a/buffalo/include/buffalo/micon_v3.h
+--
+diff --git a/buffalo/scripts/debianize.sh b/buffalo/scripts/debianize.sh
+deleted file mode 100755
+index a64ca2eac36f..000000000000
+--- a/buffalo/scripts/debianize.sh
+--
+diff --git a/buffalo/scripts/mkbuilddate_h b/buffalo/scripts/mkbuilddate_h
+deleted file mode 100644
+index c0463093a53b..000000000000
+--- a/buffalo/scripts/mkbuilddate_h
+--
+diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+index 59cd6dec0035..530be3a33d7e 100644
+--- a/drivers/ata/ahci.c
++++ b/drivers/ata/ahci.c
+--
+diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+index b49ae4e8169a..d0b55a8249c7 100644
+--- a/drivers/ata/ahci.h
++++ b/drivers/ata/ahci.h
+--
+diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
+index 43d5c5729944..90c99eae3f8e 100644
+--- a/drivers/ata/libahci.c
++++ b/drivers/ata/libahci.c
+--
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index fc2ee517672d..ccc80ff57eb2 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+--
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 54b86490d9ca..7b4e4de778e4 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+--
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 42434e001f43..fb5d702e43b5 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+--
+diff --git a/drivers/md/md.h b/drivers/md/md.h
+index 857ebe32938b..325cb2136a49 100644
+--- a/drivers/md/md.h
++++ b/drivers/md/md.h
+--
+diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+index 5fc8207f2448..fa47249fa3e4 100644
+--- a/drivers/md/raid1.c
++++ b/drivers/md/raid1.c
+--
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 3237bab92d1c..a147619498df 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+--
+diff --git a/drivers/mtd/spi-nor/spi-nor.c b/drivers/mtd/spi-nor/spi-nor.c
+index 7ddae2a9c159..b136fc1d8905 100644
+--- a/drivers/mtd/spi-nor/spi-nor.c
++++ b/drivers/mtd/spi-nor/spi-nor.c
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c
+index 8e4bea6adf5d..020528fdf6ec 100644
+--- a/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c
++++ b/drivers/net/ethernet/al/al_mod_hal_eth_mac_internal.c
+--
+diff --git a/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c b/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c
+index 9b4a89b30390..872cd730b595 100644
+--- a/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c
++++ b/drivers/net/ethernet/al/al_mod_hal_eth_mac_v3.c
+--
+diff --git a/drivers/net/ethernet/realtek/Makefile b/drivers/net/ethernet/realtek/Makefile
+index 16f78d20b58b..e274623269e2 100644
+--- a/drivers/net/ethernet/realtek/Makefile
++++ b/drivers/net/ethernet/realtek/Makefile
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/Makefile b/drivers/net/ethernet/realtek/r8125/Makefile
+index 8aa13cad8aaf..5175cf2b3492 100644
+--- a/drivers/net/ethernet/realtek/r8125/Makefile
++++ b/drivers/net/ethernet/realtek/r8125/Makefile
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125.h b/drivers/net/ethernet/realtek/r8125/r8125.h
+index 8eb14f875231..77f1a0cf6d83 100644
+--- a/drivers/net/ethernet/realtek/r8125/r8125.h
++++ b/drivers/net/ethernet/realtek/r8125/r8125.h
+--
+diff --git a/drivers/net/ethernet/realtek/r8125/r8125_n.c b/drivers/net/ethernet/realtek/r8125/r8125_n.c
+index fb47cb6ddded..a8a5fb3e0231 100644
+--- a/drivers/net/ethernet/realtek/r8125/r8125_n.c
++++ b/drivers/net/ethernet/realtek/r8125/r8125_n.c
+--
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 2d555265a5f9..1f5fd24cd749 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+--
+diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
+index 77e81000bc2d..f21cda9d865e 100644
+--- a/drivers/net/phy/Makefile
++++ b/drivers/net/phy/Makefile
+--
+diff --git a/drivers/net/phy/aquantia.c b/drivers/net/phy/aquantia.c
+index 9e32f90bd64a..da00610872a5 100644
+--- a/drivers/net/phy/aquantia.c
++++ b/drivers/net/phy/aquantia.c
+--
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 0150bfb4a790..c5588d4508f9 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+--
+diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
+deleted file mode 100644
+index 83de8440c591..000000000000
+--- a/drivers/net/phy/mxl-gpy.c
+--
+diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
+index c21e2d9e9ea9..0ba3607585bd 100644
+--- a/drivers/net/phy/phy-c45.c
++++ b/drivers/net/phy/phy-c45.c
+--
+diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
+index 0860da9eddbc..c7da4cbb1103 100644
+--- a/drivers/net/phy/phy-core.c
++++ b/drivers/net/phy/phy-core.c
+--
+diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+index 96b35098e2d5..1ee25877c4d1 100644
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+--
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 61c2f713bb4a..312dd7ce2753 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+--
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index 44040a1df9df..723611ac9102 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+--
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index ee022a684ffb..271e8adc39f1 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+--
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 9acf1ad2ca27..75b926e70076 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+--
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index dca24fd09bb0..9a7e3a3bd5ce 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+--
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 2968d8be870d..3aee9464a7bf 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+--
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index a3bd17e09177..77cb45ef55fc 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+--
+diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
+index cdc14bc3edb5..a7d4f50b67d4 100644
+--- a/drivers/scsi/sd.h
++++ b/drivers/scsi/sd.h
+--
+diff --git a/drivers/target/iscsi/cxgbit/cxgbit_cm.c b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+index d46eee369864..b19c960d5490 100644
+--- a/drivers/target/iscsi/cxgbit/cxgbit_cm.c
++++ b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+index 80796ade8942..03e9cb156df9 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target.h b/drivers/target/iscsi/iscsi_target.h
+index 11a481cf6ead..48bac0acf8c7 100644
+--- a/drivers/target/iscsi/iscsi_target.h
++++ b/drivers/target/iscsi/iscsi_target.h
+--
+diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
+index 2d79f3f643d8..e2fa3a3bc81d 100644
+--- a/drivers/target/iscsi/iscsi_target_auth.c
++++ b/drivers/target/iscsi/iscsi_target_auth.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target_auth.h b/drivers/target/iscsi/iscsi_target_auth.h
+index fc75c1c20e23..d5600ac30b53 100644
+--- a/drivers/target/iscsi/iscsi_target_auth.h
++++ b/drivers/target/iscsi/iscsi_target_auth.h
+--
+diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
+index a67943701165..95d0a22b2ad6 100644
+--- a/drivers/target/iscsi/iscsi_target_configfs.c
++++ b/drivers/target/iscsi/iscsi_target_configfs.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/iscsi/iscsi_target_login.c
+index 94d81ae50a3d..bb90c80ff388 100644
+--- a/drivers/target/iscsi/iscsi_target_login.c
++++ b/drivers/target/iscsi/iscsi_target_login.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target_login.h b/drivers/target/iscsi/iscsi_target_login.h
+index fc95e6150253..3b8e3639ff5d 100644
+--- a/drivers/target/iscsi/iscsi_target_login.h
++++ b/drivers/target/iscsi/iscsi_target_login.h
+--
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
+index 97d33c651b07..8a5e8d17a942 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target_nego.h b/drivers/target/iscsi/iscsi_target_nego.h
+index 4cc73ccbcedd..835e1b769b3f 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.h
++++ b/drivers/target/iscsi/iscsi_target_nego.h
+--
+diff --git a/drivers/target/iscsi/iscsi_target_nodeattrib.c b/drivers/target/iscsi/iscsi_target_nodeattrib.c
+index a6ea9c8a1e58..208cca8a363c 100644
+--- a/drivers/target/iscsi/iscsi_target_nodeattrib.c
++++ b/drivers/target/iscsi/iscsi_target_nodeattrib.c
+--
+diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
+index 4692d27cfa39..101d62105c93 100644
+--- a/drivers/target/iscsi/iscsi_target_tpg.c
++++ b/drivers/target/iscsi/iscsi_target_tpg.c
+--
+diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
+index 57047ff76460..e46ca968009c 100644
+--- a/drivers/target/target_core_alua.c
++++ b/drivers/target/target_core_alua.c
+--
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index 1b381519c164..47b5ef153135 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+--
+diff --git a/drivers/target/target_core_fabric_lib.c b/drivers/target/target_core_fabric_lib.c
+index 939c6212d2ac..71a80257a052 100644
+--- a/drivers/target/target_core_fabric_lib.c
++++ b/drivers/target/target_core_fabric_lib.c
+--
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 5668d02de10b..854b2bcca7c1 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+--
+diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
+index c7e1fadcc5cc..0c6635587930 100644
+--- a/drivers/target/target_core_internal.h
++++ b/drivers/target/target_core_internal.h
+--
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index 949879f2f1d1..10db5656fd5d 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+--
+diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+index 1b52cd4d793f..47d76c862014 100644
+--- a/drivers/target/target_core_pscsi.c
++++ b/drivers/target/target_core_pscsi.c
+--
+diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+index af9b038da3ba..ebac2b49b9c6 100644
+--- a/drivers/target/target_core_sbc.c
++++ b/drivers/target/target_core_sbc.c
+--
+diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+index 660f2ee26a25..93424db5f002 100644
+--- a/drivers/target/target_core_spc.c
++++ b/drivers/target/target_core_spc.c
+--
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index cbd557766073..f1b730b77a31 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+--
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index f29d600357f3..7159e8363b83 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+--
+diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
+index 977fed46914b..7cdb5d7f6538 100644
+--- a/drivers/target/target_core_xcopy.c
++++ b/drivers/target/target_core_xcopy.c
+--
+diff --git a/drivers/target/target_core_xcopy.h b/drivers/target/target_core_xcopy.h
+index 974bc1e19ff2..26ba4c3c9cff 100644
+--- a/drivers/target/target_core_xcopy.h
++++ b/drivers/target/target_core_xcopy.h
+--
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index eb7c23e9da69..bf9721fc2824 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+--
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index 454c5588af04..fe9422d3bcdc 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+--
+diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+index f643603c8de6..327630405695 100644
+--- a/drivers/usb/host/ehci-q.c
++++ b/drivers/usb/host/ehci-q.c
+--
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index a875fa40bd11..5d7b21ea6238 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+--
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index eea1ef9b38d5..b0175f17d1a2 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+--
+diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+index 88514ee40aaf..59d82b45e758 100644
+--- a/drivers/usb/storage/scsiglue.c
++++ b/drivers/usb/storage/scsiglue.c
+--
+diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
+index 2f5ec196015f..23537bc8c827 100644
+--- a/fs/btrfs/Kconfig
++++ b/fs/btrfs/Kconfig
+--
+diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+index 8108b951dae5..ca693dd554e9 100644
+--- a/fs/btrfs/Makefile
++++ b/fs/btrfs/Makefile
+--
+diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+index 867125dbb46f..4644f9b629a5 100644
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+--
+diff --git a/fs/btrfs/delayed-ref.c b/fs/btrfs/delayed-ref.c
+index 398f789e61c3..62ff545ba1f7 100644
+--- a/fs/btrfs/delayed-ref.c
++++ b/fs/btrfs/delayed-ref.c
+--
+diff --git a/fs/btrfs/delayed-ref.h b/fs/btrfs/delayed-ref.h
+index e97bb7d0dde9..d9f2a4ebd5db 100644
+--- a/fs/btrfs/delayed-ref.h
++++ b/fs/btrfs/delayed-ref.h
+--
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index f5d659dc96bf..b2dc613ebed2 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+--
+diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
+index d61fa71a9305..88c939f7aad9 100644
+--- a/fs/btrfs/extent-tree.c
++++ b/fs/btrfs/extent-tree.c
+--
+diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+index c3981914bae6..cb598eb4f3bd 100644
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+--
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 20ffa9eb167b..98c535ae038d 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+--
+diff --git a/fs/btrfs/ordered-data.c b/fs/btrfs/ordered-data.c
+index ca443344b0d5..0c4ef208b8b9 100644
+--- a/fs/btrfs/ordered-data.c
++++ b/fs/btrfs/ordered-data.c
+--
+diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+index 1312da5370c8..734866ab5194 100644
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+--
+diff --git a/fs/btrfs/qgroup.h b/fs/btrfs/qgroup.h
+index 129a582b6a28..4bbcc1e92a93 100644
+--- a/fs/btrfs/qgroup.h
++++ b/fs/btrfs/qgroup.h
+--
+diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
+index 63b86029dbd1..927f9f3daddb 100644
+--- a/fs/btrfs/raid56.c
++++ b/fs/btrfs/raid56.c
+--
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index f192f66b82d9..5d57ed629345 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+--
+diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
+index 904eb241528f..8888337a95b6 100644
+--- a/fs/btrfs/super.c
++++ b/fs/btrfs/super.c
+--
+diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
+index 2993f719c8d7..26317bca5649 100644
+--- a/fs/btrfs/transaction.c
++++ b/fs/btrfs/transaction.c
+--
+diff --git a/fs/btrfs/transaction.h b/fs/btrfs/transaction.h
+index 1e507f0c7643..c1d34cc70472 100644
+--- a/fs/btrfs/transaction.h
++++ b/fs/btrfs/transaction.h
+--
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index dd8835d805df..a8297e7489d9 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+--
+diff --git a/fs/cifs/Kconfig b/fs/cifs/Kconfig
+index abcd78e332fe..85dadb93c992 100644
+--- a/fs/cifs/Kconfig
++++ b/fs/cifs/Kconfig
+--
+diff --git a/fs/cifs/asn1.c b/fs/cifs/asn1.c
+index 4a9b53229fba..3d19595eb352 100644
+--- a/fs/cifs/asn1.c
++++ b/fs/cifs/asn1.c
+--
+diff --git a/fs/cifs/cifs_unicode.c b/fs/cifs/cifs_unicode.c
+index 9986817532b1..a2b2355e7f01 100644
+--- a/fs/cifs/cifs_unicode.c
++++ b/fs/cifs/cifs_unicode.c
+--
+diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
+index 130bdca9e568..1d377b7f2860 100644
+--- a/fs/cifs/cifsacl.c
++++ b/fs/cifs/cifsacl.c
+--
+diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
+index 63be6d674147..57af9bac0045 100644
+--- a/fs/cifs/cifsglob.h
++++ b/fs/cifs/cifsglob.h
+--
+diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
+index d7ac75ea881c..20adda4de83b 100644
+--- a/fs/cifs/cifsproto.h
++++ b/fs/cifs/cifsproto.h
+--
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index ee80205a83cd..c290e231f918 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+--
+diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
+index 2fb6fa51fd3c..907e85d65bb4 100644
+--- a/fs/cifs/dir.c
++++ b/fs/cifs/dir.c
+--
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 3015ce8fcc26..8703b5f26f45 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+--
+diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
+index 51d410c6f6a4..53f3d08898af 100644
+--- a/fs/cifs/inode.c
++++ b/fs/cifs/inode.c
+--
+diff --git a/fs/cifs/netmisc.c b/fs/cifs/netmisc.c
+index 66c10121a6ea..fdd908e4a26b 100644
+--- a/fs/cifs/netmisc.c
++++ b/fs/cifs/netmisc.c
+--
+diff --git a/fs/cifs/smb1ops.c b/fs/cifs/smb1ops.c
+index c7f0c8566442..47db8eb6cbcf 100644
+--- a/fs/cifs/smb1ops.c
++++ b/fs/cifs/smb1ops.c
+--
+diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
+index 9e2e120e163e..b204e84b87fb 100644
+--- a/fs/cifs/smb2file.c
++++ b/fs/cifs/smb2file.c
+--
+diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+index 64c45f33b315..0a7ed2e3ad4f 100644
+--- a/fs/cifs/smb2misc.c
++++ b/fs/cifs/smb2misc.c
+--
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 875a625e4cbd..cc9e846a3865 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+--
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 223adc9f4aa8..cbe633f1840a 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+--
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index b7420d2cffc3..364e647d87c0 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+--
+diff --git a/include/linux/genhd.h b/include/linux/genhd.h
+index 159d0ccc6b5c..f13272d84332 100644
+--- a/include/linux/genhd.h
++++ b/include/linux/genhd.h
+--
+diff --git a/include/linux/linkmode.h b/include/linux/linkmode.h
+deleted file mode 100644
+index a99c58866860..000000000000
+--- a/include/linux/linkmode.h
+--
+diff --git a/include/linux/mdio.h b/include/linux/mdio.h
+index 714d8455d680..bfa7114167d7 100644
+--- a/include/linux/mdio.h
++++ b/include/linux/mdio.h
+--
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 0a169493998c..cd6f637cbbfb 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+--
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 4671fbff8221..202f4d6a4342 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+--
+diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
+index f1c5895a334d..c36860111932 100644
+--- a/include/scsi/scsi_proto.h
++++ b/include/scsi/scsi_proto.h
+--
+diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/iscsi/iscsi_target_core.h
+index 0e554f9228bd..f2e6abea8490 100644
+--- a/include/target/iscsi/iscsi_target_core.h
++++ b/include/target/iscsi/iscsi_target_core.h
+--
+diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
+index 5fff54192c67..51b6f50eabee 100644
+--- a/include/target/target_core_backend.h
++++ b/include/target/target_core_backend.h
+--
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index 19a2d9904ceb..2cfd3b4573b0 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+--
+diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+index 990ef282b757..1a6fee974116 100644
+--- a/include/uapi/linux/magic.h
++++ b/include/uapi/linux/magic.h
+--
+diff --git a/include/uapi/linux/mdio.h b/include/uapi/linux/mdio.h
+index 851238afbd82..d435b00d64ad 100644
+--- a/include/uapi/linux/mdio.h
++++ b/include/uapi/linux/mdio.h
+--
+diff --git a/include/uapi/linux/sysctl.h b/include/uapi/linux/sysctl.h
+index d6bba7b7bd37..d71013fffaf6 100644
+--- a/include/uapi/linux/sysctl.h
++++ b/include/uapi/linux/sysctl.h
+--
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index f50b90d0d1c2..23a83a4da38a 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+--
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 5f6de49dc78e..a97c20ea9bce 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+--
+diff --git a/kernel/time/tick-broadcast-hrtimer.c b/kernel/time/tick-broadcast-hrtimer.c
+index a836efd34589..a59641fb88b6 100644
+--- a/kernel/time/tick-broadcast-hrtimer.c
++++ b/kernel/time/tick-broadcast-hrtimer.c
+--
+diff --git a/mm/mmap.c b/mm/mmap.c
+index ead4f1e28939..1480880ff814 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+--
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index d2cdc93d5a5f..611ba174265c 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+--
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index afffdeb3458d..14a6a489937c 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+--
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index a353b697a79a..7c4a4b874248 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+--
+diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
+index 67d7c28cdcdf..67ed9f6ccdf8 100644
+--- a/scripts/kconfig/Makefile
++++ b/scripts/kconfig/Makefile
