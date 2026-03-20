@@ -1,0 +1,15 @@
+{
+  "name": "TeraStation ARM Kernel Build",
+  "build": { "dockerfile": "Dockerfile", "context": ".." },
+  "features": { "ghcr.io/anthropics/devcontainer-features/claude-code:1": {} },
+  "runArgs": ["--platform=linux/arm64"],
+  "containerEnv": {
+    "ARCH": "arm64",
+    "CROSS_COMPILE": "",
+    "KBUILD_OUTPUT": "/workspaces/terastation/out"
+  },
+  "mounts": ["source=${localWorkspaceFolder},target=/workspaces/terastation,type=bind,consistency=cached"],
+  "workspaceFolder": "/workspaces/terastation",
+  "postCreateCommand": "mkdir -p /workspaces/terastation/out",
+  "remoteUser": "builder"
+}

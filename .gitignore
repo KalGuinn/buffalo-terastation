@@ -1,22 +1,65 @@
-# Large firmware files - don't commit binaries
+# ===========================================
+# Buffalo TeraStation - Git Ignore Rules
+# Strategy: track text/config only, no binaries
+# ===========================================
+
+# --- Firmware archives ---
+*.zip
+*.dmg
+*.dmg.zip
+
+# --- Firmware images ---
+*.img
+*.bin
+*.bin.enc
+
+# --- Other binaries ---
+*.exe
+*.ko
+*.tar.gz
+
+# --- Extracted firmware directories (huge) ---
 firmware/win298/
 firmware/win308/
 firmware/rootfs/
-*.img
-*.dmg
-*.dmg.zip
-*.exe
-*.zip
-*.tar.gz
-*.ko
-*.dtb
 
-# GPL source tarballs (too large for git)
+# --- Extracted kernel source (893MB+) ---
 gpl-source/linux-4.19.75/
-gpl-source/linux-4.19.75.tar.gz
 
-# macOS
+# --- Working kernel source and build output ---
+kernel/
+out/
+
+# --- macOS ---
 .DS_Store
 
-# Claude Code local settings
+# --- Claude Code local settings ---
 .claude/settings.local.json
+
+# ===========================================
+# Explicit allowances (override ignores above)
+# ===========================================
+
+# Device tree source and blobs (small, 36-44KB)
+!*.dts
+!*.dtsi
+!*.dtb
+
+# Documentation
+!*.md
+
+# Scripts
+!*.sh
+
+# Patches
+!*.patch
+
+# Specific firmware metadata files
+!firmware/checksums.sha256
+!firmware/download.sh
+!firmware/README.md
+
+# Project files
+!CLAUDE.md
+!Makefile
+!.devcontainer/
