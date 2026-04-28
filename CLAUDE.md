@@ -27,6 +27,26 @@ Reverse engineering Buffalo TeraStation NAS firmware to build a modern Linux ker
 - When unsure about hardware details, cross-reference `notes/hardware/hardware_catalog.md`
 - Device tree ground truth: `devicetree/alpine-ts51220.dts` (decompiled from real firmware DTB)
 
+## Wiki Sync (automatic — no manual step)
+
+The GitHub wiki at https://github.com/KalGuinn/buffalo-terastation/wiki is **fully
+generated** from this repo's docs by [`tools/build-wiki.sh`](tools/build-wiki.sh).
+Never edit the wiki by hand — it is overwritten on every sync.
+
+**Source of truth:** `README.md`, `LICENSE`, `firmware/README.md`,
+`references/README.md`, `patches/README.md`, and everything under `notes/`.
+
+**Agent responsibility:** after any commit that touches one of those paths
+(check with `git diff --name-only HEAD~1 HEAD`), invoke the
+[`update-wiki`](.claude/skills/update-wiki/SKILL.md) skill — which runs the
+generator and pushes — without prompting the user. Likewise before merging a
+branch into `main` if the branch touched any wiki source. This is meant to be
+transparent infrastructure; the user should not have to remember to run it.
+
+If only `gpl-source/`, `devicetree/`, `kernel/`, `firmware/` binaries, `tools/`,
+`.claude/`, `CLAUDE.md`, or `Makefile` changed, skip the sync — none of those
+are mapped to wiki pages.
+
 ## Common Tools
 - `binwalk` — firmware analysis and extraction
 - `dtc` — device tree compiler/decompiler (`dtc -I dtb -O dts` / `dtc -I dts -O dtb`)
