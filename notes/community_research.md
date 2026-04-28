@@ -375,15 +375,15 @@ These drivers are OUT-OF-TREE (from SDK, not upstream):
 
 Key files analyzed during this research:
 
-- `/Users/conrad/Claude/buffalo-terastation/gpl-source/linux-4.19.75_buffalo.patch`
+- `gpl-source/linux-4.19.75_buffalo.patch`
   — Buffalo's patch (inverted diff: removals = Buffalo additions)
-- `/Users/conrad/Claude/buffalo-terastation/gpl-source/v4.19.75-241-g0fb91c28a25c.patch`
+- `gpl-source/v4.19.75-241-g0fb91c28a25c.patch`
   — Annapurna Labs SDK patch (384 files, includes all AL drivers)
-- `/Users/conrad/Claude/buffalo-terastation/gpl-source/linux-4.19.75/arch/arm64/boot/dts/al/alpine-v2.dtsi`
+- `gpl-source/linux-4.19.75/arch/arm64/boot/dts/al/alpine-v2.dtsi`
   — Upstream Alpine V2 SoC DTSI (minimal)
-- `/Users/conrad/Claude/buffalo-terastation/gpl-source/linux-4.19.75/arch/arm64/boot/dts/al/alpine-v2-evp.dts`
+- `gpl-source/linux-4.19.75/arch/arm64/boot/dts/al/alpine-v2-evp.dts`
   — Upstream EVP board DTS
-- `/Users/conrad/Claude/buffalo-terastation/gpl-source/ts5020_gpl_installed_packages_list.txt`
+- `gpl-source/ts5020_gpl_installed_packages_list.txt`
   — Ubuntu 18.04 (bionic) package list from running TS5020
 
 ---

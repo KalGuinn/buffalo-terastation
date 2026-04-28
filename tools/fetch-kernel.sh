@@ -6,7 +6,9 @@ set -euo pipefail
 
 VERSION="${1:-6.12.77}"
 MAJOR="${VERSION%%.*}"
-DEST=~/Claude/buffalo-terastation/kernel
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+DEST="${KERNEL_DIR:-$PROJECT_ROOT/kernel}"
 TARBALL="linux-${VERSION}.tar.xz"
 URL="https://cdn.kernel.org/pub/linux/kernel/v${MAJOR}.x/${TARBALL}"
 SIGN_URL="https://cdn.kernel.org/pub/linux/kernel/v${MAJOR}.x/${TARBALL%.xz}.sign"
@@ -50,6 +52,14 @@ else
     tar -xf "$DEST/$TARBALL" -C "$DEST"
     echo "[OK] Extracted to $SRCDIR"
 fi
+
+# Maintain a stable 'linux' symlink so the Makefile can find the active source tree
+LINUX_LINK="$DEST/linux"
+if [ -L "$LINUX_LINK" ] || [ -e "$LINUX_LINK" ]; then
+    rm -f "$LINUX_LINK"
+fi
+ln -s "linux-${VERSION}" "$LINUX_LINK"
+echo "[OK] Symlinked $LINUX_LINK -> linux-${VERSION}"
 
 # Verify Alpine V2 support
 echo ""

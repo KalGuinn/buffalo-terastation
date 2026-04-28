@@ -6,7 +6,7 @@ CROSS_COMPILE :=
 KBUILD_OUTPUT := out
 NPROC        := $(shell nproc)
 
-KERNEL_DIR   := linux
+KERNEL_DIR   := kernel/linux
 ROOTFS_DIR   := rootfs
 ROOTFS_IMG   := $(KBUILD_OUTPUT)/rootfs.squashfs
 INITRD_IMG   := $(KBUILD_OUTPUT)/initrd.img

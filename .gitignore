@@ -33,8 +33,23 @@ out/
 # --- macOS ---
 .DS_Store
 
-# --- Claude Code local settings ---
+# --- Claude Code ---
 .claude/settings.local.json
+.claude/worktrees/
+notes/claude_setup_recommendations.md
+notes/action_plan_harness_improvements.md
+
+# --- Local archives (firmware ZIPs go in firmware/archives/, not tracked) ---
+firmware/archives/
+
+# --- Local working artifacts ---
+*.log
+__pycache__/
+*.pyc
+venv/
+node_modules/
+.env
+.env.*
 
 # ===========================================
 # Explicit allowances (override ignores above)

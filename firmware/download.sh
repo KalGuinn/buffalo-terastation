@@ -13,9 +13,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-DOWNLOAD_DIR="$PROJECT_ROOT"
+DOWNLOAD_DIR="$SCRIPT_DIR/archives"
 MANIFEST="$SCRIPT_DIR/checksums.sha256"
+
+mkdir -p "$DOWNLOAD_DIR"
 
 # --------------------------------------------------------------------------
 # Firmware definitions
