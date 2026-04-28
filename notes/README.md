@@ -13,7 +13,7 @@ Working notes generated during the project. Organized by topic. Check here befor
 
 ## Kernel
 - [`kernel/build_strategy.md`](kernel/build_strategy.md) — Phased plan for building a modern (6.x) mainline kernel
-- [`kernel/versions_2026-03-20.md`](kernel/versions_2026-03-20.md) — Snapshot of kernel version landscape (dated reference)
+- [`kernel/kernel_version_selection.md`](kernel/kernel_version_selection.md) — Recommended LTS target with verification checklist (refresh on each LTS rotation)
 
 ## Top-level
 - [`community_research.md`](community_research.md) — Related projects, prior art (QNAP Alpine V2, etc.)
